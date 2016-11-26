@@ -1,0 +1,52 @@
+
+.group {
+    display: inline-flex;
+    flex-direction: column;
+    min-width: 400px;
+
+    .group-number {
+        text-align: center;
+    }
+    .weeks {
+        display: flex;
+        flex-direction: row;
+
+        .week {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+
+            .week-number {
+                text-align: center;
+            }
+            .day {
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 1px solid #000;
+
+                .pair {
+                    width: 100%;
+                    height: 40px;
+                    border: 1px solid #000;
+                    display: flex;
+                    flex-direction: row;
+
+                    .pair-number {
+                        width: 20px;
+                        text-align: center;
+
+                    }
+                    .pair-info {
+                        width: calc(100% - 20px);
+
+                        strong {
+                            font-weight: normal;
+                            color: green;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
