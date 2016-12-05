@@ -20,7 +20,7 @@ const Login = React.createClass({
                     <Col md={6} xs={12} sm={6}>
                         <div className='login'>
                             <div className='login-form'>
-                                <h1 className='text-center'>LOGIN</h1>
+                                <h1 className='text-center'>Вход в учетную запись</h1>
                                 <form onSubmit={handleSubmit(loginAction)}>
                                     <Input
                                       {...login}
@@ -34,7 +34,7 @@ const Login = React.createClass({
                                       type='password'
                                       className={cx('', { 'has-error': password.touched && password.error })}
                                     />
-                                    <Button type='submit' className='btn-primary pull-right'>Login</Button>
+                                    <Button type='submit' className='btn-primary pull-right'>Войти</Button>
                                 </form>
                             </div>
                         </div>

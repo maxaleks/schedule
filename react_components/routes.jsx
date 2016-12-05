@@ -3,8 +3,13 @@ import { Route, IndexRoute } from 'react-router';
 
 import { makeRequireAuth } from './modules/auth';
 
-import Schedule from './containers/Schedule';
 import Login from './containers/Login';
+import Schedule from './containers/Schedule';
+import Universities from './containers/Universities';
+import Faculties from './containers/Faculties';
+import Specialities from './containers/Specialities';
+import Courses from './containers/Courses';
+
 
 function getWaite(dispatch) {
     return (action) =>
@@ -19,8 +24,12 @@ export default ({ dispatch, getState }) => {
         <Route path='/'>
             <Route onEnter={requireAuth}>
                 <IndexRoute component={Schedule}/>
+                <Route path='universities' component={Universities}/>
+                <Route path='universities/:universityId/faculties' component={Faculties}/>
+                <Route path='universities/:universityId/faculties/:facultyId/specialities' component={Specialities}/>
+                <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
             </Route>
-            <Route path='Login' component={Login} />
+            <Route path='login' component={Login} />
         </Route>
     );
 };

@@ -19,7 +19,7 @@ function request(url, data, method) {
     return $.ajax({
         method,
         url,
-        data,
+        data: { ...data, token: localStorage.getItem('token'), },
         //headers: getHeaders(),
     });
 }
