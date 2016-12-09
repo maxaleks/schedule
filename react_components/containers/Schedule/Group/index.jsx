@@ -13,12 +13,12 @@ const Group = ({ schedule }) => (
             <p>{schedule.groupName}</p>
         </div>
         <div className='weeks'>
-            {schedule.schedule.map((week, index) => (
+            {Object.keys(schedule.periods).map((week, index) => (
                 <div key={index} className='week'>
                     <div className='week-number'>
                         <p>{week.week}</p>
                     </div>
-                    {week.days.map((day, index) => {
+                    {Object.keys(week).map((day, index) => {
                          if (index !== 6) return (
                              <div key={index} className='day'>
                                 {[0, 1, 2, 3, 4].map(index => (
@@ -27,17 +27,13 @@ const Group = ({ schedule }) => (
                                             <p>{index + 1}</p>
                                         </div>
                                         <div className='pair-info'>
-                                            {day.pairs[index] && <p>
+                                            {day[index] && <p>
                                                 <strong>
-                                                    {day.pairs[index].timeStartHour}
-                                                    :
-                                                    {formatTime(day.pairs[index].timeStartMinute)}
+                                                    {day[index].startTime}
                                                     -
-                                                    {day.pairs[index].timeEndHour}
-                                                    :
-                                                    {formatTime(day.pairs[index].timeEndMinute)}
+                                                    {day[index].endTime}
                                                 </strong>
-                                                {day.pairs[index].subject}, {day.pairs[index].classroom}-{day.pairs[index].housing}
+                                                {day[index].nameSubject}, {day[index].lectureRoom}-{day[index].housing}, {day[index].nameProfessor}
                                             </p>}
                                         </div>
                                     </div>

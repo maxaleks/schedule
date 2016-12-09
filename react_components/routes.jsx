@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route, IndexRoute, IndexRedirect } from 'react-router';
 
 import { makeRequireAuth } from './modules/auth';
 
@@ -23,11 +23,12 @@ export default ({ dispatch, getState }) => {
     return (
         <Route path='/'>
             <Route onEnter={requireAuth}>
-                <IndexRoute component={Schedule}/>
+                <IndexRedirect to='/universities' />
                 <Route path='universities' component={Universities}/>
                 <Route path='universities/:universityId/faculties' component={Faculties}/>
                 <Route path='universities/:universityId/faculties/:facultyId/specialities' component={Specialities}/>
                 <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
+                <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules' component={Schedule}/>
             </Route>
             <Route path='login' component={Login} />
         </Route>

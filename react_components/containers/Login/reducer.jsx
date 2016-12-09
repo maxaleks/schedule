@@ -19,7 +19,7 @@ export function loginAction(form) {
     return (dispatch, getState) => {
         http.post('http://schedulea.h1n.ru/universities/auth/login', form).then(data => {
             localStorage.setItem('token', data.data.token);
-            dispatch(push('/'));
+            dispatch(push('/universities'));
         });
     };
 }

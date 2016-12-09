@@ -570,13 +570,20 @@ const group = {
 import http from '../../utils/http';
 
 const initState = {
-    schedules: [group],
+    schedules: [],
+    showGroupPopup: false,
 };
 
 export function reducer(state = initState, action) {
     switch (action.type) {
         case 'SET_SCHEDULES': {
             return { ...state, schedules: action.schedules };
+        }
+        case 'OPEN_GROUP_POPUP': {
+            return { ...state, showGroupPopup: true };
+        }
+        case 'CLOSE_GROUP_POPUP': {
+            return { ...state, showGroupPopup: false };
         }
         default:
             return state;
@@ -585,8 +592,33 @@ export function reducer(state = initState, action) {
 
 export function loadSchedules() {
     return (dispatch, getState) => {
-        http.get('https://api.schedule.h1n.ru/schedule/БНТУ/11201113').then(data => {
-            dispatch({ type: 'SET_SCHEDULES', schedules: [data] });
+        const { specialityId, courseNumber } = getState().router.params;
+        return http.post(`http://www.schedulea.h1n.ru/universities/admin/schedules/${specialityId}/${courseNumber}`).then(data => {
+            dispatch({ type: 'SET_SCHEDULES', schedules: data.data });
+        });
+    };
+}
+
+export function openGroupPopup() {
+    return (dispatch, getState) => {
+        dispatch({ type: 'OPEN_GROUP_POPUP' });
+    };
+}
+
+export function closeGroupPopup() {
+    return (dispatch, getState) => {
+        dispatch({ type: 'CLOSE_GROUP_POPUP' });
+    };
+}
+
+export function addGroup(form) {
+    return (dispatch, getState) => {
+        const idUniversity = getState().router.params.universityId
+        const idFaculty = getState().router.params.facultyId;
+        const idSpecialty = getState().router.params.specialityId;
+        const course = getState().router.params.courseNumber;
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/addGroup', { ...form, idSpecialty, course, idUniversity, idFaculty }).then(data => {
+            console.log(data);
         });
     };
 }

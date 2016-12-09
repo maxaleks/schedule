@@ -60,7 +60,7 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _actions = __webpack_require__(609);
+	var _actions = __webpack_require__(612);
 
 	var _reactRedux = __webpack_require__(226);
 
@@ -68,11 +68,11 @@
 
 	var _redux = __webpack_require__(233);
 
-	var _reduxThunk = __webpack_require__(610);
+	var _reduxThunk = __webpack_require__(613);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _scrollBehavior = __webpack_require__(611);
+	var _scrollBehavior = __webpack_require__(614);
 
 	var _scrollBehavior2 = _interopRequireDefault(_scrollBehavior);
 
@@ -80,7 +80,7 @@
 
 	var _historyLibCreateHashHistory2 = _interopRequireDefault(_historyLibCreateHashHistory);
 
-	var _reducers = __webpack_require__(614);
+	var _reducers = __webpack_require__(617);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -19821,19 +19821,19 @@
 
 	var _containersSchedule2 = _interopRequireDefault(_containersSchedule);
 
-	var _containersUniversities = __webpack_require__(593);
+	var _containersUniversities = __webpack_require__(597);
 
 	var _containersUniversities2 = _interopRequireDefault(_containersUniversities);
 
-	var _containersFaculties = __webpack_require__(598);
+	var _containersFaculties = __webpack_require__(601);
 
 	var _containersFaculties2 = _interopRequireDefault(_containersFaculties);
 
-	var _containersSpecialities = __webpack_require__(602);
+	var _containersSpecialities = __webpack_require__(605);
 
 	var _containersSpecialities2 = _interopRequireDefault(_containersSpecialities);
 
-	var _containersCourses = __webpack_require__(606);
+	var _containersCourses = __webpack_require__(609);
 
 	var _containersCourses2 = _interopRequireDefault(_containersCourses);
 
@@ -19857,11 +19857,12 @@
 	        _react2['default'].createElement(
 	            _reactRouter.Route,
 	            { onEnter: requireAuth },
-	            _react2['default'].createElement(_reactRouter.IndexRoute, { component: _containersSchedule2['default'] }),
+	            _react2['default'].createElement(_reactRouter.IndexRedirect, { to: '/universities' }),
 	            _react2['default'].createElement(_reactRouter.Route, { path: 'universities', component: _containersUniversities2['default'] }),
 	            _react2['default'].createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties', component: _containersFaculties2['default'] }),
 	            _react2['default'].createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties/:facultyId/specialities', component: _containersSpecialities2['default'] }),
-	            _react2['default'].createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses', component: _containersCourses2['default'] })
+	            _react2['default'].createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses', component: _containersCourses2['default'] }),
+	            _react2['default'].createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules', component: _containersSchedule2['default'] })
 	        ),
 	        _react2['default'].createElement(_reactRouter.Route, { path: 'login', component: _containersLogin2['default'] })
 	    );
@@ -47764,7 +47765,7 @@
 	    return function (dispatch, getState) {
 	        _utilsHttp2['default'].post('http://schedulea.h1n.ru/universities/auth/login', form).then(function (data) {
 	            localStorage.setItem('token', data.data.token);
-	            dispatch((0, _reduxRouter.push)('/'));
+	            dispatch((0, _reduxRouter.push)('/universities'));
 	        });
 	    };
 	}
@@ -58461,23 +58462,34 @@
 
 	var _reactRedux = __webpack_require__(226);
 
+	var _componentsButton = __webpack_require__(556);
+
+	var _componentsButton2 = _interopRequireDefault(_componentsButton);
+
 	var _Group = __webpack_require__(587);
 
 	var _Group2 = _interopRequireDefault(_Group);
 
-	var _reducer = __webpack_require__(590);
+	var _GroupPopup = __webpack_require__(590);
 
-	__webpack_require__(591);
+	var _GroupPopup2 = _interopRequireDefault(_GroupPopup);
+
+	var _reducer = __webpack_require__(591);
+
+	var _utilsNeed = __webpack_require__(594);
+
+	var _utilsNeed2 = _interopRequireDefault(_utilsNeed);
+
+	__webpack_require__(595);
 
 	var Schedule = _react2['default'].createClass({
 	    displayName: 'Schedule',
 
-	    componentDidMount: function componentDidMount() {
-	        //this.props.loadShedules();
-	    },
 	    render: function render() {
+	        var openGroupPopup = this.props.openGroupPopup;
+
 	        var schedules = this.props.schedules.map(function (item, index) {
-	            return _react2['default'].createElement(_Group2['default'], { key: index, schedule: item.data[0] });
+	            return _react2['default'].createElement(_Group2['default'], { key: index, schedule: item });
 	        });
 	        return _react2['default'].createElement(
 	            'div',
@@ -58488,21 +58500,27 @@
 	                _react2['default'].createElement(
 	                    'h3',
 	                    null,
-	                    'Schedule'
+	                    'Расписания'
 	                )
+	            ),
+	            _react2['default'].createElement(
+	                _componentsButton2['default'],
+	                { onClick: openGroupPopup },
+	                'Добавить группу'
 	            ),
 	            _react2['default'].createElement(
 	                'div',
 	                null,
 	                schedules
-	            )
+	            ),
+	            _react2['default'].createElement(_GroupPopup2['default'], null)
 	        );
 	    }
 	});
 
-	exports['default'] = (0, _reactRedux.connect)(function (state) {
+	exports['default'] = (0, _utilsNeed2['default'])(_reducer.loadSchedules)((0, _reactRedux.connect)(function (state) {
 	    return _extends({}, state.schedule);
-	}, { loadSchedules: _reducer.loadSchedules })(Schedule);
+	}, { openGroupPopup: _reducer.openGroupPopup })(Schedule));
 	module.exports = exports['default'];
 
 /***/ },
@@ -58548,7 +58566,7 @@
 	        _react2['default'].createElement(
 	            'div',
 	            { className: 'weeks' },
-	            schedule.schedule.map(function (week, index) {
+	            Object.keys(schedule.periods).map(function (week, index) {
 	                return _react2['default'].createElement(
 	                    'div',
 	                    { key: index, className: 'week' },
@@ -58561,7 +58579,7 @@
 	                            week.week
 	                        )
 	                    ),
-	                    week.days.map(function (day, index) {
+	                    Object.keys(week).map(function (day, index) {
 	                        if (index !== 6) return _react2['default'].createElement(
 	                            'div',
 	                            { key: index, className: 'day' },
@@ -58581,25 +58599,23 @@
 	                                    _react2['default'].createElement(
 	                                        'div',
 	                                        { className: 'pair-info' },
-	                                        day.pairs[index] && _react2['default'].createElement(
+	                                        day[index] && _react2['default'].createElement(
 	                                            'p',
 	                                            null,
 	                                            _react2['default'].createElement(
 	                                                'strong',
 	                                                null,
-	                                                day.pairs[index].timeStartHour,
-	                                                ':',
-	                                                formatTime(day.pairs[index].timeStartMinute),
+	                                                day[index].startTime,
 	                                                '-',
-	                                                day.pairs[index].timeEndHour,
-	                                                ':',
-	                                                formatTime(day.pairs[index].timeEndMinute)
+	                                                day[index].endTime
 	                                            ),
-	                                            day.pairs[index].subject,
+	                                            day[index].nameSubject,
 	                                            ', ',
-	                                            day.pairs[index].classroom,
+	                                            day[index].lectureRoom,
 	                                            '-',
-	                                            day.pairs[index].housing
+	                                            day[index].housing,
+	                                            ', ',
+	                                            day[index].nameProfessor
 	                                        )
 	                                    )
 	                                );
@@ -58659,6 +58675,135 @@
 /* 590 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(316);
+
+	var _reduxForm = __webpack_require__(272);
+
+	var _classnames = __webpack_require__(342);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _componentsInput = __webpack_require__(551);
+
+	var _componentsInput2 = _interopRequireDefault(_componentsInput);
+
+	var _componentsButton = __webpack_require__(556);
+
+	var _componentsButton2 = _interopRequireDefault(_componentsButton);
+
+	var _reducer = __webpack_require__(591);
+
+	__webpack_require__(592);
+
+	var GroupPopup = _react2['default'].createClass({
+	    displayName: 'GroupPopup',
+
+	    render: function render() {
+	        var _props = this.props;
+	        var show = _props.show;
+	        var closeGroupPopup = _props.closeGroupPopup;
+	        var addGroup = _props.addGroup;
+	        var _props$fields = _props.fields;
+	        var groupName = _props$fields.groupName;
+	        var amountWeeks = _props$fields.amountWeeks;
+	        var handleSubmit = _props.handleSubmit;
+
+	        return _react2['default'].createElement(
+	            'div',
+	            null,
+	            _react2['default'].createElement(
+	                _reactBootstrap.Modal,
+	                { show: show, onHide: closeGroupPopup },
+	                _react2['default'].createElement(
+	                    _reactBootstrap.Modal.Header,
+	                    { closeButton: true },
+	                    _react2['default'].createElement(
+	                        _reactBootstrap.Modal.Title,
+	                        null,
+	                        'Добавить группу'
+	                    )
+	                ),
+	                _react2['default'].createElement(
+	                    'form',
+	                    { onSubmit: handleSubmit(addGroup) },
+	                    _react2['default'].createElement(
+	                        _reactBootstrap.Modal.Body,
+	                        null,
+	                        _react2['default'].createElement(
+	                            _reactBootstrap.Grid,
+	                            { fluid: true },
+	                            _react2['default'].createElement(_componentsInput2['default'], _extends({}, groupName, {
+	                                placeholder: 'Номер группы',
+	                                type: 'text',
+	                                className: (0, _classnames2['default'])('', { 'has-error': groupName.touched && groupName.error })
+	                            })),
+	                            _react2['default'].createElement(_componentsInput2['default'], _extends({}, amountWeeks, {
+	                                placeholder: 'Кол-во учебных недель',
+	                                type: 'number',
+	                                className: (0, _classnames2['default'])('', { 'has-error': amountWeeks.touched && amountWeeks.error })
+	                            }))
+	                        )
+	                    ),
+	                    _react2['default'].createElement(
+	                        _reactBootstrap.Modal.Footer,
+	                        null,
+	                        _react2['default'].createElement(
+	                            _componentsButton2['default'],
+	                            { type: 'submit', className: 'btn-primary pull-right' },
+	                            'Добавить'
+	                        ),
+	                        _react2['default'].createElement(
+	                            _componentsButton2['default'],
+	                            { onClick: closeGroupPopup, className: 'btn-default pull-right' },
+	                            'Отмена'
+	                        )
+	                    )
+	                )
+	            )
+	        );
+	    }
+	});
+
+	var validate = function validate(values) {
+	    var errors = {};
+	    if (!values.groupName) {
+	        errors.groupName = 'Required';
+	    }
+	    if (!values.amountWeeks) {
+	        errors.amountWeeks = 'Required';
+	    }
+	    return errors;
+	};
+
+	exports['default'] = (0, _reduxForm.reduxForm)({
+	    form: 'addGroup',
+	    fields: ['groupName', 'amountWeeks'],
+	    validate: validate
+	}, function (state) {
+	    return {
+	        show: state.schedule.showGroupPopup
+	    };
+	}, { closeGroupPopup: _reducer.closeGroupPopup, addGroup: _reducer.addGroup })(GroupPopup);
+	module.exports = exports['default'];
+
+/***/ },
+/* 591 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -58669,6 +58814,9 @@
 
 	exports.reducer = reducer;
 	exports.loadSchedules = loadSchedules;
+	exports.openGroupPopup = openGroupPopup;
+	exports.closeGroupPopup = closeGroupPopup;
+	exports.addGroup = addGroup;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -59167,7 +59315,8 @@
 	};
 
 	var initState = {
-	  schedules: [group]
+	  schedules: [],
+	  showGroupPopup: false
 	};
 
 	function reducer(state, action) {
@@ -59178,6 +59327,14 @@
 	      {
 	        return _extends({}, state, { schedules: action.schedules });
 	      }
+	    case 'OPEN_GROUP_POPUP':
+	      {
+	        return _extends({}, state, { showGroupPopup: true });
+	      }
+	    case 'CLOSE_GROUP_POPUP':
+	      {
+	        return _extends({}, state, { showGroupPopup: false });
+	      }
 	    default:
 	      return state;
 	  }
@@ -59185,20 +59342,48 @@
 
 	function loadSchedules() {
 	  return function (dispatch, getState) {
-	    _utilsHttp2["default"].get('https://api.schedule.h1n.ru/schedule/БНТУ/11201113').then(function (data) {
-	      dispatch({ type: 'SET_SCHEDULES', schedules: [data] });
+	    var _getState$router$params = getState().router.params;
+	    var specialityId = _getState$router$params.specialityId;
+	    var courseNumber = _getState$router$params.courseNumber;
+
+	    return _utilsHttp2["default"].post("http://www.schedulea.h1n.ru/universities/admin/schedules/" + specialityId + "/" + courseNumber).then(function (data) {
+	      dispatch({ type: 'SET_SCHEDULES', schedules: data.data });
+	    });
+	  };
+	}
+
+	function openGroupPopup() {
+	  return function (dispatch, getState) {
+	    dispatch({ type: 'OPEN_GROUP_POPUP' });
+	  };
+	}
+
+	function closeGroupPopup() {
+	  return function (dispatch, getState) {
+	    dispatch({ type: 'CLOSE_GROUP_POPUP' });
+	  };
+	}
+
+	function addGroup(form) {
+	  return function (dispatch, getState) {
+	    var idUniversity = getState().router.params.universityId;
+	    var idFaculty = getState().router.params.facultyId;
+	    var idSpecialty = getState().router.params.specialityId;
+	    var course = getState().router.params.courseNumber;
+	    return _utilsHttp2["default"].post('http://www.schedulea.h1n.ru/universities/admin/addGroup', _extends({}, form, { idSpecialty: idSpecialty, course: course, idUniversity: idUniversity, idFaculty: idFaculty })).then(function (data) {
+	      console.log(data);
 	    });
 	  };
 	}
 
 /***/ },
-/* 591 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(592);
+	var content = __webpack_require__(593);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(555)(content, {});
@@ -59207,8 +59392,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -59218,7 +59403,7 @@
 	}
 
 /***/ },
-/* 592 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(554)();
@@ -59226,130 +59411,13 @@
 
 
 	// module
-	exports.push([module.id, ".schedule .header {\n  text-align: center; }\n", ""]);
+	exports.push([module.id, "", ""]);
 
 	// exports
 
 
 /***/ },
-/* 593 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(160);
-
-	var _reactRedux = __webpack_require__(226);
-
-	var _reducer = __webpack_require__(594);
-
-	var _utilsNeed = __webpack_require__(595);
-
-	var _utilsNeed2 = _interopRequireDefault(_utilsNeed);
-
-	__webpack_require__(596);
-
-	var Universities = _react2['default'].createClass({
-	    displayName: 'Universities',
-
-	    render: function render() {
-	        var universities = this.props.universities.map(function (item, index) {
-	            return _react2['default'].createElement(
-	                _reactRouter.Link,
-	                { key: index, to: '/universities/' + item.id + '/faculties', disabled: item.lockStatus },
-	                _react2['default'].createElement(
-	                    'div',
-	                    { className: 'university' },
-	                    item.name
-	                )
-	            );
-	        });
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'universities' },
-	            _react2['default'].createElement(
-	                'div',
-	                { className: 'header' },
-	                _react2['default'].createElement(
-	                    'h3',
-	                    null,
-	                    'Университеты'
-	                )
-	            ),
-	            _react2['default'].createElement(
-	                'div',
-	                null,
-	                universities
-	            )
-	        );
-	    }
-	});
-
-	exports['default'] = (0, _utilsNeed2['default'])(_reducer.loadUniversities)((0, _reactRedux.connect)(function (state) {
-	    return _extends({}, state.universities);
-	}, { loadUniversities: _reducer.loadUniversities })(Universities));
-	module.exports = exports['default'];
-
-/***/ },
 /* 594 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	exports.reducer = reducer;
-	exports.loadUniversities = loadUniversities;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _utilsHttp = __webpack_require__(560);
-
-	var _utilsHttp2 = _interopRequireDefault(_utilsHttp);
-
-	var initState = {
-	    universities: []
-	};
-
-	function reducer(state, action) {
-	    if (state === undefined) state = initState;
-
-	    switch (action.type) {
-	        case 'SET_UNIVERSITIES':
-	            {
-	                return _extends({}, state, { universities: action.payload });
-	            }
-	        default:
-	            return state;
-	    }
-	}
-
-	function loadUniversities() {
-	    return function (dispatch, getState) {
-	        return _utilsHttp2['default'].post('http://www.schedulea.h1n.ru/universities/admin/universities').then(function (data) {
-	            dispatch({ type: 'SET_UNIVERSITIES', payload: data.data });
-	        }, function (data) {});
-	    };
-	}
-
-/***/ },
-/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59429,13 +59497,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 596 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(597);
+	var content = __webpack_require__(596);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(555)(content, {});
@@ -59455,7 +59523,7 @@
 	}
 
 /***/ },
-/* 597 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(554)();
@@ -59463,13 +59531,13 @@
 
 
 	// module
-	exports.push([module.id, ".universities h3 {\n  text-align: center;\n  margin: 50px 0; }\n\n.universities a {\n  text-decoration: none; }\n\n.universities .university {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .universities .university:hover {\n    background-color: #e9e9e9; }\n", ""]);
+	exports.push([module.id, ".schedule .header {\n  text-align: center; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 598 */
+/* 597 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59490,13 +59558,170 @@
 
 	var _reactRedux = __webpack_require__(226);
 
-	var _reducer = __webpack_require__(599);
+	var _reducer = __webpack_require__(598);
 
-	var _utilsNeed = __webpack_require__(595);
+	var _utilsNeed = __webpack_require__(594);
 
 	var _utilsNeed2 = _interopRequireDefault(_utilsNeed);
 
-	__webpack_require__(600);
+	__webpack_require__(599);
+
+	var Universities = _react2['default'].createClass({
+	    displayName: 'Universities',
+
+	    render: function render() {
+	        var universities = this.props.universities.map(function (item, index) {
+	            return _react2['default'].createElement(
+	                _reactRouter.Link,
+	                { key: index, to: '/universities/' + item.id + '/faculties', disabled: item.lockStatus },
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'university' },
+	                    item.name
+	                )
+	            );
+	        });
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'universities' },
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'header' },
+	                _react2['default'].createElement(
+	                    'h3',
+	                    null,
+	                    'Университеты'
+	                )
+	            ),
+	            _react2['default'].createElement(
+	                'div',
+	                null,
+	                universities
+	            )
+	        );
+	    }
+	});
+
+	exports['default'] = (0, _utilsNeed2['default'])(_reducer.loadUniversities)((0, _reactRedux.connect)(function (state) {
+	    return _extends({}, state.universities);
+	}, { loadUniversities: _reducer.loadUniversities })(Universities));
+	module.exports = exports['default'];
+
+/***/ },
+/* 598 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.reducer = reducer;
+	exports.loadUniversities = loadUniversities;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _utilsHttp = __webpack_require__(560);
+
+	var _utilsHttp2 = _interopRequireDefault(_utilsHttp);
+
+	var initState = {
+	    universities: []
+	};
+
+	function reducer(state, action) {
+	    if (state === undefined) state = initState;
+
+	    switch (action.type) {
+	        case 'SET_UNIVERSITIES':
+	            {
+	                return _extends({}, state, { universities: action.payload });
+	            }
+	        default:
+	            return state;
+	    }
+	}
+
+	function loadUniversities() {
+	    return function (dispatch, getState) {
+	        return _utilsHttp2['default'].post('http://www.schedulea.h1n.ru/universities/admin/universities').then(function (data) {
+	            dispatch({ type: 'SET_UNIVERSITIES', payload: data.data });
+	        }, function (data) {});
+	    };
+	}
+
+/***/ },
+/* 599 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(600);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(555)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 600 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(554)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".universities h3 {\n  text-align: center;\n  margin: 50px 0; }\n\n.universities a {\n  text-decoration: none; }\n\n.universities .university {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .universities .university:hover {\n    background-color: #e9e9e9; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 601 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(160);
+
+	var _reactRedux = __webpack_require__(226);
+
+	var _reducer = __webpack_require__(602);
+
+	var _utilsNeed = __webpack_require__(594);
+
+	var _utilsNeed2 = _interopRequireDefault(_utilsNeed);
+
+	__webpack_require__(603);
 
 	var Faculties = _react2['default'].createClass({
 	    displayName: 'Faculties',
@@ -59542,7 +59767,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 599 */
+/* 602 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59589,13 +59814,13 @@
 	}
 
 /***/ },
-/* 600 */
+/* 603 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(601);
+	var content = __webpack_require__(604);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(555)(content, {});
@@ -59615,7 +59840,7 @@
 	}
 
 /***/ },
-/* 601 */
+/* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(554)();
@@ -59629,7 +59854,7 @@
 
 
 /***/ },
-/* 602 */
+/* 605 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59650,13 +59875,13 @@
 
 	var _reactRedux = __webpack_require__(226);
 
-	var _reducer = __webpack_require__(603);
+	var _reducer = __webpack_require__(606);
 
-	var _utilsNeed = __webpack_require__(595);
+	var _utilsNeed = __webpack_require__(594);
 
 	var _utilsNeed2 = _interopRequireDefault(_utilsNeed);
 
-	__webpack_require__(604);
+	__webpack_require__(607);
 
 	var Specialities = _react2['default'].createClass({
 	    displayName: 'Specialities',
@@ -59704,7 +59929,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 603 */
+/* 606 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59751,113 +59976,6 @@
 	}
 
 /***/ },
-/* 604 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(605);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(555)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 605 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(554)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".specialities h3 {\n  text-align: center;\n  margin: 50px 0; }\n\n.specialities a {\n  text-decoration: none; }\n\n.specialities .speciality {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .specialities .speciality:hover {\n    background-color: #e9e9e9; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 606 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(160);
-
-	var _reactRedux = __webpack_require__(226);
-
-	__webpack_require__(607);
-
-	var Courses = _react2['default'].createClass({
-	    displayName: 'Courses',
-
-	    render: function render() {
-	        var _props$params = this.props.params;
-	        var universityId = _props$params.universityId;
-	        var facultyId = _props$params.facultyId;
-	        var specialityId = _props$params.specialityId;
-
-	        var courses = [1, 2, 3, 4, 5, 6].map(function (item, index) {
-	            return _react2['default'].createElement(
-	                _reactRouter.Link,
-	                { key: index, to: '/universities/' + universityId + '/faculties/' + facultyId + '/specialities/' + specialityId + '/courses/' + item },
-	                _react2['default'].createElement(
-	                    'div',
-	                    { className: 'course' },
-	                    item,
-	                    ' курс'
-	                )
-	            );
-	        });
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'courses' },
-	            _react2['default'].createElement(
-	                'div',
-	                { className: 'header' },
-	                _react2['default'].createElement(
-	                    'h3',
-	                    null,
-	                    'Курсы'
-	                )
-	            ),
-	            _react2['default'].createElement(
-	                'div',
-	                null,
-	                courses
-	            )
-	        );
-	    }
-	});
-
-	exports['default'] = Courses;
-	module.exports = exports['default'];
-
-/***/ },
 /* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -59892,13 +60010,120 @@
 
 
 	// module
-	exports.push([module.id, ".courses h3 {\n  text-align: center;\n  margin: 50px 0; }\n\n.courses a {\n  text-decoration: none; }\n\n.courses .course {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .courses .course:hover {\n    background-color: #e9e9e9; }\n", ""]);
+	exports.push([module.id, ".specialities h3 {\n  text-align: center;\n  margin: 50px 0; }\n\n.specialities a {\n  text-decoration: none; }\n\n.specialities .speciality {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .specialities .speciality:hover {\n    background-color: #e9e9e9; }\n", ""]);
 
 	// exports
 
 
 /***/ },
 /* 609 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(160);
+
+	var _reactRedux = __webpack_require__(226);
+
+	__webpack_require__(610);
+
+	var Courses = _react2['default'].createClass({
+	    displayName: 'Courses',
+
+	    render: function render() {
+	        var _props$params = this.props.params;
+	        var universityId = _props$params.universityId;
+	        var facultyId = _props$params.facultyId;
+	        var specialityId = _props$params.specialityId;
+
+	        var courses = [1, 2, 3, 4, 5, 6].map(function (item, index) {
+	            return _react2['default'].createElement(
+	                _reactRouter.Link,
+	                { key: index, to: '/universities/' + universityId + '/faculties/' + facultyId + '/specialities/' + specialityId + '/courses/' + item + '/schedules' },
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'course' },
+	                    item,
+	                    ' курс'
+	                )
+	            );
+	        });
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'courses' },
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'header' },
+	                _react2['default'].createElement(
+	                    'h3',
+	                    null,
+	                    'Курсы'
+	                )
+	            ),
+	            _react2['default'].createElement(
+	                'div',
+	                null,
+	                courses
+	            )
+	        );
+	    }
+	});
+
+	exports['default'] = Courses;
+	module.exports = exports['default'];
+
+/***/ },
+/* 610 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(611);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(555)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 611 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(554)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".courses h3 {\n  text-align: center;\n  margin: 50px 0; }\n\n.courses a {\n  text-decoration: none; }\n\n.courses .course {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .courses .course:hover {\n    background-color: #e9e9e9; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 612 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -59915,7 +60140,7 @@
 	}
 
 /***/ },
-/* 610 */
+/* 613 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -59938,7 +60163,7 @@
 	}
 
 /***/ },
-/* 611 */
+/* 614 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59949,7 +60174,7 @@
 
 	exports.default = withScroll;
 
-	var _ScrollBehavior = __webpack_require__(612);
+	var _ScrollBehavior = __webpack_require__(615);
 
 	var _ScrollBehavior2 = _interopRequireDefault(_ScrollBehavior);
 
@@ -60015,7 +60240,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 612 */
+/* 615 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60038,7 +60263,7 @@
 
 	var _scrollTop2 = _interopRequireDefault(_scrollTop);
 
-	var _requestAnimationFrame = __webpack_require__(613);
+	var _requestAnimationFrame = __webpack_require__(616);
 
 	var _requestAnimationFrame2 = _interopRequireDefault(_requestAnimationFrame);
 
@@ -60222,7 +60447,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 613 */
+/* 616 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60273,7 +60498,7 @@
 	module.exports = compatRaf;
 
 /***/ },
-/* 614 */
+/* 617 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60290,13 +60515,13 @@
 
 	var _containersLoginReducer = __webpack_require__(559);
 
-	var _containersScheduleReducer = __webpack_require__(590);
+	var _containersScheduleReducer = __webpack_require__(591);
 
-	var _containersUniversitiesReducer = __webpack_require__(594);
+	var _containersUniversitiesReducer = __webpack_require__(598);
 
-	var _containersFacultiesReducer = __webpack_require__(599);
+	var _containersFacultiesReducer = __webpack_require__(602);
 
-	var _containersSpecialitiesReducer = __webpack_require__(603);
+	var _containersSpecialitiesReducer = __webpack_require__(606);
 
 	exports['default'] = (0, _redux.combineReducers)({
 	    schedule: _containersScheduleReducer.reducer,
