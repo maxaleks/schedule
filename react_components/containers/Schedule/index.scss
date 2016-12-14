@@ -1,5 +1,8 @@
-
 .schedule {
+    overflow:scroll;
+    height: 100vh;
+    white-space: nowrap;
+
     .header {
         text-align: center;
     }

@@ -5,15 +5,18 @@ import { connect } from 'react-redux';
 import Button from '../../components/Button';
 import Group from './Group';
 import GroupPopup from './GroupPopup';
-import { loadSchedules, openGroupPopup } from './reducer';
+import CouplePopup from './CouplePopup';
+import { loadSchedules, openGroupPopup, openCouplePopup } from './reducer';
 import need from '../../utils/need';
 
 require('./index.scss');
 
 const Schedule = React.createClass({
     render() {
-        const { openGroupPopup } = this.props;
-        const schedules = this.props.schedules.map((item, index) => <Group key={index} schedule={item}/>);
+        const { openGroupPopup, openCouplePopup } = this.props;
+        const schedules = this.props.schedules.map((item, index) =>
+            <Group key={index} schedule={item} openCouplePopup={openCouplePopup} />
+        );
         return (
             <div className='schedule'>
                 <div className='header'>
@@ -24,6 +27,7 @@ const Schedule = React.createClass({
                     {schedules}
                 </div>
                 <GroupPopup />
+                <CouplePopup />
             </div>
         );
     },
@@ -33,5 +37,5 @@ export default need(loadSchedules)(connect(
     state => ({
         ...state.schedule,
     }),
-    { openGroupPopup }
+    { openGroupPopup, openCouplePopup }
 )(Schedule));
