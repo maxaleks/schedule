@@ -9,19 +9,23 @@ module.exports = {
   },
   module: {
     loaders: [
-      {
-        test: /\.jsx$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      },
-      {
-        test: /\.json$/,
-        loader: 'json'
-      },
-      {
-        test: /\.scss$/,
-        loader: 'style-loader!css-loader!sass-loader',
-      }
+        {
+            test: /\.jsx$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader'
+        },
+        {
+            test: /\.json$/,
+            loader: 'json'
+        },
+        {
+            test: /\.scss$/,
+            loader: 'style-loader!css-loader!sass-loader',
+        },
+        {
+            test: /\.css$/,
+            loader: 'style-loader!css-loader!sass-loader',
+        }
     ]
   },
   modulesDirectories: ['node_modules'],

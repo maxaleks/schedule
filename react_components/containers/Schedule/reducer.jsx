@@ -34,24 +34,24 @@ export function reducer(state = initState, action) {
 
 function schedulesMapping(schedules) {
     const mappedSchedules = [];
-    const days = [];
-    const couples = [];
-    for (let i = 1; i <= 8; i++) {
-        couples.push({ serialNumber: i });
-    }
-    for (let i = 1; i <= 6; i++) {
-        days.push({
-            number: i,
-            couples,
-        });
-    }
-    schedules.forEach((item, index) => {
-        const { groupName, id, course, amountWeeks } = item;
+    schedules.forEach(item => {
+        const { groupName, id, amountWeeks } = item;
         const weeks = [];
         for (let i = 1; i <= item.amountWeeks; i++) {
+            const couples = [];
+            const days = [];
+            for (let i = 1; i <= 8; i++) {
+                couples.push({ serialNumber: i });
+            }
+            for (let i = 1; i <= 6; i++) {
+                days.push({
+                    number: i,
+                    couples: couples.slice(),
+                });
+            }
             weeks.push({
                 number: i,
-                days,
+                days: days.slice(),
             });
         }
         if (item.periods) {
@@ -59,10 +59,10 @@ function schedulesMapping(schedules) {
                 const i = couple.week - 1;
                 const j = couple.weekday - 1;
                 const k = couple.serialNumber - 1;
-                weeks[i][j][k] = couple;
+                weeks[i].days[j].couples[k] = { ...couple };
             });
         }
-        mappedSchedules.push({ groupName, id, weeks });
+        mappedSchedules.push({ groupName, id, weeks: weeks.slice() });
     });
     return mappedSchedules;
 }

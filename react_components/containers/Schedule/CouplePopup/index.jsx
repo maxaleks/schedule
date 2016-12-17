@@ -3,12 +3,15 @@ import { Grid, Col, Row, Modal } from 'react-bootstrap';
 import { reduxForm } from 'redux-form';
 import cx from 'classnames';
 import Select from 'react-select';
+import moment from 'moment';
+import TimePicker from 'rc-time-picker';
 
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 
 import { closeCouplePopup, saveCouple, addCouple } from '../reducer';
 import './index.scss';
+import 'rc-time-picker/assets/index.css';
 
 const GroupPopup = React.createClass({
     render() {
@@ -21,48 +24,54 @@ const GroupPopup = React.createClass({
                 startTime, endTime, nameSubject,
                 housing, lectureRoom, nameProfessor,
                 typeSubject, idSchedule, week,
-                weekday, serialNumber, id,
+                weekday, serialNumber, id, subgroup,
             },
             handleSubmit,
         } = this.props;
 
         return (
-            <div >
+            <div>
                 <Modal show={show} onHide={closeCouplePopup}>
                     <Modal.Header closeButton>
                         <Modal.Title>Добавить группу</Modal.Title>
                     </Modal.Header>
-                    <form onSubmit={handleSubmit(id.value ? saveCouple : addCouple)}>
+                    <form onSubmit={handleSubmit(id.value ? saveCouple : addCouple)} className='couple-form'>
                         <Modal.Body>
                             <Grid fluid>
-                                <input type='radio' value='1' onChange={() => typeSubject.onChange(1)} checked={typeSubject.value === 1}/> Лекция
-                                <input type='radio' value='2' onChange={() => typeSubject.onChange(2)} checked={typeSubject.value === 2}/> Практика
-                                <input type='radio' value='3' onChange={() => typeSubject.onChange(3)} checked={typeSubject.value === 3}/> Лабораторная
-                                <div>
-                                    <label>Начало пары (формат 08:45)</label>
-                                    <Input
-                                      {...startTime}
-                                      type='text'
-                                      className={cx('', { 'has-error': startTime.touched && startTime.error })}
+                                <div className='radio-btns-block'>
+                                    <input type='radio' value='1' onChange={() => typeSubject.onChange(1)} checked={Number(typeSubject.value) === 1}/>
+                                    Лекция <br />
+                                    <input type='radio' value='2' onChange={() => typeSubject.onChange(2)} checked={Number(typeSubject.value) === 2}/>
+                                    Практика <br />
+                                    <input type='radio' value='3' onChange={() => typeSubject.onChange(3)} checked={Number(typeSubject.value) === 3}/>
+                                    Лабораторная
+                                </div>
+                                <div className='radio-btns-block'>
+                                    <input type='radio' value='1' onChange={() => subgroup.onChange(0)} checked={Number(subgroup.value) === 0}/>
+                                    Вся группа <br />
+                                    <input type='radio' value='2' onChange={() => subgroup.onChange(1)} checked={Number(subgroup.value) === 1}/>
+                                    1 подгруппа <br />
+                                    <input type='radio' value='3' onChange={() => subgroup.onChange(2)} checked={Number(subgroup.value) === 2}/>
+                                    2 подгруппа
+                                </div>
+                                <div className='time-block'>
+                                    <label>Время</label><br />
+                                    с
+                                    <TimePicker
+                                      showSecond={false}
+                                      className='time-picker'
+                                      value={moment('2000-1-1 ' + startTime.value)}
+                                      onChange={val => startTime.onChange(val.format('HH:mm'))}
+                                    />
+                                    до
+                                    <TimePicker
+                                      showSecond={false}
+                                      className='time-picker'
+                                      value={moment('2000-1-1 ' + endTime.value)}
+                                      onChange={val => endTime.onChange(val.format('HH:mm'))}
                                     />
                                 </div>
-                                <div>
-                                    <label>Конец пары (формат 10:25)</label>
-                                    <Input
-                                      {...endTime}
-                                      type='text'
-                                      className={cx('', { 'has-error': endTime.touched && endTime.error })}
-                                    />
-                                </div>
-                                <div>
-                                    <label>Название предмета</label>
-                                    <Input
-                                      {...nameSubject}
-                                      type='text'
-                                      className={cx('', { 'has-error': nameSubject.touched && nameSubject.error })}
-                                    />
-                                </div>
-                                <div>
+                                <div className='house-block'>
                                     <label>Корпус</label>
                                     <Input
                                       {...housing}
@@ -70,7 +79,7 @@ const GroupPopup = React.createClass({
                                       className={cx('', { 'has-error': housing.touched && housing.error })}
                                     />
                                 </div>
-                                <div>
+                                <div className='room-block'>
                                     <label>Аудитория</label>
                                     <Input
                                       {...lectureRoom}
@@ -78,7 +87,15 @@ const GroupPopup = React.createClass({
                                       className={cx('', { 'has-error': lectureRoom.touched && lectureRoom.error })}
                                     />
                                 </div>
-                                <div>
+                                <div className='subject-block'>
+                                    <label>Название предмета</label>
+                                    <Input
+                                      {...nameSubject}
+                                      type='text'
+                                      className={cx('', { 'has-error': nameSubject.touched && nameSubject.error })}
+                                    />
+                                </div>
+                                <div className='teacher-block'>
                                     <label>Преподаватель</label>
                                     <Input
                                       {...nameProfessor}
@@ -101,6 +118,30 @@ const GroupPopup = React.createClass({
 
 const validate = values => {
     const errors = {};
+    if (!values.startTime) {
+        errors.startTime = 'Required';
+    }
+    if (!values.endTime) {
+        errors.endTime = 'Required';
+    }
+    if (!values.nameSubject) {
+        errors.nameSubject = 'Required';
+    }
+    if (!values.housing) {
+        errors.housing = 'Required';
+    }
+    if (!values.lectureRoom) {
+        errors.lectureRoom = 'Required';
+    }
+    if (!values.nameProfessor) {
+        errors.nameProfessor = 'Required';
+    }
+    if (!values.typeSubject) {
+        errors.typeSubject = 'Required';
+    }
+    if (!values.subgroup && values.subgroup !== 0) {
+        errors.subgroup = 'Required';
+    }
     return errors;
 };
 
@@ -111,7 +152,7 @@ export default reduxForm(
             'startTime', 'endTime', 'nameSubject',
             'housing', 'lectureRoom', 'nameProfessor',
             'typeSubject', 'idSchedule', 'week',
-            'weekday', 'serialNumber', 'id',
+            'weekday', 'serialNumber', 'id', 'subgroup',
         ],
         validate,
     },
