@@ -1,16 +1,19 @@
 
 
 .couple-form {
-    .time-picker {
-        width: 60px;
-        margin: 0 5px;
+    .time-input {
+        display: inline-block;
 
         input {
+            margin: 0 5px;
+            width: 65px;
             font-size: 14px;
             height: 34px;
-        }
-        .rc-time-picker-panel-inner {
-            width: 60px;
+            padding: 6px 12px;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
     }
     .radio-btns-block {

@@ -33,6 +33,7 @@ export function reducer(state = initState, action) {
 }
 
 function schedulesMapping(schedules) {
+    schedules.sort((a, b) => a.id > b.id);
     const mappedSchedules = [];
     schedules.forEach(item => {
         const { groupName, id, amountWeeks } = item;

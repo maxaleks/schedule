@@ -13,6 +13,7 @@
 
         .week {
             width: 400px;
+            margin-right: 10px;
             display: flex;
             flex-direction: column;
 
@@ -21,31 +22,77 @@
             }
             .day {
                 margin-bottom: 20px;
-                padding: 10px;
+                padding-left: 30px;
                 border: 1px solid #000;
+                position: relative;
+                display: flex;
+                flex-direction: row;
 
-                .pair {
+                .day-name {
+                    width: 30px;
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    transform: translateY(-30%);
+
+                    p {
+                        -webkit-transform: rotate(-90deg);
+                        -moz-transform: rotate(-90deg);
+                        -ms-transform: rotate(-90deg);
+                        -o-transform: rotate(-90deg);
+                    }
+                }
+                .day-name-bg {
+                    background-color: rgb(247, 247, 247);
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 30px;
+                    height: 100%;
+                }
+                .couples {
                     width: 100%;
-                    height: 40px;
-                    border: 1px solid #000;
-                    display: flex;
-                    flex-direction: row;
-                    cursor: pointer;
 
-                    &:hover {
-                        background-color: rgb(233, 233, 233);
-                    }
-                    .pair-number {
-                        width: 20px;
-                        text-align: center;
-                    }
-                    .pair-info {
-                        width: calc(100% - 20px);
+                    .pair {
+                        width: 100%;
+                        height: 40px;
+                        line-height: 40px;
+                        border-top: 1px solid #000;
+                        border-left: 1px solid #000;
+                        display: flex;
+                        flex-direction: row;
+                        cursor: pointer;
 
-                        strong {
-                            font-weight: normal;
-                            color: green;
+                        &:hover {
+                            background-color: rgb(233, 233, 233);
+                        }
+                        .pair-number {
+                            width: 30px;
+                            height: 100%;
                             margin-right: 5px;
+                            text-align: center;
+
+                            &.green {
+                                background-color: rgb(169, 255, 156);
+                            }
+                            &.yellow {
+                                background-color: rgb(255, 217, 153);
+                            }
+                            &.red {
+                                background-color: rgb(255, 152, 142);
+                            }
+                        }
+                        .pair-info {
+                            width: calc(100% - 20px);
+
+                            strong {
+                                font-weight: normal;
+                                color: green;
+                                margin-right: 5px;
+                            }
+                        }
+                        &:first-child {
+                            border-top: 0;
                         }
                     }
                 }

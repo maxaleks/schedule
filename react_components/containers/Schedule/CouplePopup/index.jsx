@@ -4,14 +4,13 @@ import { reduxForm } from 'redux-form';
 import cx from 'classnames';
 import Select from 'react-select';
 import moment from 'moment';
-import TimePicker from 'rc-time-picker';
+import TimeInput from 'time-input';
 
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 
 import { closeCouplePopup, saveCouple, addCouple } from '../reducer';
 import './index.scss';
-import 'rc-time-picker/assets/index.css';
 
 const GroupPopup = React.createClass({
     render() {
@@ -28,6 +27,12 @@ const GroupPopup = React.createClass({
             },
             handleSubmit,
         } = this.props;
+        if (!startTime.value) {
+            startTime.onChange('00:00')
+        }
+        if (!endTime.value) {
+            endTime.onChange('00:00')
+        }
 
         return (
             <div>
@@ -57,18 +62,16 @@ const GroupPopup = React.createClass({
                                 <div className='time-block'>
                                     <label>Время</label><br />
                                     с
-                                    <TimePicker
-                                      showSecond={false}
-                                      className='time-picker'
-                                      value={moment('2000-1-1 ' + startTime.value)}
-                                      onChange={val => startTime.onChange(val.format('HH:mm'))}
+                                    <TimeInput
+                                      className='time-input'
+                                      value={startTime.value}
+                                      onChange={val => startTime.onChange(val)}
                                     />
                                     до
-                                    <TimePicker
-                                      showSecond={false}
-                                      className='time-picker'
-                                      value={moment('2000-1-1 ' + endTime.value)}
-                                      onChange={val => endTime.onChange(val.format('HH:mm'))}
+                                    <TimeInput
+                                      className='time-input'
+                                      value={endTime.value}
+                                      onChange={val => endTime.onChange(val)}
                                     />
                                 </div>
                                 <div className='house-block'>
