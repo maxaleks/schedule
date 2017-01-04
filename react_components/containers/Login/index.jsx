@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { reduxForm } from 'redux-form';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Alert } from 'react-bootstrap';
 import cx from 'classnames';
 
 import Input from '../../components/Input';
@@ -12,7 +12,7 @@ require('./index.scss');
 
 const Login = React.createClass({
     render() {
-        const { fields: { login, password }, handleSubmit, loginAction } = this.props;
+        const { fields: { login, password }, handleSubmit, loginAction, errorText } = this.props;
         return (
             <Grid>
                 <Row>
@@ -21,6 +21,7 @@ const Login = React.createClass({
                         <div className='login'>
                             <div className='login-form'>
                                 <h1 className='text-center'>Вход в учетную запись</h1>
+                                {errorText && <Alert bsStyle='danger'>{errorText}</Alert>}
                                 <form onSubmit={handleSubmit(loginAction)}>
                                     <Input
                                       {...login}
@@ -63,6 +64,8 @@ export default reduxForm(
         fields: ['login', 'password'],
         validate,
     },
-    state => ({}),
+    state => ({
+        ...state.login,
+    }),
     { loginAction }
 )(Login);

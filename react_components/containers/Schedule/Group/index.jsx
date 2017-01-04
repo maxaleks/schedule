@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import cx from 'classnames';
+import ReactTooltip from 'react-tooltip';
 
 import './index.scss';
 
@@ -9,7 +10,27 @@ function getDay(number) {
     return days[number];
 }
 
-const Group = ({ schedule, openCouplePopup }) => (
+function getTypeOfCouple(i) {
+    const types = ['Лекция', 'Практика', 'Лабораторная'];
+    return types[i];
+}
+
+function getSubgroup(i) {
+    const subgroups = ['Вся группа', '1-я подгруппа', '2-я подгруппа'];
+    return subgroups[i];
+}
+
+function isInCopyArray(item, array) {
+    const foundedItem = array.find(arrItem =>
+        Number(arrItem.serialNumber) === Number(item.serialNumber)
+        && Number(arrItem.week) === Number(item.week)
+        && Number(arrItem.weekday) === Number(item.weekday)
+        && Number(arrItem.idSchedule) === Number(item.idSchedule)
+    );
+    return !!foundedItem;
+}
+
+const Group = ({ schedule, openCouplePopup, addToCopyArray, copying, copyCouple, copyArray }) => (
     <div className='group'>
         <div className='group-number'>
             <p>Группа: {schedule.groupName}</p>
@@ -30,15 +51,15 @@ const Group = ({ schedule, openCouplePopup }) => (
                                 {day.couples.map((couple, index) => (
                                     <div
                                       key={index}
-                                      className='pair'
-                                      onClick={
-                                          () => openCouplePopup({
+                                      className={cx('pair', {
+                                          'to-copy': Number(couple.id) === Number(copyCouple.id),
+                                          'in-copy-array': isInCopyArray({
                                               ...couple,
                                               week: week.number,
                                               weekday: day.number,
                                               idSchedule: schedule.id
-                                          })
-                                      }
+                                          }, copyArray),
+                                      })}
                                     >
                                         <div
                                           className={cx('pair-number', {
@@ -46,19 +67,41 @@ const Group = ({ schedule, openCouplePopup }) => (
                                               yellow: couple.typeSubject == 2,
                                               red: couple.typeSubject == 3,
                                           })}
+                                          data-tip={getTypeOfCouple(couple.typeSubject)}
                                         >
                                             <p>{couple.serialNumber}</p>
                                         </div>
-                                        <div className='pair-info'>
+                                        <div
+                                          className='pair-info'
+                                          onClick={copying ?
+                                              () => addToCopyArray({
+                                                  ...couple,
+                                                  week: week.number,
+                                                  weekday: day.number,
+                                                  idSchedule: schedule.id
+                                              }) :
+                                              () => openCouplePopup({
+                                                  ...couple,
+                                                  week: week.number,
+                                                  weekday: day.number,
+                                                  idSchedule: schedule.id
+                                              })
+
+                                          }
+                                        >
                                             {couple.id && <p>
                                                 <strong>
                                                     {couple.startTime}
                                                     -
                                                     {couple.endTime}
                                                 </strong>
-                                                {couple.nameSubject}, {couple.lectureRoom}-{couple.housing}, {couple.nameProfessor}
+                                                {couple.nameSubject}, {couple.housing}-{couple.lectureRoom}, {couple.nameProfessor}
                                             </p>}
                                         </div>
+                                        <div
+                                          className='pair-subgroup'
+                                          data-tip={getSubgroup(couple.subgroup)}
+                                        >{couple.subgroup}</div>
                                     </div>
                                 ))}
                             </div>
@@ -67,6 +110,7 @@ const Group = ({ schedule, openCouplePopup }) => (
                 </div>
             ))}
         </div>
+        <ReactTooltip />
     </div>
 );
 

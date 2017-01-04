@@ -9,7 +9,7 @@ import TimeInput from 'time-input';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 
-import { closeCouplePopup, saveCouple, addCouple } from '../reducer';
+import { closeCouplePopup, saveCouple, addCouple, removeCouple } from '../reducer';
 import './index.scss';
 
 const GroupPopup = React.createClass({
@@ -19,6 +19,7 @@ const GroupPopup = React.createClass({
             closeCouplePopup,
             saveCouple,
             addCouple,
+            removeCouple,
             fields: {
                 startTime, endTime, nameSubject,
                 housing, lectureRoom, nameProfessor,
@@ -38,7 +39,7 @@ const GroupPopup = React.createClass({
             <div>
                 <Modal show={show} onHide={closeCouplePopup}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Добавить группу</Modal.Title>
+                        <Modal.Title>{id.value ? 'Редактировать пару' : 'Добавить пару'}</Modal.Title>
                     </Modal.Header>
                     <form onSubmit={handleSubmit(id.value ? saveCouple : addCouple)} className='couple-form'>
                         <Modal.Body>
@@ -111,6 +112,7 @@ const GroupPopup = React.createClass({
                         <Modal.Footer>
                             <Button type='submit' className='btn-primary pull-right'>Сохранить</Button>
                             <Button onClick={closeCouplePopup} className='btn-default pull-right'>Отмена</Button>
+                            {id.value && <Button onClick={removeCouple} className='btn-danger pull-right'>Удалить пару</Button>}
                         </Modal.Footer>
                     </form>
                 </Modal>
@@ -142,9 +144,6 @@ const validate = values => {
     if (!values.typeSubject) {
         errors.typeSubject = 'Required';
     }
-    if (!values.subgroup && values.subgroup !== 0) {
-        errors.subgroup = 'Required';
-    }
     return errors;
 };
 
@@ -163,5 +162,5 @@ export default reduxForm(
         show: state.schedule.showCouplePopup,
         initialValues: state.schedule.couple,
     }),
-    { closeCouplePopup, saveCouple, addCouple }
+    { closeCouplePopup, saveCouple, addCouple, removeCouple }
 )(GroupPopup);

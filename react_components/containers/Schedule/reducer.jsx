@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import http from '../../utils/http';
 
 const initState = {
@@ -5,6 +7,9 @@ const initState = {
     couple: {},
     showGroupPopup: false,
     showCouplePopup: false,
+    copyCouple: {},
+    copyArray: [],
+    copying: false,
 };
 
 export function reducer(state = initState, action) {
@@ -27,6 +32,15 @@ export function reducer(state = initState, action) {
         case 'SET_COUPLE': {
             return { ...state, couple: action.payload };
         }
+        case 'SET_COPY_COUPLE': {
+            return { ...state, copyCouple: action.payload };
+        }
+        case 'SET_COPY_ARRAY': {
+            return { ...state, copyArray: action.payload };
+        }
+        case 'SET_COPYING': {
+            return { ...state, copying: action.payload };
+        }
         default:
             return state;
     }
@@ -41,7 +55,7 @@ function schedulesMapping(schedules) {
         for (let i = 1; i <= item.amountWeeks; i++) {
             const couples = [];
             const days = [];
-            for (let i = 1; i <= 8; i++) {
+            for (let i = 1; i <= 5; i++) {
                 couples.push({ serialNumber: i });
             }
             for (let i = 1; i <= 6; i++) {
@@ -130,5 +144,81 @@ export function addCouple(form) {
             dispatch(closeCouplePopup());
             dispatch(loadSchedules());
         });
+    };
+}
+
+export function removeCouple() {
+    return (dispatch, getState) => {
+        const { id, idSchedule } = getState().schedule.couple;
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/deletePeriod', { id, idSchedule }).then(data => {
+            dispatch(closeCouplePopup());
+            dispatch(loadSchedules());
+        });
+    };
+}
+
+export function startCopying() {
+    return (dispatch, getState) => {
+        dispatch({ type: 'SET_COPYING', payload: true });
+    };
+}
+
+export function endCopying() {
+    return (dispatch, getState) => {
+        dispatch({ type: 'SET_COPY_ARRAY', payload: [] });
+        dispatch({ type: 'SET_COPY_COUPLE', payload: {} });
+        dispatch({ type: 'SET_COPYING', payload: false });
+    };
+}
+
+export function copy() {
+    return (dispatch, getState) => {
+        const { copyArray, copyCouple } = getState().schedule;
+        const promiseArray = copyArray.map(item => {
+            const form = {
+                ...copyCouple,
+                id: item.id,
+                idSchedule: item.idSchedule,
+                week: item.week,
+                weekday: item.weekday,
+                serialNumber: item.serialNumber,
+            }
+            if (item.id) {
+                return http.post('http://www.schedulea.h1n.ru/universities/admin/editPeriod', form);
+            } else {
+                return http.post('http://www.schedulea.h1n.ru/universities/admin/addPeriod', form);
+            }
+        })
+        axios.all(promiseArray).then(() => {
+            dispatch(endCopying());
+            dispatch(loadSchedules());
+        });
+    };
+}
+
+export function addToCopyArray(couple) {
+    return (dispatch, getState) => {
+        const schedule = getState().schedule;
+        if (!schedule.copyCouple.id) {
+            if (couple.id) {
+                dispatch({ type: 'SET_COPY_COUPLE', payload: couple });
+            }
+        } else {
+            if (couple.id !== schedule.copyCouple.id) {
+                const copyArray = schedule.copyArray.slice();
+                const index = copyArray.findIndex(item =>
+                    item.serialNumber === couple.serialNumber
+                    && item.week === couple.week
+                    && item.weekday === couple.weekday
+                    && item.idSchedule === couple.idSchedule
+                );
+                if (index + 1) {
+                    copyArray.splice(index, 1);
+                } else {
+                    copyArray.push(couple);
+                }
+                dispatch({ type: 'SET_COPY_ARRAY', payload: copyArray });
+            }
+        }
     };
 }

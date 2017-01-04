@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
+import { Title } from '../../components/Layouts';
+
 import { loadSpecialities } from './reducer';
 import need from '../../utils/need';
 
@@ -17,9 +19,7 @@ const Specialities = React.createClass({
         );
         return (
             <div className='specialities'>
-                <div className='header'>
-                    <h3>Специальности</h3>
-                </div>
+                <Title text='Специальности' linkUrl={`/universities/${universityId}/faculties`} />
                 <div>
                     {specialities}
                 </div>

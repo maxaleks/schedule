@@ -61,16 +61,18 @@
                         border-left: 1px solid #000;
                         display: flex;
                         flex-direction: row;
-                        cursor: pointer;
 
-                        &:hover {
-                            background-color: rgb(233, 233, 233);
+                        &.to-copy {
+                            background-color: rgb(130, 255, 111);
+                        }
+                        &.in-copy-array {
+                            background-color: rgb(255, 200, 107);
                         }
                         .pair-number {
                             width: 30px;
                             height: 100%;
-                            margin-right: 5px;
                             text-align: center;
+                            border-right: 1px solid;
 
                             &.green {
                                 background-color: rgb(169, 255, 156);
@@ -83,13 +85,24 @@
                             }
                         }
                         .pair-info {
-                            width: calc(100% - 20px);
+                            width: calc(100% - 40px);
+                            cursor: pointer;
+                            padding: 0 5px;
 
                             strong {
                                 font-weight: normal;
                                 color: green;
                                 margin-right: 5px;
                             }
+                            &:hover {
+                                background-color: rgba(245, 245, 245, 0.8);
+                            }
+                        }
+                        .pair-subgroup {
+                          width: 20px;
+                          height: 100%;
+                          text-align: center;
+                          border-left: 1px solid;
                         }
                         &:first-child {
                             border-top: 0;

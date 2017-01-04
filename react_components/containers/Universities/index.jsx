@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
+import { Title } from '../../components/Layouts';
+
 import { loadUniversities } from './reducer';
 import need from '../../utils/need';
 
@@ -16,9 +18,7 @@ const Universities = React.createClass({
         );
         return (
             <div className='universities'>
-                <div className='header'>
-                    <h3>Университеты</h3>
-                </div>
+                <Title text='Университеты' />
                 <div>
                     {universities}
                 </div>

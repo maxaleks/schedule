@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
+import { Title } from '../../components/Layouts';
+
 require('./index.scss');
 
 const Courses = React.createClass({
@@ -14,9 +16,7 @@ const Courses = React.createClass({
         );
         return (
             <div className='courses'>
-                <div className='header'>
-                    <h3>Курсы</h3>
-                </div>
+                <Title text='Курсы' linkUrl={`/universities/${universityId}/faculties/${facultyId}/specialities`} />
                 <div>
                     {courses}
                 </div>

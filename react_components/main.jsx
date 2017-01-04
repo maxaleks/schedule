@@ -16,6 +16,8 @@ import createHistory from 'history/lib/createHashHistory';
 import rootReducer from './reducers';
 import { reduxReactRouter } from 'redux-router';
 
+import './css/main.scss';
+
 
 const middleware = applyMiddleware(thunk);
 
