@@ -58,7 +58,7 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _actions = __webpack_require__(765);
+	var _actions = __webpack_require__(774);
 
 	var _reactRedux = __webpack_require__(226);
 
@@ -66,11 +66,11 @@
 
 	var _redux = __webpack_require__(233);
 
-	var _reduxThunk = __webpack_require__(766);
+	var _reduxThunk = __webpack_require__(775);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _scrollBehavior = __webpack_require__(767);
+	var _scrollBehavior = __webpack_require__(776);
 
 	var _scrollBehavior2 = _interopRequireDefault(_scrollBehavior);
 
@@ -78,11 +78,11 @@
 
 	var _createHashHistory2 = _interopRequireDefault(_createHashHistory);
 
-	var _reducers = __webpack_require__(770);
+	var _reducers = __webpack_require__(779);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	__webpack_require__(771);
+	__webpack_require__(780);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19825,15 +19825,15 @@
 
 	var _Universities2 = _interopRequireDefault(_Universities);
 
-	var _Faculties = __webpack_require__(754);
+	var _Faculties = __webpack_require__(757);
 
 	var _Faculties2 = _interopRequireDefault(_Faculties);
 
-	var _Specialities = __webpack_require__(758);
+	var _Specialities = __webpack_require__(764);
 
 	var _Specialities2 = _interopRequireDefault(_Specialities);
 
-	var _Courses = __webpack_require__(762);
+	var _Courses = __webpack_require__(771);
 
 	var _Courses2 = _interopRequireDefault(_Courses);
 
@@ -58294,9 +58294,9 @@
 
 	var _Group2 = _interopRequireDefault(_Group);
 
-	var _GroupPopup = __webpack_require__(609);
+	var _ManagePopup = __webpack_require__(609);
 
-	var _GroupPopup2 = _interopRequireDefault(_GroupPopup);
+	var _ManagePopup2 = _interopRequireDefault(_ManagePopup);
 
 	var _CouplePopup = __webpack_require__(613);
 
@@ -58373,7 +58373,7 @@
 	        key: 'render',
 	        value: function render() {
 	            var _props = this.props,
-	                openGroupPopup = _props.openGroupPopup,
+	                openManagePopup = _props.openManagePopup,
 	                openCouplePopup = _props.openCouplePopup,
 	                copying = _props.copying,
 	                startCopying = _props.startCopying,
@@ -58401,12 +58401,13 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_Layouts.Title, { text: '\u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u044F', linkUrl: '/universities/' + idUniversity + '/faculties/' + idFaculty + '/specialities/' + idSpecialty + '/courses' }),
-	                _react2.default.createElement(
-	                    _Button2.default,
-	                    { onClick: openGroupPopup },
-	                    '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0433\u0440\u0443\u043F\u043F\u0443'
-	                ),
+	                _react2.default.createElement(_Layouts.Title, {
+	                    text: '\u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u044F',
+	                    linkUrl: '/universities/' + idUniversity + '/faculties/' + idFaculty + '/specialities/' + idSpecialty + '/courses',
+	                    managing: true,
+	                    managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0433\u0440\u0443\u043F\u043F\u0430\u043C\u0438',
+	                    managingAction: openManagePopup
+	                }),
 	                !copying && _react2.default.createElement(
 	                    _Button2.default,
 	                    { onClick: startCopying },
@@ -58427,7 +58428,7 @@
 	                    { className: 'schedule' },
 	                    schedules
 	                ),
-	                _react2.default.createElement(_GroupPopup2.default, null),
+	                _react2.default.createElement(_ManagePopup2.default, null),
 	                _react2.default.createElement(_CouplePopup2.default, null)
 	            );
 	        }
@@ -58444,7 +58445,7 @@
 	        idSpecialty: state.router.params.specialityId,
 	        course: state.router.params.courseNumber
 	    });
-	}, { openGroupPopup: _reducer.openGroupPopup, openCouplePopup: _reducer.openCouplePopup, startCopying: _reducer.startCopying, copy: _reducer.copy, endCopying: _reducer.endCopying, addToCopyArray: _reducer.addToCopyArray })(Schedule));
+	}, { openManagePopup: _reducer.openManagePopup, openCouplePopup: _reducer.openCouplePopup, startCopying: _reducer.startCopying, copy: _reducer.copy, endCopying: _reducer.endCopying, addToCopyArray: _reducer.addToCopyArray })(Schedule));
 
 /***/ },
 /* 578 */
@@ -59728,7 +59729,10 @@
 	        linkUrl = _ref.linkUrl,
 	        linkText = _ref.linkText,
 	        underText = _ref.underText,
-	        logout = _ref.logout;
+	        logout = _ref.logout,
+	        managing = _ref.managing,
+	        managingAction = _ref.managingAction,
+	        managingText = _ref.managingText;
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'title-component' },
@@ -59738,6 +59742,12 @@
 	            _react2.default.createElement('span', { 'data-tip': '\u041D\u0430\u0437\u0430\u0434', 'data-delay-show': 400, className: 'fa fa-arrow-circle-left' }),
 	            linkText
 	        ),
+	        managing && _react2.default.createElement('span', {
+	            'data-tip': managingText,
+	            'data-delay-show': 400,
+	            className: 'fa fa-cogs managing',
+	            onClick: managingAction
+	        }),
 	        _react2.default.createElement(
 	            'h3',
 	            { className: 'title' },
@@ -61116,7 +61126,7 @@
 
 
 	// module
-	exports.push([module.id, ".title-component {\n  position: relative;\n  height: 80px;\n  margin-bottom: 20px;\n  padding-top: 21px; }\n  .title-component a {\n    text-decoration: none; }\n  .title-component .title {\n    text-align: center; }\n  .title-component .back-link, .title-component .logout {\n    position: absolute;\n    cursor: pointer; }\n  .title-component .back-link {\n    top: 20px;\n    left: 30px;\n    font-size: 46px;\n    color: #a7a7a7; }\n    .title-component .back-link:hover {\n      color: #747474;\n      transition: color .3s ease-in-out; }\n  .title-component .logout {\n    top: 25px;\n    right: 30px;\n    font-size: 30px;\n    color: #000000; }\n", ""]);
+	exports.push([module.id, ".title-component {\n  position: relative;\n  height: 80px;\n  margin-bottom: 20px;\n  padding-top: 21px; }\n  .title-component a {\n    text-decoration: none; }\n  .title-component .title {\n    text-align: center; }\n  .title-component .back-link, .title-component .logout, .title-component .managing {\n    position: absolute;\n    cursor: pointer; }\n  .title-component .back-link {\n    top: 20px;\n    left: 30px;\n    font-size: 46px;\n    color: #a7a7a7; }\n    .title-component .back-link:hover {\n      color: #747474;\n      transition: color .3s ease-in-out; }\n  .title-component .logout {\n    top: 25px;\n    right: 30px;\n    font-size: 30px;\n    color: #000000; }\n  .title-component .managing {\n    top: 30px;\n    right: 80px;\n    font-size: 30px;\n    color: #000000; }\n", ""]);
 
 	// exports
 
@@ -61395,13 +61405,14 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var GroupPopup = _react2.default.createClass({
-	    displayName: 'GroupPopup',
+	var ManagePopup = _react2.default.createClass({
+	    displayName: 'ManagePopup',
 	    render: function render() {
 	        var _props = this.props,
 	            show = _props.show,
-	            closeGroupPopup = _props.closeGroupPopup,
-	            addGroup = _props.addGroup,
+	            closePopup = _props.closePopup,
+	            groups = _props.groups,
+	            add = _props.add,
 	            _props$fields = _props.fields,
 	            groupName = _props$fields.groupName,
 	            amountWeeks = _props$fields.amountWeeks,
@@ -61409,55 +61420,69 @@
 
 
 	        return _react2.default.createElement(
-	            'div',
-	            null,
+	            _reactBootstrap.Modal,
+	            { show: show, onHide: closePopup },
 	            _react2.default.createElement(
-	                _reactBootstrap.Modal,
-	                { show: show, onHide: closeGroupPopup },
+	                _reactBootstrap.Modal.Header,
+	                { closeButton: true },
 	                _react2.default.createElement(
-	                    _reactBootstrap.Modal.Header,
-	                    { closeButton: true },
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Modal.Title,
-	                        null,
-	                        '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0433\u0440\u0443\u043F\u043F\u0443'
-	                    )
-	                ),
+	                    _reactBootstrap.Modal.Title,
+	                    null,
+	                    '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0433\u0440\u0443\u043F\u043F\u0430\u043C\u0438'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'form',
+	                { onSubmit: handleSubmit(add) },
 	                _react2.default.createElement(
-	                    'form',
-	                    { onSubmit: handleSubmit(addGroup) },
+	                    _reactBootstrap.Modal.Body,
+	                    null,
 	                    _react2.default.createElement(
-	                        _reactBootstrap.Modal.Body,
-	                        null,
+	                        _reactBootstrap.Grid,
+	                        { fluid: true, className: 'manage-popup' },
 	                        _react2.default.createElement(
-	                            _reactBootstrap.Grid,
-	                            { fluid: true },
+	                            'div',
+	                            { className: 'add' },
 	                            _react2.default.createElement(_Input2.default, _extends({}, groupName, {
 	                                placeholder: '\u041D\u043E\u043C\u0435\u0440 \u0433\u0440\u0443\u043F\u043F\u044B',
 	                                type: 'text',
-	                                className: (0, _classnames2.default)('', { 'has-error': groupName.touched && groupName.error })
+	                                className: (0, _classnames2.default)('name', { 'has-error': groupName.touched && groupName.error })
 	                            })),
 	                            _react2.default.createElement(_Input2.default, _extends({}, amountWeeks, {
-	                                placeholder: '\u041A\u043E\u043B-\u0432\u043E \u0443\u0447\u0435\u0431\u043D\u044B\u0445 \u043D\u0435\u0434\u0435\u043B\u044C',
+	                                placeholder: '\u041A\u043E\u043B-\u0432\u043E \u043D\u0435\u0434\u0435\u043B\u044C',
+	                                min: 1,
 	                                type: 'number',
-	                                className: (0, _classnames2.default)('', { 'has-error': amountWeeks.touched && amountWeeks.error })
-	                            }))
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Modal.Footer,
-	                        null,
-	                        _react2.default.createElement(
-	                            _Button2.default,
-	                            { type: 'submit', className: 'btn-primary pull-right' },
-	                            '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
+	                                className: (0, _classnames2.default)('amount-of-weeks', { 'has-error': amountWeeks.touched && amountWeeks.error })
+	                            })),
+	                            _react2.default.createElement(
+	                                _Button2.default,
+	                                { className: 'btn-primary add-btn', type: 'submit' },
+	                                '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
+	                            )
 	                        ),
-	                        _react2.default.createElement(
-	                            _Button2.default,
-	                            { onClick: closeGroupPopup, className: 'btn-default pull-right' },
-	                            '\u041E\u0442\u043C\u0435\u043D\u0430'
-	                        )
+	                        groups.map(function (item, i) {
+	                            return _react2.default.createElement(
+	                                'div',
+	                                { key: i, className: 'item' },
+	                                _react2.default.createElement(
+	                                    'p',
+	                                    { className: 'name', title: item.groupName },
+	                                    item.groupName
+	                                ),
+	                                _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                                _react2.default.createElement('div', { className: 'clear-block' })
+	                            );
+	                        })
 	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Footer,
+	                null,
+	                _react2.default.createElement(
+	                    _Button2.default,
+	                    { onClick: closePopup, className: 'btn-default pull-right' },
+	                    '\u0417\u0430\u043A\u0440\u044B\u0442\u044C'
 	                )
 	            )
 	        );
@@ -61471,6 +61496,8 @@
 	    }
 	    if (!values.amountWeeks) {
 	        errors.amountWeeks = 'Required';
+	    } else if (values.amountWeeks < 1) {
+	        errors.amountWeeks = 'Must be a positive';
 	    }
 	    return errors;
 	};
@@ -61481,9 +61508,10 @@
 	    validate: validate
 	}, function (state) {
 	    return {
-	        show: state.schedule.showGroupPopup
+	        show: state.schedule.showManagePopup,
+	        groups: state.schedule.schedules
 	    };
-	}, { closeGroupPopup: _reducer.closeGroupPopup, addGroup: _reducer.addGroup })(GroupPopup);
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addGroup })(ManagePopup);
 
 /***/ },
 /* 610 */
@@ -61499,8 +61527,8 @@
 
 	exports.reducer = reducer;
 	exports.loadSchedules = loadSchedules;
-	exports.openGroupPopup = openGroupPopup;
-	exports.closeGroupPopup = closeGroupPopup;
+	exports.openManagePopup = openManagePopup;
+	exports.closeManagePopup = closeManagePopup;
 	exports.openCouplePopup = openCouplePopup;
 	exports.closeCouplePopup = closeCouplePopup;
 	exports.addGroup = addGroup;
@@ -61525,7 +61553,7 @@
 	var initState = {
 	    schedules: [],
 	    couple: {},
-	    showGroupPopup: false,
+	    showManagePopup: false,
 	    showCouplePopup: false,
 	    copyCouple: {},
 	    copyArray: [],
@@ -61543,11 +61571,11 @@
 	            }
 	        case 'OPEN_GROUP_POPUP':
 	            {
-	                return _extends({}, state, { showGroupPopup: true });
+	                return _extends({}, state, { showManagePopup: true });
 	            }
 	        case 'CLOSE_GROUP_POPUP':
 	            {
-	                return _extends({}, state, { showGroupPopup: false });
+	                return _extends({}, state, { showManagePopup: false });
 	            }
 	        case 'OPEN_COUPLE_POPUP':
 	            {
@@ -61580,7 +61608,7 @@
 
 	function schedulesMapping(schedules) {
 	    schedules.sort(function (a, b) {
-	        return a.id > b.id;
+	        return Number(a.id) > Number(b.id);
 	    });
 	    var mappedSchedules = [];
 	    schedules.forEach(function (item) {
@@ -61631,13 +61659,13 @@
 	    };
 	}
 
-	function openGroupPopup() {
+	function openManagePopup() {
 	    return function (dispatch, getState) {
 	        dispatch({ type: 'OPEN_GROUP_POPUP' });
 	    };
 	}
 
-	function closeGroupPopup() {
+	function closeManagePopup() {
 	    return function (dispatch, getState) {
 	        dispatch({ type: 'CLOSE_GROUP_POPUP' });
 	    };
@@ -61663,7 +61691,6 @@
 	        var idSpecialty = getState().router.params.specialityId;
 	        var course = getState().router.params.courseNumber;
 	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addGroup', _extends({}, form, { idSpecialty: idSpecialty, course: course, idUniversity: idUniversity, idFaculty: idFaculty })).then(function (data) {
-	            dispatch(closeGroupPopup());
 	            dispatch(loadSchedules());
 	        });
 	    };
@@ -61800,7 +61827,7 @@
 
 
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .name, .manage-popup .add .amount-of-weeks, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .name {\n    width: calc(100% - 250px);\n    margin-right: 10px; }\n  .manage-popup .add .amount-of-weeks {\n    width: 140px;\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
 
 	// exports
 
@@ -79310,7 +79337,11 @@
 
 	var _Layouts = __webpack_require__(592);
 
-	var _reducer = __webpack_require__(751);
+	var _ManagePopup = __webpack_require__(751);
+
+	var _ManagePopup2 = _interopRequireDefault(_ManagePopup);
+
+	var _reducer = __webpack_require__(752);
 
 	var _need = __webpack_require__(747);
 
@@ -79318,11 +79349,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(752);
+	__webpack_require__(755);
 
 	var Universities = _react2.default.createClass({
 	    displayName: 'Universities',
 	    render: function render() {
+	        var _props = this.props,
+	            openManagePopup = _props.openManagePopup,
+	            role = _props.role;
+
 	        var universities = this.props.universities.map(function (item, index) {
 	            return _react2.default.createElement(
 	                _reactRouter.Link,
@@ -79334,25 +79369,168 @@
 	                )
 	            );
 	        });
+	        var admin = role === 'superadmin';
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'universities' },
-	            _react2.default.createElement(_Layouts.Title, { text: '\u0423\u043D\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442\u044B' }),
+	            _react2.default.createElement(_Layouts.Title, {
+	                text: '\u0423\u043D\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442\u044B',
+	                managing: admin,
+	                managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0443\u043D\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442\u0430\u043C\u0438',
+	                managingAction: openManagePopup
+	            }),
 	            _react2.default.createElement(
 	                'div',
 	                null,
 	                universities
-	            )
+	            ),
+	            _react2.default.createElement(_ManagePopup2.default, null)
 	        );
 	    }
 	});
 
 	exports.default = (0, _need2.default)(_reducer.loadUniversities)((0, _reactRedux.connect)(function (state) {
-	    return _extends({}, state.universities);
-	}, { loadUniversities: _reducer.loadUniversities })(Universities));
+	    return _extends({}, state.universities, {
+	        role: state.auth.role
+	    });
+	}, { loadUniversities: _reducer.loadUniversities, openManagePopup: _reducer.openManagePopup })(Universities));
 
 /***/ },
 /* 751 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(330);
+
+	var _reactRedux = __webpack_require__(226);
+
+	var _classnames = __webpack_require__(356);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _Input = __webpack_require__(566);
+
+	var _Input2 = _interopRequireDefault(_Input);
+
+	var _Button = __webpack_require__(571);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _reducer = __webpack_require__(752);
+
+	__webpack_require__(753);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ManagePopup = _react2.default.createClass({
+	    displayName: 'ManagePopup',
+	    getInitialState: function getInitialState() {
+	        return {
+	            text: ''
+	        };
+	    },
+	    changeText: function changeText(e) {
+	        this.setState({ text: e.target.value });
+	    },
+	    add: function add() {
+	        if (this.state.text) {
+	            this.props.add(this.state.text);
+	            this.setState({ text: '' });
+	        }
+	    },
+	    handleKeyPress: function handleKeyPress(e) {
+	        if (e.charCode === 13) {
+	            this.add();
+	        }
+	    },
+	    render: function render() {
+	        var _props = this.props,
+	            show = _props.show,
+	            closePopup = _props.closePopup,
+	            universities = _props.universities;
+
+
+	        return _react2.default.createElement(
+	            _reactBootstrap.Modal,
+	            { show: show, onHide: closePopup },
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Header,
+	                { closeButton: true },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Title,
+	                    null,
+	                    '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0443\u043D\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442\u0430\u043C\u0438'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Body,
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Grid,
+	                    { fluid: true, className: 'manage-popup' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'add' },
+	                        _react2.default.createElement(_Input2.default, {
+	                            value: this.state.text,
+	                            onChange: this.changeText,
+	                            placeholder: '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435',
+	                            type: 'text',
+	                            className: 'add-input',
+	                            onKeyPress: this.handleKeyPress
+	                        }),
+	                        _react2.default.createElement(
+	                            _Button2.default,
+	                            { className: 'btn-primary add-btn', onClick: this.add },
+	                            '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
+	                        )
+	                    ),
+	                    universities.map(function (item, i) {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            { key: i, className: 'item' },
+	                            _react2.default.createElement(
+	                                'p',
+	                                { className: 'name', title: item.name },
+	                                item.name
+	                            ),
+	                            _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                            _react2.default.createElement('div', { className: 'clear-block' })
+	                        );
+	                    })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Footer,
+	                null,
+	                _react2.default.createElement(
+	                    _Button2.default,
+	                    { onClick: closePopup, className: 'btn-default pull-right' },
+	                    '\u0417\u0430\u043A\u0440\u044B\u0442\u044C'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return {
+	        show: state.universities.showManagePopup,
+	        universities: state.universities.universities
+	    };
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addUniversity })(ManagePopup);
+
+/***/ },
+/* 752 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79365,6 +79543,9 @@
 
 	exports.reducer = reducer;
 	exports.loadUniversities = loadUniversities;
+	exports.addUniversity = addUniversity;
+	exports.openManagePopup = openManagePopup;
+	exports.closeManagePopup = closeManagePopup;
 
 	var _http = __webpack_require__(261);
 
@@ -79373,7 +79554,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var initState = {
-	    universities: []
+	    universities: [],
+	    showManagePopup: false
 	};
 
 	function reducer() {
@@ -79384,6 +79566,14 @@
 	        case 'SET_UNIVERSITIES':
 	            {
 	                return _extends({}, state, { universities: action.payload });
+	            }
+	        case 'OPEN_UNIVERSITIES_POPUP':
+	            {
+	                return _extends({}, state, { showManagePopup: true });
+	            }
+	        case 'CLOSE_UNIVERSITIES_POPUP':
+	            {
+	                return _extends({}, state, { showManagePopup: false });
 	            }
 	        default:
 	            return state;
@@ -79398,14 +79588,74 @@
 	    };
 	}
 
+	function addUniversity(name) {
+	    return function (dispatch, getState) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addUniversity', { name: name }).then(function (data) {
+	            dispatch(loadUniversities());
+	        }, function (data) {});
+	    };
+	}
+
+	function openManagePopup() {
+	    return function (dispatch, getState) {
+	        dispatch({ type: 'OPEN_UNIVERSITIES_POPUP' });
+	    };
+	}
+
+	function closeManagePopup() {
+	    return function (dispatch, getState) {
+	        dispatch({ type: 'CLOSE_UNIVERSITIES_POPUP' });
+	    };
+	}
+
 /***/ },
-/* 752 */
+/* 753 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(753);
+	var content = __webpack_require__(754);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(570)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 754 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(569)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .add-input, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 755 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(756);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(570)(content, {});
@@ -79425,7 +79675,7 @@
 	}
 
 /***/ },
-/* 753 */
+/* 756 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(569)();
@@ -79439,7 +79689,7 @@
 
 
 /***/ },
-/* 754 */
+/* 757 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79460,7 +79710,11 @@
 
 	var _Layouts = __webpack_require__(592);
 
-	var _reducer = __webpack_require__(755);
+	var _ManagePopup = __webpack_require__(758);
+
+	var _ManagePopup2 = _interopRequireDefault(_ManagePopup);
+
+	var _reducer = __webpack_require__(759);
 
 	var _need = __webpack_require__(747);
 
@@ -79468,12 +79722,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(756);
+	__webpack_require__(762);
 
 	var Faculties = _react2.default.createClass({
 	    displayName: 'Faculties',
 	    render: function render() {
-	        var universityId = this.props.params.universityId;
+	        var _props = this.props,
+	            universityId = _props.params.universityId,
+	            openManagePopup = _props.openManagePopup,
+	            role = _props.role;
 
 	        var faculties = this.props.faculties.map(function (item, index) {
 	            return _react2.default.createElement(
@@ -79486,25 +79743,169 @@
 	                )
 	            );
 	        });
+	        var admin = role === 'superadmin' || role === 'admin';
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'faculties' },
-	            _react2.default.createElement(_Layouts.Title, { text: '\u0424\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u044B', linkUrl: '/universities' }),
+	            _react2.default.createElement(_Layouts.Title, {
+	                text: '\u0424\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u044B',
+	                linkUrl: '/universities',
+	                managing: admin,
+	                managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0444\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u0430\u043C\u0438',
+	                managingAction: openManagePopup
+	            }),
 	            _react2.default.createElement(
 	                'div',
 	                null,
 	                faculties
-	            )
+	            ),
+	            _react2.default.createElement(_ManagePopup2.default, null)
 	        );
 	    }
 	});
 
 	exports.default = (0, _need2.default)(_reducer.loadFaculties)((0, _reactRedux.connect)(function (state) {
-	    return _extends({}, state.faculties);
-	}, { loadFaculties: _reducer.loadFaculties })(Faculties));
+	    return _extends({}, state.faculties, {
+	        role: state.auth.role
+	    });
+	}, { loadFaculties: _reducer.loadFaculties, openManagePopup: _reducer.openManagePopup })(Faculties));
 
 /***/ },
-/* 755 */
+/* 758 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(330);
+
+	var _reactRedux = __webpack_require__(226);
+
+	var _classnames = __webpack_require__(356);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _Input = __webpack_require__(566);
+
+	var _Input2 = _interopRequireDefault(_Input);
+
+	var _Button = __webpack_require__(571);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _reducer = __webpack_require__(759);
+
+	__webpack_require__(760);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ManagePopup = _react2.default.createClass({
+	    displayName: 'ManagePopup',
+	    getInitialState: function getInitialState() {
+	        return {
+	            text: ''
+	        };
+	    },
+	    changeText: function changeText(e) {
+	        this.setState({ text: e.target.value });
+	    },
+	    add: function add() {
+	        if (this.state.text) {
+	            this.props.add(this.state.text);
+	            this.setState({ text: '' });
+	        }
+	    },
+	    handleKeyPress: function handleKeyPress(e) {
+	        if (e.charCode === 13) {
+	            this.add();
+	        }
+	    },
+	    render: function render() {
+	        var _props = this.props,
+	            show = _props.show,
+	            closePopup = _props.closePopup,
+	            faculties = _props.faculties;
+
+
+	        return _react2.default.createElement(
+	            _reactBootstrap.Modal,
+	            { show: show, onHide: closePopup },
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Header,
+	                { closeButton: true },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Title,
+	                    null,
+	                    '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0444\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u0430\u043C\u0438'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Body,
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Grid,
+	                    { fluid: true, className: 'manage-popup' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'add' },
+	                        _react2.default.createElement(_Input2.default, {
+	                            value: this.state.text,
+	                            onChange: this.changeText,
+	                            placeholder: '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435',
+	                            type: 'text',
+	                            className: 'add-input',
+	                            onKeyPress: this.handleKeyPress
+	                        }),
+	                        _react2.default.createElement(
+	                            _Button2.default,
+	                            { className: 'btn-primary add-btn', onClick: this.add },
+	                            '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
+	                        )
+	                    ),
+	                    faculties.map(function (item, i) {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            { key: i, className: 'item' },
+	                            _react2.default.createElement(
+	                                'p',
+	                                { className: 'name', title: item.name },
+	                                item.name
+	                            ),
+	                            _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                            _react2.default.createElement('div', { className: 'clear-block' })
+	                        );
+	                    })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Footer,
+	                null,
+	                _react2.default.createElement(
+	                    _Button2.default,
+	                    { onClick: closePopup, className: 'btn-default pull-right' },
+	                    '\u0417\u0430\u043A\u0440\u044B\u0442\u044C'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return {
+	        show: state.faculties.showManagePopup,
+	        faculties: state.faculties.faculties
+	    };
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addFaculty })(ManagePopup);
+
+/***/ },
+/* 759 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79517,6 +79918,9 @@
 
 	exports.reducer = reducer;
 	exports.loadFaculties = loadFaculties;
+	exports.addFaculty = addFaculty;
+	exports.openManagePopup = openManagePopup;
+	exports.closeManagePopup = closeManagePopup;
 
 	var _http = __webpack_require__(261);
 
@@ -79525,7 +79929,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var initState = {
-	    faculties: []
+	    faculties: [],
+	    showManagePopup: false
 	};
 
 	function reducer() {
@@ -79536,6 +79941,14 @@
 	        case 'SET_FACULTIES':
 	            {
 	                return _extends({}, state, { faculties: action.payload });
+	            }
+	        case 'OPEN_FACULTIES_POPUP':
+	            {
+	                return _extends({}, state, { showManagePopup: true });
+	            }
+	        case 'CLOSE_FACULTIES_POPUP':
+	            {
+	                return _extends({}, state, { showManagePopup: false });
 	            }
 	        default:
 	            return state;
@@ -79551,158 +79964,24 @@
 	    };
 	}
 
-/***/ },
-/* 756 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(757);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(570)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 757 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(569)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".faculties a {\n  text-decoration: none; }\n\n.faculties .faculty {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .faculties .faculty:hover {\n    background-color: #e9e9e9; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 758 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(160);
-
-	var _reactRedux = __webpack_require__(226);
-
-	var _Layouts = __webpack_require__(592);
-
-	var _reducer = __webpack_require__(759);
-
-	var _need = __webpack_require__(747);
-
-	var _need2 = _interopRequireDefault(_need);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(760);
-
-	var Specialities = _react2.default.createClass({
-	    displayName: 'Specialities',
-	    render: function render() {
-	        var _props$params = this.props.params,
-	            universityId = _props$params.universityId,
-	            facultyId = _props$params.facultyId;
-
-	        var specialities = this.props.specialities.map(function (item, index) {
-	            return _react2.default.createElement(
-	                _reactRouter.Link,
-	                { key: index, to: '/universities/' + universityId + '/faculties/' + facultyId + '/specialities/' + item.id + '/courses' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'speciality' },
-	                    item.name
-	                )
-	            );
-	        });
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'specialities' },
-	            _react2.default.createElement(_Layouts.Title, { text: '\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438', linkUrl: '/universities/' + universityId + '/faculties' }),
-	            _react2.default.createElement(
-	                'div',
-	                null,
-	                specialities
-	            )
-	        );
-	    }
-	});
-
-	exports.default = (0, _need2.default)(_reducer.loadSpecialities)((0, _reactRedux.connect)(function (state) {
-	    return _extends({}, state.specialities);
-	}, { loadSpecialities: _reducer.loadSpecialities })(Specialities));
-
-/***/ },
-/* 759 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	exports.reducer = reducer;
-	exports.loadSpecialities = loadSpecialities;
-
-	var _http = __webpack_require__(261);
-
-	var _http2 = _interopRequireDefault(_http);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var initState = {
-	    specialities: []
-	};
-
-	function reducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case 'SET_SPECIALITIES':
-	            {
-	                return _extends({}, state, { specialities: action.payload });
-	            }
-	        default:
-	            return state;
-	    }
-	}
-
-	function loadSpecialities() {
+	function addFaculty(name) {
 	    return function (dispatch, getState) {
-	        var id = getState().router.params.facultyId;
-	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/specialties/' + id).then(function (data) {
-	            dispatch({ type: 'SET_SPECIALITIES', payload: data.data });
+	        var idUniversity = getState().router.params.universityId;
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addFaculty', { name: name, idUniversity: idUniversity }).then(function (data) {
+	            dispatch(loadFaculties());
 	        }, function (data) {});
+	    };
+	}
+
+	function openManagePopup() {
+	    return function (dispatch, getState) {
+	        dispatch({ type: 'OPEN_FACULTIES_POPUP' });
+	    };
+	}
+
+	function closeManagePopup() {
+	    return function (dispatch, getState) {
+	        dispatch({ type: 'CLOSE_FACULTIES_POPUP' });
 	    };
 	}
 
@@ -79722,8 +80001,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -79741,13 +80020,432 @@
 
 
 	// module
-	exports.push([module.id, ".specialities a {\n  text-decoration: none; }\n\n.specialities .speciality {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .specialities .speciality:hover {\n    background-color: #e9e9e9; }\n", ""]);
+	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .add-input, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
 /* 762 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(763);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(570)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 763 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(569)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".faculties a {\n  text-decoration: none; }\n\n.faculties .faculty {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .faculties .faculty:hover {\n    background-color: #e9e9e9; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 764 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(160);
+
+	var _reactRedux = __webpack_require__(226);
+
+	var _Layouts = __webpack_require__(592);
+
+	var _ManagePopup = __webpack_require__(765);
+
+	var _ManagePopup2 = _interopRequireDefault(_ManagePopup);
+
+	var _reducer = __webpack_require__(766);
+
+	var _need = __webpack_require__(747);
+
+	var _need2 = _interopRequireDefault(_need);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(769);
+
+	var Specialities = _react2.default.createClass({
+	    displayName: 'Specialities',
+	    render: function render() {
+	        var _props = this.props,
+	            _props$params = _props.params,
+	            universityId = _props$params.universityId,
+	            facultyId = _props$params.facultyId,
+	            openManagePopup = _props.openManagePopup,
+	            role = _props.role;
+
+	        var specialities = this.props.specialities.map(function (item, index) {
+	            return _react2.default.createElement(
+	                _reactRouter.Link,
+	                { key: index, to: '/universities/' + universityId + '/faculties/' + facultyId + '/specialities/' + item.id + '/courses' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'speciality' },
+	                    item.name
+	                )
+	            );
+	        });
+	        var admin = role === 'superadmin' || role === 'admin';
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'specialities' },
+	            _react2.default.createElement(_Layouts.Title, {
+	                text: '\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438',
+	                linkUrl: '/universities/' + universityId + '/faculties',
+	                managing: admin,
+	                managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u044F\u043C\u0438',
+	                managingAction: openManagePopup
+	            }),
+	            _react2.default.createElement(
+	                'div',
+	                null,
+	                specialities
+	            ),
+	            _react2.default.createElement(_ManagePopup2.default, null)
+	        );
+	    }
+	});
+
+	exports.default = (0, _need2.default)(_reducer.loadSpecialities)((0, _reactRedux.connect)(function (state) {
+	    return _extends({}, state.specialities, {
+	        role: state.auth.role
+	    });
+	}, { loadSpecialities: _reducer.loadSpecialities, openManagePopup: _reducer.openManagePopup })(Specialities));
+
+/***/ },
+/* 765 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(330);
+
+	var _reactRedux = __webpack_require__(226);
+
+	var _classnames = __webpack_require__(356);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _Input = __webpack_require__(566);
+
+	var _Input2 = _interopRequireDefault(_Input);
+
+	var _Button = __webpack_require__(571);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _reducer = __webpack_require__(766);
+
+	__webpack_require__(767);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ManagePopup = _react2.default.createClass({
+	    displayName: 'ManagePopup',
+	    getInitialState: function getInitialState() {
+	        return {
+	            text: ''
+	        };
+	    },
+	    changeText: function changeText(e) {
+	        this.setState({ text: e.target.value });
+	    },
+	    add: function add() {
+	        if (this.state.text) {
+	            this.props.add(this.state.text);
+	            this.setState({ text: '' });
+	        }
+	    },
+	    handleKeyPress: function handleKeyPress(e) {
+	        if (e.charCode === 13) {
+	            this.add();
+	        }
+	    },
+	    render: function render() {
+	        var _props = this.props,
+	            show = _props.show,
+	            closePopup = _props.closePopup,
+	            specialities = _props.specialities;
+
+
+	        return _react2.default.createElement(
+	            _reactBootstrap.Modal,
+	            { show: show, onHide: closePopup },
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Header,
+	                { closeButton: true },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Title,
+	                    null,
+	                    '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u044F\u043C\u0438'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Body,
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Grid,
+	                    { fluid: true, className: 'manage-popup' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'add' },
+	                        _react2.default.createElement(_Input2.default, {
+	                            value: this.state.text,
+	                            onChange: this.changeText,
+	                            placeholder: '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435',
+	                            type: 'text',
+	                            className: 'add-input',
+	                            onKeyPress: this.handleKeyPress
+	                        }),
+	                        _react2.default.createElement(
+	                            _Button2.default,
+	                            { className: 'btn-primary add-btn', onClick: this.add },
+	                            '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
+	                        )
+	                    ),
+	                    specialities.map(function (item, i) {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            { key: i, className: 'item' },
+	                            _react2.default.createElement(
+	                                'p',
+	                                { className: 'name', title: item.name },
+	                                item.name
+	                            ),
+	                            _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                            _react2.default.createElement('div', { className: 'clear-block' })
+	                        );
+	                    })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal.Footer,
+	                null,
+	                _react2.default.createElement(
+	                    _Button2.default,
+	                    { onClick: closePopup, className: 'btn-default pull-right' },
+	                    '\u0417\u0430\u043A\u0440\u044B\u0442\u044C'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return {
+	        show: state.specialities.showManagePopup,
+	        specialities: state.specialities.specialities
+	    };
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addSpeciality })(ManagePopup);
+
+/***/ },
+/* 766 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.reducer = reducer;
+	exports.loadSpecialities = loadSpecialities;
+	exports.addSpeciality = addSpeciality;
+	exports.openManagePopup = openManagePopup;
+	exports.closeManagePopup = closeManagePopup;
+
+	var _http = __webpack_require__(261);
+
+	var _http2 = _interopRequireDefault(_http);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initState = {
+	    specialities: [],
+	    showManagePopup: false
+	};
+
+	function reducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'SET_SPECIALITIES':
+	            {
+	                return _extends({}, state, { specialities: action.payload });
+	            }
+	        case 'OPEN_SPECIALITIES_POPUP':
+	            {
+	                return _extends({}, state, { showManagePopup: true });
+	            }
+	        case 'CLOSE_SPECIALITIES_POPUP':
+	            {
+	                return _extends({}, state, { showManagePopup: false });
+	            }
+	        default:
+	            return state;
+	    }
+	}
+
+	function loadSpecialities() {
+	    return function (dispatch, getState) {
+	        var id = getState().router.params.facultyId;
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/specialties/' + id).then(function (data) {
+	            dispatch({ type: 'SET_SPECIALITIES', payload: data.data });
+	        }, function (data) {});
+	    };
+	}
+
+	function addSpeciality(name) {
+	    return function (dispatch, getState) {
+	        var idFaculty = getState().router.params.facultyId;
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addSpeciality', { name: name, idFaculty: idFaculty }).then(function (data) {
+	            dispatch(loadSpecialities());
+	        }, function (data) {});
+	    };
+	}
+
+	function openManagePopup() {
+	    return function (dispatch, getState) {
+	        dispatch({ type: 'OPEN_SPECIALITIES_POPUP' });
+	    };
+	}
+
+	function closeManagePopup() {
+	    return function (dispatch, getState) {
+	        dispatch({ type: 'CLOSE_SPECIALITIES_POPUP' });
+	    };
+	}
+
+/***/ },
+/* 767 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(768);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(570)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 768 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(569)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .add-input, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 769 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(770);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(570)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 770 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(569)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".specialities a {\n  text-decoration: none; }\n\n.specialities .speciality {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .specialities .speciality:hover {\n    background-color: #e9e9e9; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 771 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79768,7 +80466,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(763);
+	__webpack_require__(772);
 
 	var Courses = _react2.default.createClass({
 	    displayName: 'Courses',
@@ -79806,13 +80504,13 @@
 	exports.default = Courses;
 
 /***/ },
-/* 763 */
+/* 772 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(764);
+	var content = __webpack_require__(773);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(570)(content, {});
@@ -79832,7 +80530,7 @@
 	}
 
 /***/ },
-/* 764 */
+/* 773 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(569)();
@@ -79846,7 +80544,7 @@
 
 
 /***/ },
-/* 765 */
+/* 774 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79862,7 +80560,7 @@
 	}
 
 /***/ },
-/* 766 */
+/* 775 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -79885,7 +80583,7 @@
 	}
 
 /***/ },
-/* 767 */
+/* 776 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79896,7 +80594,7 @@
 
 	exports.default = withScroll;
 
-	var _ScrollBehavior = __webpack_require__(768);
+	var _ScrollBehavior = __webpack_require__(777);
 
 	var _ScrollBehavior2 = _interopRequireDefault(_ScrollBehavior);
 
@@ -79962,7 +80660,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 768 */
+/* 777 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79985,7 +80683,7 @@
 
 	var _scrollTop2 = _interopRequireDefault(_scrollTop);
 
-	var _requestAnimationFrame = __webpack_require__(769);
+	var _requestAnimationFrame = __webpack_require__(778);
 
 	var _requestAnimationFrame2 = _interopRequireDefault(_requestAnimationFrame);
 
@@ -80169,7 +80867,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 769 */
+/* 778 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80220,7 +80918,7 @@
 	module.exports = compatRaf;
 
 /***/ },
-/* 770 */
+/* 779 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80235,17 +80933,20 @@
 
 	var _reduxForm = __webpack_require__(286);
 
+	var _auth = __webpack_require__(221);
+
 	var _reducer = __webpack_require__(574);
 
 	var _reducer2 = __webpack_require__(610);
 
-	var _reducer3 = __webpack_require__(751);
+	var _reducer3 = __webpack_require__(752);
 
-	var _reducer4 = __webpack_require__(755);
+	var _reducer4 = __webpack_require__(759);
 
-	var _reducer5 = __webpack_require__(759);
+	var _reducer5 = __webpack_require__(766);
 
 	exports.default = (0, _redux.combineReducers)({
+	    auth: _auth.reducer,
 	    schedule: _reducer2.reducer,
 	    login: _reducer.reducer,
 	    universities: _reducer3.reducer,
@@ -80256,13 +80957,13 @@
 	});
 
 /***/ },
-/* 771 */
+/* 780 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(772);
+	var content = __webpack_require__(781);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(570)(content, {});
@@ -80282,7 +80983,7 @@
 	}
 
 /***/ },
-/* 772 */
+/* 781 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(569)();
@@ -80290,13 +80991,13 @@
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(773) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(782) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 773 */
+/* 782 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "b06871f281fee6b241d60582ae9369b9.ttf";

@@ -1,0 +1,47 @@
+.manage-popup {
+    .item {
+        clear: both;
+        border-bottom: 1px dotted rgb(158, 158, 158);
+        padding: 10px;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+        .name, .fa-pencil, input {
+            float: left;
+        }
+        .name {
+            width: calc(100% - 15px);
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        input {
+            width: calc(100% - 15px);
+        }
+        .fa-pencil {
+            cursor: pointer;
+        }
+        .clear-block {
+            clear: both;
+        }
+    }
+    .add {
+        margin-bottom: 60px;
+
+        .name, .amount-of-weeks, .add-btn {
+            float: left;
+        }
+        .name {
+            width: calc(100% - 250px);
+            margin-right: 10px;
+        }
+        .amount-of-weeks {
+            width: 140px;
+            margin-right: 10px;
+        }
+        .add-btn {
+            width: 90px;
+        }
+    }
+}

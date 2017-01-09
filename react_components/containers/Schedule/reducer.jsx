@@ -5,7 +5,7 @@ import http from '../../utils/http';
 const initState = {
     schedules: [],
     couple: {},
-    showGroupPopup: false,
+    showManagePopup: false,
     showCouplePopup: false,
     copyCouple: {},
     copyArray: [],
@@ -18,10 +18,10 @@ export function reducer(state = initState, action) {
             return { ...state, schedules: action.payload };
         }
         case 'OPEN_GROUP_POPUP': {
-            return { ...state, showGroupPopup: true };
+            return { ...state, showManagePopup: true };
         }
         case 'CLOSE_GROUP_POPUP': {
-            return { ...state, showGroupPopup: false };
+            return { ...state, showManagePopup: false };
         }
         case 'OPEN_COUPLE_POPUP': {
             return { ...state, showCouplePopup: true };
@@ -47,7 +47,7 @@ export function reducer(state = initState, action) {
 }
 
 function schedulesMapping(schedules) {
-    schedules.sort((a, b) => a.id > b.id);
+    schedules.sort((a, b) => Number(a.id) > Number(b.id));
     const mappedSchedules = [];
     schedules.forEach(item => {
         const { groupName, id, amountWeeks } = item;
@@ -91,13 +91,13 @@ export function loadSchedules() {
     };
 }
 
-export function openGroupPopup() {
+export function openManagePopup() {
     return (dispatch, getState) => {
         dispatch({ type: 'OPEN_GROUP_POPUP' });
     };
 }
 
-export function closeGroupPopup() {
+export function closeManagePopup() {
     return (dispatch, getState) => {
         dispatch({ type: 'CLOSE_GROUP_POPUP' });
     };
@@ -123,7 +123,6 @@ export function addGroup(form) {
         const idSpecialty = getState().router.params.specialityId;
         const course = getState().router.params.courseNumber;
         return http.post('http://www.schedulea.h1n.ru/universities/admin/addGroup', { ...form, idSpecialty, course, idUniversity, idFaculty }).then(data => {
-            dispatch(closeGroupPopup());
             dispatch(loadSchedules());
         });
     };

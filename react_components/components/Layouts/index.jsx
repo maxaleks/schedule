@@ -8,13 +8,21 @@ import './index.scss';
 
 import { Row, Col, Grid } from 'react-bootstrap';
 
-let Title = ({ text, linkUrl, linkText, underText, logout }) => (
+let Title = ({ text, linkUrl, linkText, underText, logout, managing, managingAction, managingText }) => (
     <div className='title-component'>
         {linkUrl &&
             <Link className='back-link' to={linkUrl}>
                 <span data-tip='Назад' data-delay-show={400} className='fa fa-arrow-circle-left'></span>
                 {linkText}
             </Link>
+        }
+        {managing &&
+            <span
+              data-tip={managingText}
+              data-delay-show={400}
+              className='fa fa-cogs managing'
+              onClick={managingAction}
+            ></span>
         }
         <h3 className='title'>{text}</h3>
         <a data-tip='Выйти' data-delay-show={400} className='logout' onClick={logout}>
