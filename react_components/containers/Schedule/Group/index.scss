@@ -88,7 +88,12 @@
                             width: calc(100% - 40px);
                             cursor: pointer;
                             padding: 0 5px;
+                            overflow: hidden;
 
+                            p {
+                              overflow: hidden;
+                              text-overflow: ellipsis;
+                            }
                             strong {
                                 font-weight: normal;
                                 color: green;

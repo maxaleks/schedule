@@ -12,7 +12,11 @@ module.exports = {
         {
             test: /\.jsx$/,
             exclude: /node_modules/,
-            loader: 'babel-loader'
+            loader: 'babel-loader',
+            query: {
+                plugins: ['transform-decorators-legacy'],
+                presets: ['es2015', 'stage-2', 'react']
+            }
         },
         {
             test: /\.json$/,

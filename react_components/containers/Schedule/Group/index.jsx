@@ -86,8 +86,8 @@ const Group = ({ schedule, openCouplePopup, addToCopyArray, copying, copyCouple,
                                                   weekday: day.number,
                                                   idSchedule: schedule.id
                                               })
-
                                           }
+                                          title={`${couple.startTime}-${couple.endTime} ${couple.nameSubject}, ${couple.housing}-${couple.lectureRoom}, ${couple.nameProfessor}`}
                                         >
                                             {couple.id && <p>
                                                 <strong>

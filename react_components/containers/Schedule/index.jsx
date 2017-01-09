@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import keydown from 'react-keydown';
 
 import Button from '../../components/Button';
 import { Title } from '../../components/Layouts';
@@ -12,7 +13,22 @@ import need from '../../utils/need';
 
 require('./index.scss');
 
-const Schedule = React.createClass({
+class Schedule extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    @keydown(13)
+    copy() {
+        this.props.copy();
+    }
+
+    @keydown(27)
+    cancel() {
+        this.props.endCopying();
+    }
+
     render() {
         const {
             openGroupPopup, openCouplePopup, copying,
@@ -31,21 +47,21 @@ const Schedule = React.createClass({
             />
         );
         return (
-            <div className='schedule'>
+            <div>
                 <Title text='Расписания' linkUrl={`/universities/${idUniversity}/faculties/${idFaculty}/specialities/${idSpecialty}/courses`} />
                 <Button onClick={openGroupPopup}>Добавить группу</Button>
                 {!copying && <Button onClick={startCopying}>Копировать пару</Button>}
                 {copying && <Button onClick={copy}>Копировать</Button>}
                 {copying && <Button onClick={endCopying}>Отменить</Button>}
-                <div>
+                <div className='schedule'>
                     {schedules}
                 </div>
                 <GroupPopup />
                 <CouplePopup />
             </div>
         );
-    },
-});
+    }
+};
 
 export default need(loadSchedules)(connect(
     state => ({
