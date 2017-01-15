@@ -110,7 +110,7 @@ const Group = ({ schedule, openCouplePopup, addToCopyArray, copying, copyCouple,
                 </div>
             ))}
         </div>
-        <ReactTooltip />
+        {/*<ReactTooltip />*/}
     </div>
 );
 

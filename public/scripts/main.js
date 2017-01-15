@@ -58112,7 +58112,7 @@
 	        className = _ref.className;
 	    return _react2.default.createElement(
 	        _reactBootstrap.Button,
-	        { onClick: onClick, type: type, className: className },
+	        { onClick: onClick, type: type, className: 'custom-button ' + className },
 	        children
 	    );
 	};
@@ -58154,7 +58154,7 @@
 
 
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".custom-button {\n  margin-left: 5px; }\n", ""]);
 
 	// exports
 
@@ -58209,6 +58209,7 @@
 	        _http2.default.post('http://schedulea.h1n.ru/universities/auth/login', form).then(function (data) {
 	            localStorage.setItem('token', data.data.token);
 	            dispatch((0, _reduxRouter.push)('/universities'));
+	            // dispatch(push('/faculties'));
 	            dispatch({ type: 'SET_ERROR', payload: null });
 	        }, function (error) {
 	            dispatch({ type: 'SET_ERROR', payload: JSON.parse(error.responseText).errors[0].message });
@@ -58400,7 +58401,7 @@
 	            });
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'schedule-page' },
 	                _react2.default.createElement(_Layouts.Title, {
 	                    text: '\u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u044F',
 	                    linkUrl: '/universities/' + idUniversity + '/faculties/' + idFaculty + '/specialities/' + idSpecialty + '/courses',
@@ -58408,20 +58409,32 @@
 	                    managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0433\u0440\u0443\u043F\u043F\u0430\u043C\u0438',
 	                    managingAction: openManagePopup
 	                }),
-	                !copying && _react2.default.createElement(
-	                    _Button2.default,
-	                    { onClick: startCopying },
-	                    '\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u0430\u0440\u0443'
-	                ),
-	                copying && _react2.default.createElement(
-	                    _Button2.default,
-	                    { onClick: copy },
-	                    '\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C'
-	                ),
-	                copying && _react2.default.createElement(
-	                    _Button2.default,
-	                    { onClick: endCopying },
-	                    '\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C'
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'btn-group' },
+	                    !copying && _react2.default.createElement(
+	                        _Button2.default,
+	                        { className: 'copy', onClick: startCopying },
+	                        _react2.default.createElement('span', { className: 'fa fa-files-o' }),
+	                        ' \u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u0430\u0440\u0443'
+	                    ),
+	                    copying && _react2.default.createElement(
+	                        _Button2.default,
+	                        { className: 'ok', onClick: copy },
+	                        _react2.default.createElement('span', { className: 'fa fa-check' }),
+	                        ' \u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C'
+	                    ),
+	                    copying && _react2.default.createElement(
+	                        _Button2.default,
+	                        { className: 'cancel', onClick: endCopying },
+	                        _react2.default.createElement('span', { className: 'fa fa-ban' }),
+	                        ' \u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C'
+	                    ),
+	                    copying && _react2.default.createElement(
+	                        'span',
+	                        { className: 'help-text' },
+	                        '(\u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0430\u0440\u0443, \u043A\u043E\u0442\u043E\u0440\u0443\u044E \u0445\u043E\u0442\u0438\u0442\u0435 \u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C, \u0438 \u0434\u0430\u043B\u0435\u0435 \u0431\u043B\u043E\u043A\u0438, \u043A\u0443\u0434\u0430 \u043E\u043D\u0430 \u0431\u0443\u0434\u0435\u0442 \u0432\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u0430)'
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -61320,8 +61333,7 @@
 	                    })
 	                );
 	            })
-	        ),
-	        _react2.default.createElement(_reactTooltip2.default, null)
+	        )
 	    );
 	};
 
@@ -61362,7 +61374,7 @@
 
 
 	// module
-	exports.push([module.id, ".group {\n  display: inline-flex;\n  flex-direction: column;\n  min-width: 400px; }\n  .group .group-number {\n    text-align: center; }\n  .group .weeks {\n    display: flex;\n    flex-direction: row; }\n    .group .weeks .week {\n      width: 400px;\n      margin-right: 10px;\n      display: flex;\n      flex-direction: column; }\n      .group .weeks .week .week-number {\n        text-align: center; }\n      .group .weeks .week .day {\n        margin-bottom: 20px;\n        padding-left: 30px;\n        border: 1px solid #000;\n        position: relative;\n        display: flex;\n        flex-direction: row; }\n        .group .weeks .week .day .day-name {\n          width: 30px;\n          position: absolute;\n          top: 50%;\n          left: 0;\n          transform: translateY(-30%); }\n          .group .weeks .week .day .day-name p {\n            -webkit-transform: rotate(-90deg);\n            -moz-transform: rotate(-90deg);\n            -ms-transform: rotate(-90deg);\n            -o-transform: rotate(-90deg); }\n        .group .weeks .week .day .day-name-bg {\n          background-color: #f7f7f7;\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 30px;\n          height: 100%; }\n        .group .weeks .week .day .couples {\n          width: 100%; }\n          .group .weeks .week .day .couples .pair {\n            width: 100%;\n            height: 40px;\n            line-height: 40px;\n            border-top: 1px solid #000;\n            border-left: 1px solid #000;\n            display: flex;\n            flex-direction: row; }\n            .group .weeks .week .day .couples .pair.to-copy {\n              background-color: #82ff6f; }\n            .group .weeks .week .day .couples .pair.in-copy-array {\n              background-color: #ffc86b; }\n            .group .weeks .week .day .couples .pair .pair-number {\n              width: 30px;\n              height: 100%;\n              text-align: center;\n              border-right: 1px solid; }\n              .group .weeks .week .day .couples .pair .pair-number.green {\n                background-color: #a9ff9c; }\n              .group .weeks .week .day .couples .pair .pair-number.yellow {\n                background-color: #ffd999; }\n              .group .weeks .week .day .couples .pair .pair-number.red {\n                background-color: #ff988e; }\n            .group .weeks .week .day .couples .pair .pair-info {\n              width: calc(100% - 40px);\n              cursor: pointer;\n              padding: 0 5px;\n              overflow: hidden; }\n              .group .weeks .week .day .couples .pair .pair-info p {\n                overflow: hidden;\n                text-overflow: ellipsis; }\n              .group .weeks .week .day .couples .pair .pair-info strong {\n                font-weight: normal;\n                color: green;\n                margin-right: 5px; }\n              .group .weeks .week .day .couples .pair .pair-info:hover {\n                background-color: rgba(245, 245, 245, 0.8); }\n            .group .weeks .week .day .couples .pair .pair-subgroup {\n              width: 20px;\n              height: 100%;\n              text-align: center;\n              border-left: 1px solid; }\n            .group .weeks .week .day .couples .pair:first-child {\n              border-top: 0; }\n", ""]);
+	exports.push([module.id, ".group {\n  display: inline-flex;\n  flex-direction: column;\n  overflow: hidden;\n  min-width: 400px;\n  border: 2px solid #818181;\n  border-radius: 10px;\n  margin-right: 20px; }\n  .group:first-child {\n    margin-left: 5px; }\n  .group:last-child {\n    margin-right: 5px; }\n  .group .group-number {\n    text-align: center;\n    margin-top: 10px;\n    margin-bottom: 0;\n    font-size: 18px;\n    font-weight: bold;\n    border-bottom: 2px solid #818181; }\n  .group .weeks {\n    display: flex;\n    flex-direction: row; }\n    .group .weeks .week {\n      width: 400px;\n      display: flex;\n      flex-direction: column; }\n      .group .weeks .week:first-child .day {\n        border-left: 0; }\n      .group .weeks .week:first-child .week-number {\n        border-left: 0; }\n      .group .weeks .week:last-child .day {\n        border-right: 0; }\n      .group .weeks .week:last-child .week-number {\n        border-right: 0; }\n      .group .weeks .week .week-number {\n        text-align: center;\n        padding-top: 10px;\n        border: 1px solid #818181;\n        border-top: 0;\n        font-weight: bold; }\n      .group .weeks .week .day {\n        padding-left: 30px;\n        border: 1px solid #818181;\n        position: relative;\n        display: flex;\n        flex-direction: row; }\n        .group .weeks .week .day:last-child {\n          border-bottom: 0; }\n        .group .weeks .week .day .day-name {\n          width: 30px;\n          position: absolute;\n          top: 50%;\n          left: 0;\n          transform: translateY(-30%); }\n          .group .weeks .week .day .day-name p {\n            -webkit-transform: rotate(-90deg);\n            -moz-transform: rotate(-90deg);\n            -ms-transform: rotate(-90deg);\n            -o-transform: rotate(-90deg); }\n        .group .weeks .week .day .day-name-bg {\n          background-color: #f7f7f7;\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 30px;\n          height: 100%; }\n        .group .weeks .week .day .couples {\n          width: 100%; }\n          .group .weeks .week .day .couples .pair {\n            width: 100%;\n            height: 40px;\n            line-height: 40px;\n            border-top: 1px solid #000;\n            border-left: 1px solid #000;\n            display: flex;\n            flex-direction: row; }\n            .group .weeks .week .day .couples .pair.to-copy {\n              background-color: #82ff6f; }\n            .group .weeks .week .day .couples .pair.in-copy-array {\n              background-color: #ffc86b; }\n            .group .weeks .week .day .couples .pair .pair-number {\n              width: 30px;\n              height: 100%;\n              text-align: center;\n              border-right: 1px solid; }\n              .group .weeks .week .day .couples .pair .pair-number.green {\n                background-color: #a9ff9c; }\n              .group .weeks .week .day .couples .pair .pair-number.yellow {\n                background-color: #ffd999; }\n              .group .weeks .week .day .couples .pair .pair-number.red {\n                background-color: #ff988e; }\n            .group .weeks .week .day .couples .pair .pair-info {\n              width: calc(100% - 40px);\n              cursor: pointer;\n              padding: 0 5px;\n              overflow: hidden; }\n              .group .weeks .week .day .couples .pair .pair-info p {\n                overflow: hidden;\n                text-overflow: ellipsis; }\n              .group .weeks .week .day .couples .pair .pair-info strong {\n                font-weight: normal;\n                color: green;\n                margin-right: 5px; }\n              .group .weeks .week .day .couples .pair .pair-info:hover {\n                background-color: rgba(245, 245, 245, 0.8); }\n            .group .weeks .week .day .couples .pair .pair-subgroup {\n              width: 20px;\n              height: 100%;\n              text-align: center;\n              border-left: 1px solid; }\n            .group .weeks .week .day .couples .pair:first-child {\n              border-top: 0; }\n", ""]);
 
 	// exports
 
@@ -79310,7 +79322,7 @@
 
 
 	// module
-	exports.push([module.id, ".schedule {\n  overflow: scroll;\n  height: calc(100vh - 160px);\n  white-space: nowrap; }\n  .schedule .header {\n    text-align: center; }\n", ""]);
+	exports.push([module.id, ".schedule-page .schedule {\n  overflow: scroll;\n  height: calc(100vh - 154px);\n  white-space: nowrap; }\n  .schedule-page .schedule .header {\n    text-align: center; }\n\n.schedule-page .btn-group {\n  margin-left: 30px;\n  margin-bottom: 20px;\n  line-height: 34px; }\n  .schedule-page .btn-group .cancel {\n    border-top-right-radius: 4px !important;\n    border-bottom-right-radius: 4px !important; }\n  .schedule-page .btn-group .fa-check {\n    color: #16cc00;\n    font-size: 16px; }\n  .schedule-page .btn-group .fa-ban {\n    color: #b80000;\n    font-size: 16px; }\n  .schedule-page .btn-group .help-text {\n    margin-left: 10px; }\n", ""]);
 
 	// exports
 
@@ -79683,7 +79695,7 @@
 
 
 	// module
-	exports.push([module.id, ".universities a {\n  text-decoration: none; }\n\n.universities .university {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .universities .university:hover {\n    background-color: #e9e9e9; }\n", ""]);
+	exports.push([module.id, ".universities a {\n  text-decoration: none; }\n\n.universities .university {\n  width: calc(100% - 50px);\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000;\n  margin-left: 25px;\n  margin-right: 25px;\n  border-radius: 10px; }\n  .universities .university:hover {\n    background-color: whitesmoke; }\n", ""]);
 
 	// exports
 
@@ -79960,7 +79972,10 @@
 	        var id = getState().router.params.universityId;
 	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/faculties/' + id).then(function (data) {
 	            dispatch({ type: 'SET_FACULTIES', payload: data.data });
-	        }, function (data) {});
+	        });
+	        // return http.post(`http://www.schedulea.h1n.ru/universities/admin/faculties`).then(data => {
+	        //     dispatch({ type: 'SET_FACULTIES', payload: data.data });
+	        // });
 	    };
 	}
 
@@ -80060,7 +80075,7 @@
 
 
 	// module
-	exports.push([module.id, ".faculties a {\n  text-decoration: none; }\n\n.faculties .faculty {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .faculties .faculty:hover {\n    background-color: #e9e9e9; }\n", ""]);
+	exports.push([module.id, ".faculties a {\n  text-decoration: none; }\n\n.faculties .faculty {\n  width: calc(100% - 50px);\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000;\n  margin-left: 25px;\n  margin-right: 25px;\n  border-radius: 10px; }\n  .faculties .faculty:hover {\n    background-color: whitesmoke; }\n", ""]);
 
 	// exports
 
@@ -80439,7 +80454,7 @@
 
 
 	// module
-	exports.push([module.id, ".specialities a {\n  text-decoration: none; }\n\n.specialities .speciality {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .specialities .speciality:hover {\n    background-color: #e9e9e9; }\n", ""]);
+	exports.push([module.id, ".specialities a {\n  text-decoration: none; }\n\n.specialities .speciality {\n  width: calc(100% - 50px);\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000;\n  margin-left: 25px;\n  margin-right: 25px;\n  border-radius: 10px; }\n  .specialities .speciality:hover {\n    background-color: whitesmoke; }\n", ""]);
 
 	// exports
 
@@ -80538,7 +80553,7 @@
 
 
 	// module
-	exports.push([module.id, ".courses a {\n  text-decoration: none; }\n\n.courses .course {\n  width: 100%;\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000; }\n  .courses .course:hover {\n    background-color: #e9e9e9; }\n", ""]);
+	exports.push([module.id, ".courses a {\n  text-decoration: none; }\n\n.courses .course {\n  width: calc(100% - 50px);\n  height: 70px;\n  text-align: center;\n  border: 1px solid #000000;\n  margin-bottom: 10px;\n  line-height: 70px;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000;\n  margin-left: 25px;\n  margin-right: 25px;\n  border-radius: 10px; }\n  .courses .course:hover {\n    background-color: whitesmoke; }\n", ""]);
 
 	// exports
 
@@ -80991,7 +81006,7 @@
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(782) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(782) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n\n.fa-files-o:before {\n  content: \"\\F0C5\"; }\n\n.fa-check:before {\n  content: \"\\F00C\"; }\n\n.fa-ban:before {\n  content: \"\\F05E\"; }\n", ""]);
 
 	// exports
 

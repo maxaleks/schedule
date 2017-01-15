@@ -47,7 +47,7 @@ class Schedule extends React.Component {
             />
         );
         return (
-            <div>
+            <div className='schedule-page'>
                 <Title
                   text='Расписания'
                   linkUrl={`/universities/${idUniversity}/faculties/${idFaculty}/specialities/${idSpecialty}/courses`}
@@ -55,9 +55,12 @@ class Schedule extends React.Component {
                   managingText='Управление группами'
                   managingAction={openManagePopup}
                 />
-                {!copying && <Button onClick={startCopying}>Копировать пару</Button>}
-                {copying && <Button onClick={copy}>Копировать</Button>}
-                {copying && <Button onClick={endCopying}>Отменить</Button>}
+                <div className='btn-group'>
+                    {!copying && <Button className='copy' onClick={startCopying}><span className='fa fa-files-o' /> Копировать пару</Button>}
+                    {copying && <Button className='ok' onClick={copy}><span className='fa fa-check' /> Копировать</Button>}
+                    {copying && <Button className='cancel' onClick={endCopying}><span className='fa fa-ban' /> Отменить</Button>}
+                    {copying && <span className='help-text'>(выберите пару, которую хотите копировать, и далее блоки, куда она будет вставлена)</span>}
+                </div>
                 <div className='schedule'>
                     {schedules}
                 </div>

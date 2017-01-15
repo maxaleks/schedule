@@ -2,10 +2,25 @@
 .group {
     display: inline-flex;
     flex-direction: column;
+    overflow: hidden;
     min-width: 400px;
+    border: 2px solid rgb(129, 129, 129);
+    border-radius: 10px;
+    margin-right: 20px;
 
+    &:first-child {
+        margin-left: 5px;
+    }
+    &:last-child {
+        margin-right: 5px;
+    }
     .group-number {
         text-align: center;
+        margin-top: 10px;
+        margin-bottom: 0;
+        font-size: 18px;
+        font-weight: bold;
+        border-bottom: 2px solid rgb(129, 129, 129);
     }
     .weeks {
         display: flex;
@@ -13,21 +28,44 @@
 
         .week {
             width: 400px;
-            margin-right: 10px;
+            //margin-right: 10px;
             display: flex;
             flex-direction: column;
 
+            &:first-child {
+                .day {
+                    border-left: 0;
+                }
+                .week-number {
+                    border-left: 0;
+                }
+            }
+            &:last-child {
+                .day {
+                    border-right: 0;
+                }
+                .week-number {
+                    border-right: 0;
+                }
+            }
             .week-number {
                 text-align: center;
+                padding-top: 10px;
+                border: 1px solid rgb(129, 129, 129);
+                border-top: 0;
+                font-weight: bold;
             }
             .day {
-                margin-bottom: 20px;
+                //margin-bottom: 20px;
                 padding-left: 30px;
-                border: 1px solid #000;
+                border: 1px solid rgb(129, 129, 129);
                 position: relative;
                 display: flex;
                 flex-direction: row;
 
+                &:last-child {
+                    border-bottom: 0;
+                }
                 .day-name {
                     width: 30px;
                     position: absolute;

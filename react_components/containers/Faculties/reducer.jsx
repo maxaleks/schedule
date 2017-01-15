@@ -26,8 +26,10 @@ export function loadFaculties() {
         const id = getState().router.params.universityId;
         return http.post(`http://www.schedulea.h1n.ru/universities/admin/faculties/${id}`).then(data => {
             dispatch({ type: 'SET_FACULTIES', payload: data.data });
-        }, data => {
         });
+        // return http.post(`http://www.schedulea.h1n.ru/universities/admin/faculties`).then(data => {
+        //     dispatch({ type: 'SET_FACULTIES', payload: data.data });
+        // });
     };
 }
 

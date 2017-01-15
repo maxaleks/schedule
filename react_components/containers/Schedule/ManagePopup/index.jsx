@@ -47,6 +47,14 @@ const ManagePopup = React.createClass({
                             {groups.map((item, i) => (
                                 <div key={i} className='item'>
                                     <p className='name' title={item.groupName}>{item.groupName}</p>
+                                    {/*<Input
+                                      {...amountWeeks}
+                                      placeholder='Кол-во недель'
+                                      min={1}
+                                      type='number'
+                                      className='name'
+                                    />*/}
+                                    <span data-tip='Редактировать' data-delay-show={400} className='fa fa-pencil'></span>
                                     <span data-tip='Редактировать' data-delay-show={400} className='fa fa-pencil'></span>
                                     <div className='clear-block'></div>
                                 </div>

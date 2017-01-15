@@ -30,6 +30,13 @@ export default ({ dispatch, getState }) => {
                 <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
                 <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules' component={Schedule}/>
             </Route>
+            {/*<Route onEnter={requireAuth}>
+                <IndexRedirect to='/faculties' />
+                <Route path='/faculties' component={Faculties}/>
+                <Route path='/faculties/:facultyId/specialities' component={Specialities}/>
+                <Route path='/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
+                <Route path='/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules' component={Schedule}/>
+            </Route>*/}
             <Route path='login' component={Login} />
         </Route>
     );
