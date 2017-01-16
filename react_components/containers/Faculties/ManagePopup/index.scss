@@ -1,9 +1,13 @@
-.manage-popup {
+.manage-popup.faculties {
     .item {
         clear: both;
         border-bottom: 1px dotted rgb(158, 158, 158);
         padding: 10px;
 
+        &.editing {
+            line-height: 34px;
+            padding-left: 0;
+        }
         &:last-child {
             border-bottom: 0;
         }
@@ -11,16 +15,32 @@
             float: left;
         }
         .name {
-            width: calc(100% - 15px);
+            width: calc(100% - 38px);
             margin: 0;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        input {
-            width: calc(100% - 15px);
+        .form-group {
+            margin: 0;
+        }
+        input.name {
+            width: calc(100% - 50px);
+            margin-right: 10px;
+        }
+        .fa {
+            cursor: pointer;
+            font-size: 16px;
         }
         .fa-pencil {
-            cursor: pointer;
+            color: rgb(62, 157, 255);
+            margin-right: 10px;
+        }
+        .fa-check {
+            color: rgb(22, 204, 0);
+            margin-right: 10px;
+        }
+        .fa-trash, .fa-ban {
+            color: rgb(255, 91, 91);
         }
         .clear-block {
             clear: both;

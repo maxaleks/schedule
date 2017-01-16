@@ -6,13 +6,15 @@ import cx from 'classnames';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 
-import { closeManagePopup, addSpeciality } from '../reducer';
+import { closeManagePopup, addSpeciality, editSpeciality, deleteSpeciality } from '../reducer';
 import './index.scss';
 
 const ManagePopup = React.createClass({
     getInitialState() {
         return {
             text: '',
+            editId: null,
+            name: null,
         };
     },
     changeText(e) {
@@ -29,20 +31,34 @@ const ManagePopup = React.createClass({
             this.add();
         }
     },
+    save() {
+        const self = this;
+        const { name, editId, weeks } = self.state;
+        if (name) {
+          self.props.edit({ name: name, id: editId }).then(() => {
+              self.setState({ editId: null, name: null });
+          });
+        }
+    },
+    closePopup() {
+        this.setState({ editId: null, name: null, text: null });
+        this.props.closePopup();
+    },
     render() {
         const {
             show,
             closePopup,
             specialities,
+            remove,
         } = this.props;
 
         return (
-            <Modal show={show} onHide={closePopup}>
+            <Modal show={show} onHide={this.closePopup}>
                 <Modal.Header closeButton>
                     <Modal.Title>Управление специальностями</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Grid fluid className='manage-popup'>
+                    <Grid fluid className='manage-popup specialities'>
                         <div className='add'>
                             <Input
                               value={this.state.text}
@@ -55,9 +71,30 @@ const ManagePopup = React.createClass({
                             <Button className='btn-primary add-btn' onClick={this.add}>Добавить</Button>
                         </div>
                         {specialities.map((item, i) => (
-                            <div key={i} className='item'>
-                                <p className='name' title={item.name}>{item.name}</p>
-                                <span data-tip='Редактировать' data-delay-show={400} className='fa fa-pencil'></span>
+                            <div key={i} className={cx('item', { editing: item.id === this.state.editId })}>
+                                {item.id !== this.state.editId && <p className='name' title={item.name}>{item.name}</p>}
+                                {item.id === this.state.editId && <Input
+                                  value={this.state.name}
+                                  onChange={(e) => this.setState({ name: e.target.value })}
+                                  placeholder='Название специальности'
+                                  type='text'
+                                  className='name'
+                                />}
+                                {item.id !== this.state.editId &&
+                                    <span
+                                      className='fa fa-pencil'
+                                      onClick={() => this.setState({ editId: item.id, name: item.name })}
+                                    ></span>
+                                }
+                                {item.id !== this.state.editId &&
+                                    <span className='fa fa-trash' onClick={() => remove(item.id)}></span>
+                                }
+                                {item.id === this.state.editId &&
+                                    <span className='fa fa-check' onClick={this.save}></span>
+                                }
+                                {item.id === this.state.editId &&
+                                    <span className='fa fa-ban' onClick={() => this.setState({ editId: null })}></span>
+                                }
                                 <div className='clear-block'></div>
                             </div>
                         ))}
@@ -76,5 +113,5 @@ export default connect(
         show: state.specialities.showManagePopup,
         specialities: state.specialities.specialities,
     }),
-    { closePopup: closeManagePopup, add: addSpeciality }
+    { closePopup: closeManagePopup, add: addSpeciality, edit: editSpeciality, remove: deleteSpeciality }
 )(ManagePopup);

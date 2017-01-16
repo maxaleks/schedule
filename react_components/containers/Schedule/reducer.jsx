@@ -118,11 +118,27 @@ export function closeCouplePopup() {
 
 export function addGroup(form) {
     return (dispatch, getState) => {
-        const idUniversity = getState().router.params.universityId
-        const idFaculty = getState().router.params.facultyId;
         const idSpecialty = getState().router.params.specialityId;
         const course = getState().router.params.courseNumber;
-        return http.post('http://www.schedulea.h1n.ru/universities/admin/addGroup', { ...form, idSpecialty, course, idUniversity, idFaculty }).then(data => {
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/group/add', { ...form, idSpecialty, course }).then(data => {
+            dispatch(loadSchedules());
+        });
+    };
+}
+
+export function editGroup(form) {
+    return (dispatch, getState) => {
+        const idSpecialty = getState().router.params.specialityId;
+        const course = getState().router.params.courseNumber;
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/group/edit', { ...form, idSpecialty, course }).then(data => {
+            dispatch(loadSchedules());
+        });
+    };
+}
+
+export function deleteGroup(id) {
+    return (dispatch, getState) => {
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/group/delete', { id }).then(data => {
             dispatch(loadSchedules());
         });
     };

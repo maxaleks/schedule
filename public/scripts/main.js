@@ -58154,7 +58154,7 @@
 
 
 	// module
-	exports.push([module.id, ".custom-button {\n  margin-left: 5px; }\n", ""]);
+	exports.push([module.id, "", ""]);
 
 	// exports
 
@@ -61419,12 +61419,39 @@
 
 	var ManagePopup = _react2.default.createClass({
 	    displayName: 'ManagePopup',
+	    getInitialState: function getInitialState() {
+	        return {
+	            editId: null,
+	            name: null,
+	            weeks: null
+	        };
+	    },
+	    save: function save() {
+	        var self = this;
+	        var _self$state = self.state,
+	            name = _self$state.name,
+	            editId = _self$state.editId,
+	            weeks = _self$state.weeks;
+
+	        if (name && weeks) {
+	            self.props.edit({ groupName: name, id: editId, amountWeeks: weeks }).then(function () {
+	                self.setState({ editId: null, name: null, weeks: null });
+	            });
+	        }
+	    },
+	    closePopup: function closePopup() {
+	        this.setState({ editId: null, name: null, weeks: null });
+	        this.props.closePopup();
+	    },
 	    render: function render() {
+	        var _this = this;
+
 	        var _props = this.props,
 	            show = _props.show,
 	            closePopup = _props.closePopup,
 	            groups = _props.groups,
 	            add = _props.add,
+	            remove = _props.remove,
 	            _props$fields = _props.fields,
 	            groupName = _props$fields.groupName,
 	            amountWeeks = _props$fields.amountWeeks,
@@ -61433,7 +61460,7 @@
 
 	        return _react2.default.createElement(
 	            _reactBootstrap.Modal,
-	            { show: show, onHide: closePopup },
+	            { show: show, onHide: this.closePopup },
 	            _react2.default.createElement(
 	                _reactBootstrap.Modal.Header,
 	                { closeButton: true },
@@ -61451,7 +61478,7 @@
 	                    null,
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Grid,
-	                        { fluid: true, className: 'manage-popup' },
+	                        { fluid: true, className: 'manage-popup groups' },
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'add' },
@@ -61475,13 +61502,44 @@
 	                        groups.map(function (item, i) {
 	                            return _react2.default.createElement(
 	                                'div',
-	                                { key: i, className: 'item' },
-	                                _react2.default.createElement(
+	                                { key: i, className: (0, _classnames2.default)('item', { editing: item.id === _this.state.editId }) },
+	                                item.id !== _this.state.editId && _react2.default.createElement(
 	                                    'p',
 	                                    { className: 'name', title: item.groupName },
 	                                    item.groupName
 	                                ),
-	                                _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                                item.id === _this.state.editId && _react2.default.createElement(_Input2.default, {
+	                                    value: _this.state.name,
+	                                    onChange: function onChange(e) {
+	                                        return _this.setState({ name: e.target.value });
+	                                    },
+	                                    placeholder: '\u041D\u043E\u043C\u0435\u0440 \u0433\u0440\u0443\u043F\u043F\u044B',
+	                                    type: 'text',
+	                                    className: 'name'
+	                                }),
+	                                item.id === _this.state.editId && _react2.default.createElement(_Input2.default, {
+	                                    value: _this.state.weeks,
+	                                    onChange: function onChange(e) {
+	                                        return _this.setState({ weeks: e.target.value });
+	                                    },
+	                                    placeholder: '\u041A\u043E\u043B-\u0432\u043E \u043D\u0435\u0434\u0435\u043B\u044C',
+	                                    min: 1,
+	                                    type: 'number',
+	                                    className: 'weeks'
+	                                }),
+	                                item.id !== _this.state.editId && _react2.default.createElement('span', {
+	                                    className: 'fa fa-pencil',
+	                                    onClick: function onClick() {
+	                                        return _this.setState({ editId: item.id, name: item.groupName, weeks: item.weeks.length });
+	                                    }
+	                                }),
+	                                item.id !== _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-trash', onClick: function onClick() {
+	                                        return remove(item.id);
+	                                    } }),
+	                                item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-check', onClick: _this.save }),
+	                                item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-ban', onClick: function onClick() {
+	                                        return _this.setState({ editId: null });
+	                                    } }),
 	                                _react2.default.createElement('div', { className: 'clear-block' })
 	                            );
 	                        })
@@ -61523,7 +61581,7 @@
 	        show: state.schedule.showManagePopup,
 	        groups: state.schedule.schedules
 	    };
-	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addGroup })(ManagePopup);
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addGroup, edit: _reducer.editGroup, remove: _reducer.deleteGroup })(ManagePopup);
 
 /***/ },
 /* 610 */
@@ -61544,6 +61602,8 @@
 	exports.openCouplePopup = openCouplePopup;
 	exports.closeCouplePopup = closeCouplePopup;
 	exports.addGroup = addGroup;
+	exports.editGroup = editGroup;
+	exports.deleteGroup = deleteGroup;
 	exports.saveCouple = saveCouple;
 	exports.addCouple = addCouple;
 	exports.removeCouple = removeCouple;
@@ -61698,11 +61758,27 @@
 
 	function addGroup(form) {
 	    return function (dispatch, getState) {
-	        var idUniversity = getState().router.params.universityId;
-	        var idFaculty = getState().router.params.facultyId;
 	        var idSpecialty = getState().router.params.specialityId;
 	        var course = getState().router.params.courseNumber;
-	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addGroup', _extends({}, form, { idSpecialty: idSpecialty, course: course, idUniversity: idUniversity, idFaculty: idFaculty })).then(function (data) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/group/add', _extends({}, form, { idSpecialty: idSpecialty, course: course })).then(function (data) {
+	            dispatch(loadSchedules());
+	        });
+	    };
+	}
+
+	function editGroup(form) {
+	    return function (dispatch, getState) {
+	        var idSpecialty = getState().router.params.specialityId;
+	        var course = getState().router.params.courseNumber;
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/group/edit', _extends({}, form, { idSpecialty: idSpecialty, course: course })).then(function (data) {
+	            dispatch(loadSchedules());
+	        });
+	    };
+	}
+
+	function deleteGroup(id) {
+	    return function (dispatch, getState) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/group/delete', { id: id }).then(function (data) {
 	            dispatch(loadSchedules());
 	        });
 	    };
@@ -61839,7 +61915,7 @@
 
 
 	// module
-	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .name, .manage-popup .add .amount-of-weeks, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .name {\n    width: calc(100% - 250px);\n    margin-right: 10px; }\n  .manage-popup .add .amount-of-weeks {\n    width: 140px;\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
+	exports.push([module.id, ".manage-popup.groups .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup.groups .item.editing {\n    line-height: 34px;\n    padding-left: 0; }\n  .manage-popup.groups .item:last-child {\n    border-bottom: 0; }\n  .manage-popup.groups .item .name, .manage-popup.groups .item .fa-pencil, .manage-popup.groups .item input, .manage-popup.groups .item .fa-pencil, .manage-popup.groups .item .fa-trash {\n    float: left; }\n  .manage-popup.groups .item .name {\n    width: calc(100% - 38px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup.groups .item .form-group {\n    margin: 0; }\n  .manage-popup.groups .item input.name {\n    width: calc(100% - 110px);\n    margin-right: 10px; }\n  .manage-popup.groups .item input.weeks {\n    width: 50px;\n    margin-right: 10px; }\n  .manage-popup.groups .item .fa {\n    cursor: pointer;\n    font-size: 16px; }\n  .manage-popup.groups .item .fa-pencil {\n    color: #3e9dff;\n    margin-right: 10px; }\n  .manage-popup.groups .item .fa-check {\n    color: #16cc00;\n    margin-right: 10px; }\n  .manage-popup.groups .item .fa-trash, .manage-popup.groups .item .fa-ban {\n    color: #ff5b5b; }\n  .manage-popup.groups .item .clear-block {\n    clear: both; }\n\n.manage-popup.groups .add {\n  margin-bottom: 60px; }\n  .manage-popup.groups .add .name, .manage-popup.groups .add .amount-of-weeks, .manage-popup.groups .add .add-btn {\n    float: left; }\n  .manage-popup.groups .add .name {\n    width: calc(100% - 250px);\n    margin-right: 10px; }\n  .manage-popup.groups .add .amount-of-weeks {\n    width: 140px;\n    margin-right: 10px; }\n  .manage-popup.groups .add .add-btn {\n    width: 90px; }\n", ""]);
 
 	// exports
 
@@ -79447,7 +79523,9 @@
 	    displayName: 'ManagePopup',
 	    getInitialState: function getInitialState() {
 	        return {
-	            text: ''
+	            text: '',
+	            editId: null,
+	            name: null
 	        };
 	    },
 	    changeText: function changeText(e) {
@@ -79464,16 +79542,36 @@
 	            this.add();
 	        }
 	    },
+	    save: function save() {
+	        var self = this;
+	        var _self$state = self.state,
+	            name = _self$state.name,
+	            editId = _self$state.editId,
+	            weeks = _self$state.weeks;
+
+	        if (name) {
+	            self.props.edit({ name: name, id: editId }).then(function () {
+	                self.setState({ editId: null, name: null });
+	            });
+	        }
+	    },
+	    closePopup: function closePopup() {
+	        this.setState({ editId: null, name: null, text: null });
+	        this.props.closePopup();
+	    },
 	    render: function render() {
+	        var _this = this;
+
 	        var _props = this.props,
 	            show = _props.show,
 	            closePopup = _props.closePopup,
-	            universities = _props.universities;
+	            universities = _props.universities,
+	            remove = _props.remove;
 
 
 	        return _react2.default.createElement(
 	            _reactBootstrap.Modal,
-	            { show: show, onHide: closePopup },
+	            { show: show, onHide: this.closePopup },
 	            _react2.default.createElement(
 	                _reactBootstrap.Modal.Header,
 	                { closeButton: true },
@@ -79488,7 +79586,7 @@
 	                null,
 	                _react2.default.createElement(
 	                    _reactBootstrap.Grid,
-	                    { fluid: true, className: 'manage-popup' },
+	                    { fluid: true, className: 'manage-popup universities' },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'add' },
@@ -79509,13 +79607,34 @@
 	                    universities.map(function (item, i) {
 	                        return _react2.default.createElement(
 	                            'div',
-	                            { key: i, className: 'item' },
-	                            _react2.default.createElement(
+	                            { key: i, className: (0, _classnames2.default)('item', { editing: item.id === _this.state.editId }) },
+	                            item.id !== _this.state.editId && _react2.default.createElement(
 	                                'p',
 	                                { className: 'name', title: item.name },
 	                                item.name
 	                            ),
-	                            _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                            item.id === _this.state.editId && _react2.default.createElement(_Input2.default, {
+	                                value: _this.state.name,
+	                                onChange: function onChange(e) {
+	                                    return _this.setState({ name: e.target.value });
+	                                },
+	                                placeholder: '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0443\u043D\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442\u0430',
+	                                type: 'text',
+	                                className: 'name'
+	                            }),
+	                            item.id !== _this.state.editId && _react2.default.createElement('span', {
+	                                className: 'fa fa-pencil',
+	                                onClick: function onClick() {
+	                                    return _this.setState({ editId: item.id, name: item.name });
+	                                }
+	                            }),
+	                            item.id !== _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-trash', onClick: function onClick() {
+	                                    return remove(item.id);
+	                                } }),
+	                            item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-check', onClick: _this.save }),
+	                            item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-ban', onClick: function onClick() {
+	                                    return _this.setState({ editId: null });
+	                                } }),
 	                            _react2.default.createElement('div', { className: 'clear-block' })
 	                        );
 	                    })
@@ -79539,7 +79658,7 @@
 	        show: state.universities.showManagePopup,
 	        universities: state.universities.universities
 	    };
-	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addUniversity })(ManagePopup);
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addUniversity, edit: _reducer.editUniversity, remove: _reducer.deleteUniversity })(ManagePopup);
 
 /***/ },
 /* 752 */
@@ -79556,6 +79675,8 @@
 	exports.reducer = reducer;
 	exports.loadUniversities = loadUniversities;
 	exports.addUniversity = addUniversity;
+	exports.editUniversity = editUniversity;
+	exports.deleteUniversity = deleteUniversity;
 	exports.openManagePopup = openManagePopup;
 	exports.closeManagePopup = closeManagePopup;
 
@@ -79602,9 +79723,25 @@
 
 	function addUniversity(name) {
 	    return function (dispatch, getState) {
-	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addUniversity', { name: name }).then(function (data) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/university/add', { name: name }).then(function (data) {
 	            dispatch(loadUniversities());
 	        }, function (data) {});
+	    };
+	}
+
+	function editUniversity(form) {
+	    return function (dispatch, getState) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/university/edit', form).then(function (data) {
+	            dispatch(loadUniversities());
+	        });
+	    };
+	}
+
+	function deleteUniversity(id) {
+	    return function (dispatch, getState) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/university/delete', { id: id }).then(function (data) {
+	            dispatch(loadUniversities());
+	        });
 	    };
 	}
 
@@ -79655,7 +79792,7 @@
 
 
 	// module
-	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .add-input, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
+	exports.push([module.id, ".manage-popup.universities .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup.universities .item.editing {\n    line-height: 34px;\n    padding-left: 0; }\n  .manage-popup.universities .item:last-child {\n    border-bottom: 0; }\n  .manage-popup.universities .item .name, .manage-popup.universities .item .fa-pencil, .manage-popup.universities .item input {\n    float: left; }\n  .manage-popup.universities .item .name {\n    width: calc(100% - 38px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup.universities .item .form-group {\n    margin: 0; }\n  .manage-popup.universities .item input.name {\n    width: calc(100% - 50px);\n    margin-right: 10px; }\n  .manage-popup.universities .item .fa {\n    cursor: pointer;\n    font-size: 16px; }\n  .manage-popup.universities .item .fa-pencil {\n    color: #3e9dff;\n    margin-right: 10px; }\n  .manage-popup.universities .item .fa-check {\n    color: #16cc00;\n    margin-right: 10px; }\n  .manage-popup.universities .item .fa-trash, .manage-popup.universities .item .fa-ban {\n    color: #ff5b5b; }\n  .manage-popup.universities .item .clear-block {\n    clear: both; }\n\n.manage-popup.universities .add {\n  margin-bottom: 60px; }\n  .manage-popup.universities .add .add-input, .manage-popup.universities .add .add-btn {\n    float: left; }\n  .manage-popup.universities .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup.universities .add .add-btn {\n    width: 90px; }\n", ""]);
 
 	// exports
 
@@ -79822,7 +79959,9 @@
 	    displayName: 'ManagePopup',
 	    getInitialState: function getInitialState() {
 	        return {
-	            text: ''
+	            text: '',
+	            editId: null,
+	            name: null
 	        };
 	    },
 	    changeText: function changeText(e) {
@@ -79839,16 +79978,36 @@
 	            this.add();
 	        }
 	    },
+	    save: function save() {
+	        var self = this;
+	        var _self$state = self.state,
+	            name = _self$state.name,
+	            editId = _self$state.editId,
+	            weeks = _self$state.weeks;
+
+	        if (name) {
+	            self.props.edit({ name: name, id: editId }).then(function () {
+	                self.setState({ editId: null, name: null });
+	            });
+	        }
+	    },
+	    closePopup: function closePopup() {
+	        this.setState({ editId: null, name: null, text: null });
+	        this.props.closePopup();
+	    },
 	    render: function render() {
+	        var _this = this;
+
 	        var _props = this.props,
 	            show = _props.show,
 	            closePopup = _props.closePopup,
-	            faculties = _props.faculties;
+	            faculties = _props.faculties,
+	            remove = _props.remove;
 
 
 	        return _react2.default.createElement(
 	            _reactBootstrap.Modal,
-	            { show: show, onHide: closePopup },
+	            { show: show, onHide: this.closePopup },
 	            _react2.default.createElement(
 	                _reactBootstrap.Modal.Header,
 	                { closeButton: true },
@@ -79863,7 +80022,7 @@
 	                null,
 	                _react2.default.createElement(
 	                    _reactBootstrap.Grid,
-	                    { fluid: true, className: 'manage-popup' },
+	                    { fluid: true, className: 'manage-popup faculties' },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'add' },
@@ -79884,13 +80043,34 @@
 	                    faculties.map(function (item, i) {
 	                        return _react2.default.createElement(
 	                            'div',
-	                            { key: i, className: 'item' },
-	                            _react2.default.createElement(
+	                            { key: i, className: (0, _classnames2.default)('item', { editing: item.id === _this.state.editId }) },
+	                            item.id !== _this.state.editId && _react2.default.createElement(
 	                                'p',
 	                                { className: 'name', title: item.name },
 	                                item.name
 	                            ),
-	                            _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                            item.id === _this.state.editId && _react2.default.createElement(_Input2.default, {
+	                                value: _this.state.name,
+	                                onChange: function onChange(e) {
+	                                    return _this.setState({ name: e.target.value });
+	                                },
+	                                placeholder: '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0444\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u0430',
+	                                type: 'text',
+	                                className: 'name'
+	                            }),
+	                            item.id !== _this.state.editId && _react2.default.createElement('span', {
+	                                className: 'fa fa-pencil',
+	                                onClick: function onClick() {
+	                                    return _this.setState({ editId: item.id, name: item.name });
+	                                }
+	                            }),
+	                            item.id !== _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-trash', onClick: function onClick() {
+	                                    return remove(item.id);
+	                                } }),
+	                            item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-check', onClick: _this.save }),
+	                            item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-ban', onClick: function onClick() {
+	                                    return _this.setState({ editId: null });
+	                                } }),
 	                            _react2.default.createElement('div', { className: 'clear-block' })
 	                        );
 	                    })
@@ -79914,7 +80094,7 @@
 	        show: state.faculties.showManagePopup,
 	        faculties: state.faculties.faculties
 	    };
-	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addFaculty })(ManagePopup);
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addFaculty, edit: _reducer.editFaculty, remove: _reducer.deleteFaculty })(ManagePopup);
 
 /***/ },
 /* 759 */
@@ -79931,6 +80111,8 @@
 	exports.reducer = reducer;
 	exports.loadFaculties = loadFaculties;
 	exports.addFaculty = addFaculty;
+	exports.editFaculty = editFaculty;
+	exports.deleteFaculty = deleteFaculty;
 	exports.openManagePopup = openManagePopup;
 	exports.closeManagePopup = closeManagePopup;
 
@@ -79982,9 +80164,26 @@
 	function addFaculty(name) {
 	    return function (dispatch, getState) {
 	        var idUniversity = getState().router.params.universityId;
-	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addFaculty', { name: name, idUniversity: idUniversity }).then(function (data) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/faculty/add', { name: name, idUniversity: idUniversity }).then(function (data) {
 	            dispatch(loadFaculties());
 	        }, function (data) {});
+	    };
+	}
+
+	function editFaculty(form) {
+	    return function (dispatch, getState) {
+	        var idUniversity = getState().router.params.universityId;
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/faculty/edit', _extends({}, form, { idUniversity: idUniversity })).then(function (data) {
+	            dispatch(loadFaculties());
+	        });
+	    };
+	}
+
+	function deleteFaculty(id) {
+	    return function (dispatch, getState) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/faculty/delete', { id: id }).then(function (data) {
+	            dispatch(loadFaculties());
+	        });
 	    };
 	}
 
@@ -80035,7 +80234,7 @@
 
 
 	// module
-	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .add-input, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
+	exports.push([module.id, ".manage-popup.faculties .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup.faculties .item.editing {\n    line-height: 34px;\n    padding-left: 0; }\n  .manage-popup.faculties .item:last-child {\n    border-bottom: 0; }\n  .manage-popup.faculties .item .name, .manage-popup.faculties .item .fa-pencil, .manage-popup.faculties .item input {\n    float: left; }\n  .manage-popup.faculties .item .name {\n    width: calc(100% - 38px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup.faculties .item .form-group {\n    margin: 0; }\n  .manage-popup.faculties .item input.name {\n    width: calc(100% - 50px);\n    margin-right: 10px; }\n  .manage-popup.faculties .item .fa {\n    cursor: pointer;\n    font-size: 16px; }\n  .manage-popup.faculties .item .fa-pencil {\n    color: #3e9dff;\n    margin-right: 10px; }\n  .manage-popup.faculties .item .fa-check {\n    color: #16cc00;\n    margin-right: 10px; }\n  .manage-popup.faculties .item .fa-trash, .manage-popup.faculties .item .fa-ban {\n    color: #ff5b5b; }\n  .manage-popup.faculties .item .clear-block {\n    clear: both; }\n\n.manage-popup.faculties .add {\n  margin-bottom: 60px; }\n  .manage-popup.faculties .add .add-input, .manage-popup.faculties .add .add-btn {\n    float: left; }\n  .manage-popup.faculties .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup.faculties .add .add-btn {\n    width: 90px; }\n", ""]);
 
 	// exports
 
@@ -80204,7 +80403,9 @@
 	    displayName: 'ManagePopup',
 	    getInitialState: function getInitialState() {
 	        return {
-	            text: ''
+	            text: '',
+	            editId: null,
+	            name: null
 	        };
 	    },
 	    changeText: function changeText(e) {
@@ -80221,16 +80422,36 @@
 	            this.add();
 	        }
 	    },
+	    save: function save() {
+	        var self = this;
+	        var _self$state = self.state,
+	            name = _self$state.name,
+	            editId = _self$state.editId,
+	            weeks = _self$state.weeks;
+
+	        if (name) {
+	            self.props.edit({ name: name, id: editId }).then(function () {
+	                self.setState({ editId: null, name: null });
+	            });
+	        }
+	    },
+	    closePopup: function closePopup() {
+	        this.setState({ editId: null, name: null, text: null });
+	        this.props.closePopup();
+	    },
 	    render: function render() {
+	        var _this = this;
+
 	        var _props = this.props,
 	            show = _props.show,
 	            closePopup = _props.closePopup,
-	            specialities = _props.specialities;
+	            specialities = _props.specialities,
+	            remove = _props.remove;
 
 
 	        return _react2.default.createElement(
 	            _reactBootstrap.Modal,
-	            { show: show, onHide: closePopup },
+	            { show: show, onHide: this.closePopup },
 	            _react2.default.createElement(
 	                _reactBootstrap.Modal.Header,
 	                { closeButton: true },
@@ -80245,7 +80466,7 @@
 	                null,
 	                _react2.default.createElement(
 	                    _reactBootstrap.Grid,
-	                    { fluid: true, className: 'manage-popup' },
+	                    { fluid: true, className: 'manage-popup specialities' },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'add' },
@@ -80266,13 +80487,34 @@
 	                    specialities.map(function (item, i) {
 	                        return _react2.default.createElement(
 	                            'div',
-	                            { key: i, className: 'item' },
-	                            _react2.default.createElement(
+	                            { key: i, className: (0, _classnames2.default)('item', { editing: item.id === _this.state.editId }) },
+	                            item.id !== _this.state.editId && _react2.default.createElement(
 	                                'p',
 	                                { className: 'name', title: item.name },
 	                                item.name
 	                            ),
-	                            _react2.default.createElement('span', { 'data-tip': '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C', 'data-delay-show': 400, className: 'fa fa-pencil' }),
+	                            item.id === _this.state.editId && _react2.default.createElement(_Input2.default, {
+	                                value: _this.state.name,
+	                                onChange: function onChange(e) {
+	                                    return _this.setState({ name: e.target.value });
+	                                },
+	                                placeholder: '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438',
+	                                type: 'text',
+	                                className: 'name'
+	                            }),
+	                            item.id !== _this.state.editId && _react2.default.createElement('span', {
+	                                className: 'fa fa-pencil',
+	                                onClick: function onClick() {
+	                                    return _this.setState({ editId: item.id, name: item.name });
+	                                }
+	                            }),
+	                            item.id !== _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-trash', onClick: function onClick() {
+	                                    return remove(item.id);
+	                                } }),
+	                            item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-check', onClick: _this.save }),
+	                            item.id === _this.state.editId && _react2.default.createElement('span', { className: 'fa fa-ban', onClick: function onClick() {
+	                                    return _this.setState({ editId: null });
+	                                } }),
 	                            _react2.default.createElement('div', { className: 'clear-block' })
 	                        );
 	                    })
@@ -80296,7 +80538,7 @@
 	        show: state.specialities.showManagePopup,
 	        specialities: state.specialities.specialities
 	    };
-	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addSpeciality })(ManagePopup);
+	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addSpeciality, edit: _reducer.editSpeciality, remove: _reducer.deleteSpeciality })(ManagePopup);
 
 /***/ },
 /* 766 */
@@ -80313,6 +80555,8 @@
 	exports.reducer = reducer;
 	exports.loadSpecialities = loadSpecialities;
 	exports.addSpeciality = addSpeciality;
+	exports.editSpeciality = editSpeciality;
+	exports.deleteSpeciality = deleteSpeciality;
 	exports.openManagePopup = openManagePopup;
 	exports.closeManagePopup = closeManagePopup;
 
@@ -80361,9 +80605,26 @@
 	function addSpeciality(name) {
 	    return function (dispatch, getState) {
 	        var idFaculty = getState().router.params.facultyId;
-	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/addSpeciality', { name: name, idFaculty: idFaculty }).then(function (data) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/speciality/add', { name: name, idFaculty: idFaculty }).then(function (data) {
 	            dispatch(loadSpecialities());
 	        }, function (data) {});
+	    };
+	}
+
+	function editSpeciality(form) {
+	    return function (dispatch, getState) {
+	        var idFaculty = getState().router.params.facultyId;
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/speciality/edit', _extends({}, form, { idFaculty: idFaculty })).then(function (data) {
+	            dispatch(loadSpecialities());
+	        });
+	    };
+	}
+
+	function deleteSpeciality(id) {
+	    return function (dispatch, getState) {
+	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/speciality/delete', { id: id }).then(function (data) {
+	            dispatch(loadSpecialities());
+	        });
 	    };
 	}
 
@@ -80414,7 +80675,7 @@
 
 
 	// module
-	exports.push([module.id, ".manage-popup .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup .item:last-child {\n    border-bottom: 0; }\n  .manage-popup .item .name, .manage-popup .item .fa-pencil, .manage-popup .item input {\n    float: left; }\n  .manage-popup .item .name {\n    width: calc(100% - 15px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup .item input {\n    width: calc(100% - 15px); }\n  .manage-popup .item .fa-pencil {\n    cursor: pointer; }\n  .manage-popup .item .clear-block {\n    clear: both; }\n\n.manage-popup .add {\n  margin-bottom: 60px; }\n  .manage-popup .add .add-input, .manage-popup .add .add-btn {\n    float: left; }\n  .manage-popup .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup .add .add-btn {\n    width: 90px; }\n", ""]);
+	exports.push([module.id, ".manage-popup.specialities .item {\n  clear: both;\n  border-bottom: 1px dotted #9e9e9e;\n  padding: 10px; }\n  .manage-popup.specialities .item.editing {\n    line-height: 34px;\n    padding-left: 0; }\n  .manage-popup.specialities .item:last-child {\n    border-bottom: 0; }\n  .manage-popup.specialities .item .name, .manage-popup.specialities .item .fa-pencil, .manage-popup.specialities .item input {\n    float: left; }\n  .manage-popup.specialities .item .name {\n    width: calc(100% - 38px);\n    margin: 0;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .manage-popup.specialities .item .form-group {\n    margin: 0; }\n  .manage-popup.specialities .item input.name {\n    width: calc(100% - 50px);\n    margin-right: 10px; }\n  .manage-popup.specialities .item .fa {\n    cursor: pointer;\n    font-size: 16px; }\n  .manage-popup.specialities .item .fa-pencil {\n    color: #3e9dff;\n    margin-right: 10px; }\n  .manage-popup.specialities .item .fa-check {\n    color: #16cc00;\n    margin-right: 10px; }\n  .manage-popup.specialities .item .fa-trash, .manage-popup.specialities .item .fa-ban {\n    color: #ff5b5b; }\n  .manage-popup.specialities .item .clear-block {\n    clear: both; }\n\n.manage-popup.specialities .add {\n  margin-bottom: 60px; }\n  .manage-popup.specialities .add .add-input, .manage-popup.specialities .add .add-btn {\n    float: left; }\n  .manage-popup.specialities .add .add-input {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .manage-popup.specialities .add .add-btn {\n    width: 90px; }\n", ""]);
 
 	// exports
 
@@ -81006,7 +81267,7 @@
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(782) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n\n.fa-files-o:before {\n  content: \"\\F0C5\"; }\n\n.fa-check:before {\n  content: \"\\F00C\"; }\n\n.fa-ban:before {\n  content: \"\\F05E\"; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(782) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n\n.fa-files-o:before {\n  content: \"\\F0C5\"; }\n\n.fa-check:before {\n  content: \"\\F00C\"; }\n\n.fa-ban:before {\n  content: \"\\F05E\"; }\n\n.fa-trash:before {\n  content: \"\\F1F8\"; }\n", ""]);
 
 	// exports
 

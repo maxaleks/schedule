@@ -32,9 +32,25 @@ export function loadUniversities() {
 
 export function addUniversity(name) {
     return (dispatch, getState) => {
-        return http.post('http://www.schedulea.h1n.ru/universities/admin/addUniversity', { name }).then(data => {
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/university/add', { name }).then(data => {
             dispatch(loadUniversities());
         }, data => {
+        });
+    };
+}
+
+export function editUniversity(form) {
+    return (dispatch, getState) => {
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/university/edit', form).then(data => {
+            dispatch(loadUniversities());
+        });
+    };
+}
+
+export function deleteUniversity(id) {
+    return (dispatch, getState) => {
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/university/delete', { id }).then(data => {
+            dispatch(loadUniversities());
         });
     };
 }

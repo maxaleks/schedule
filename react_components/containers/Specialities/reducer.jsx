@@ -34,9 +34,26 @@ export function loadSpecialities() {
 export function addSpeciality(name) {
     return (dispatch, getState) => {
         const idFaculty = getState().router.params.facultyId;
-        return http.post('http://www.schedulea.h1n.ru/universities/admin/addSpeciality', { name, idFaculty }).then(data => {
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/speciality/add', { name, idFaculty }).then(data => {
             dispatch(loadSpecialities());
         }, data => {
+        });
+    };
+}
+
+export function editSpeciality(form) {
+    return (dispatch, getState) => {
+        const idFaculty = getState().router.params.facultyId;
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/speciality/edit', { ...form, idFaculty }).then(data => {
+            dispatch(loadSpecialities());
+        });
+    };
+}
+
+export function deleteSpeciality(id) {
+    return (dispatch, getState) => {
+        return http.post('http://www.schedulea.h1n.ru/universities/admin/speciality/delete', { id }).then(data => {
+            dispatch(loadSpecialities());
         });
     };
 }
