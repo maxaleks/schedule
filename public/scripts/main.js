@@ -19859,12 +19859,11 @@
 	        _react2.default.createElement(
 	            _reactRouter.Route,
 	            { onEnter: requireAuth },
-	            _react2.default.createElement(_reactRouter.IndexRedirect, { to: '/universities' }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'universities', component: _Universities2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties', component: _Faculties2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties/:facultyId/specialities', component: _Specialities2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses', component: _Courses2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules', component: _Schedule2.default })
+	            _react2.default.createElement(_reactRouter.IndexRedirect, { to: '/faculties' }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties', component: _Faculties2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties/:facultyId/specialities', component: _Specialities2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties/:facultyId/specialities/:specialityId/courses', component: _Courses2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules', component: _Schedule2.default })
 	        ),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _Login2.default })
 	    );
@@ -58208,8 +58207,8 @@
 	    return function (dispatch, getState) {
 	        _http2.default.post('http://schedulea.h1n.ru/universities/auth/login', form).then(function (data) {
 	            localStorage.setItem('token', data.data.token);
-	            dispatch((0, _reduxRouter.push)('/universities'));
-	            // dispatch(push('/faculties'));
+	            // dispatch(push('/universities'));
+	            dispatch((0, _reduxRouter.push)('/faculties'));
 	            dispatch({ type: 'SET_ERROR', payload: null });
 	        }, function (error) {
 	            dispatch({ type: 'SET_ERROR', payload: JSON.parse(error.responseText).errors[0].message });
@@ -58403,8 +58402,9 @@
 	                'div',
 	                { className: 'schedule-page' },
 	                _react2.default.createElement(_Layouts.Title, {
-	                    text: '\u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u044F',
-	                    linkUrl: '/universities/' + idUniversity + '/faculties/' + idFaculty + '/specialities/' + idSpecialty + '/courses',
+	                    text: '\u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u044F'
+	                    //  linkUrl={`/universities/${idUniversity}/faculties/${idFaculty}/specialities/${idSpecialty}/courses`}
+	                    , linkUrl: '/faculties/' + idFaculty + '/specialities/' + idSpecialty + '/courses',
 	                    managing: true,
 	                    managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0433\u0440\u0443\u043F\u043F\u0430\u043C\u0438',
 	                    managingAction: openManagePopup
@@ -79882,13 +79882,18 @@
 	            role = _props.role;
 
 	        var faculties = this.props.faculties.map(function (item, index) {
-	            return _react2.default.createElement(
-	                _reactRouter.Link,
-	                { key: index, to: '/universities/' + universityId + '/faculties/' + item.id + '/specialities' },
+	            return (
+	                // <Link key={index} to={`/universities/${universityId}/faculties/${item.id}/specialities`}>
+	                //     <div className='faculty'>{item.name}</div>
+	                // </Link>
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'faculty' },
-	                    item.name
+	                    _reactRouter.Link,
+	                    { key: index, to: 'faculties/' + item.id + '/specialities' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'faculty' },
+	                        item.name
+	                    )
 	                )
 	            );
 	        });
@@ -79897,9 +79902,9 @@
 	            'div',
 	            { className: 'faculties' },
 	            _react2.default.createElement(_Layouts.Title, {
-	                text: '\u0424\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u044B',
-	                linkUrl: '/universities',
-	                managing: admin,
+	                text: '\u0424\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u044B'
+	                //  linkUrl={`/universities`}
+	                , managing: admin,
 	                managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0444\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u0430\u043C\u0438',
 	                managingAction: openManagePopup
 	            }),
@@ -80326,13 +80331,18 @@
 	            role = _props.role;
 
 	        var specialities = this.props.specialities.map(function (item, index) {
-	            return _react2.default.createElement(
-	                _reactRouter.Link,
-	                { key: index, to: '/universities/' + universityId + '/faculties/' + facultyId + '/specialities/' + item.id + '/courses' },
+	            return (
+	                // <Link key={index} to={`/universities/${universityId}/faculties/${facultyId}/specialities/${item.id}/courses`}>
+	                //     <div className='speciality'>{item.name}</div>
+	                // </Link>
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'speciality' },
-	                    item.name
+	                    _reactRouter.Link,
+	                    { key: index, to: 'faculties/' + facultyId + '/specialities/' + item.id + '/courses' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'speciality' },
+	                        item.name
+	                    )
 	                )
 	            );
 	        });
@@ -80341,8 +80351,9 @@
 	            'div',
 	            { className: 'specialities' },
 	            _react2.default.createElement(_Layouts.Title, {
-	                text: '\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438',
-	                linkUrl: '/universities/' + universityId + '/faculties',
+	                text: '\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438'
+	                //  linkUrl={`/universities/${universityId}/faculties`}
+	                , linkUrl: '/faculties',
 	                managing: admin,
 	                managingText: '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u044F\u043C\u0438',
 	                managingAction: openManagePopup
@@ -80614,6 +80625,7 @@
 	function editSpeciality(form) {
 	    return function (dispatch, getState) {
 	        var idFaculty = getState().router.params.facultyId;
+	        console.log(idFaculty);
 	        return _http2.default.post('http://www.schedulea.h1n.ru/universities/admin/speciality/edit', _extends({}, form, { idFaculty: idFaculty })).then(function (data) {
 	            dispatch(loadSpecialities());
 	        });
@@ -80753,21 +80765,30 @@
 	            specialityId = _props$params.specialityId;
 
 	        var courses = [1, 2, 3, 4, 5, 6].map(function (item, index) {
-	            return _react2.default.createElement(
-	                _reactRouter.Link,
-	                { key: index, to: '/universities/' + universityId + '/faculties/' + facultyId + '/specialities/' + specialityId + '/courses/' + item + '/schedules' },
+	            return (
+	                // <Link key={index} to={`/universities/${universityId}/faculties/${facultyId}/specialities/${specialityId}/courses/${item}/schedules`}>
+	                //     <div className='course'>{item} курс</div>
+	                // </Link>
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'course' },
-	                    item,
-	                    ' \u043A\u0443\u0440\u0441'
+	                    _reactRouter.Link,
+	                    { key: index, to: '/faculties/' + facultyId + '/specialities/' + specialityId + '/courses/' + item + '/schedules' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'course' },
+	                        item,
+	                        ' \u043A\u0443\u0440\u0441'
+	                    )
 	                )
 	            );
 	        });
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'courses' },
-	            _react2.default.createElement(_Layouts.Title, { text: '\u041A\u0443\u0440\u0441\u044B', linkUrl: '/universities/' + universityId + '/faculties/' + facultyId + '/specialities' }),
+	            _react2.default.createElement(_Layouts.Title, {
+	                text: '\u041A\u0443\u0440\u0441\u044B'
+	                //  linkUrl={`/universities/${universityId}/faculties/${facultyId}/specialities`}
+	                , linkUrl: '/faculties/' + facultyId + '/specialities'
+	            }),
 	            _react2.default.createElement(
 	                'div',
 	                null,

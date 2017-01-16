@@ -23,8 +23,8 @@ export function loginAction(form) {
     return (dispatch, getState) => {
         http.post('http://schedulea.h1n.ru/universities/auth/login', form).then(data => {
             localStorage.setItem('token', data.data.token);
-            dispatch(push('/universities'));
-            // dispatch(push('/faculties'));
+            // dispatch(push('/universities'));
+            dispatch(push('/faculties'));
             dispatch({ type: 'SET_ERROR', payload: null });
         }, error => {
             dispatch({ type: 'SET_ERROR', payload: JSON.parse(error.responseText).errors[0].message });

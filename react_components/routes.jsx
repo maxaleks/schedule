@@ -22,21 +22,21 @@ export default ({ dispatch, getState }) => {
     const requireAuth = makeRequireAuth(dispatch, getState);
     return (
         <Route path='/'>
-            <Route onEnter={requireAuth}>
+            {/*<Route onEnter={requireAuth}>
                 <IndexRedirect to='/universities' />
                 <Route path='universities' component={Universities}/>
                 <Route path='universities/:universityId/faculties' component={Faculties}/>
                 <Route path='universities/:universityId/faculties/:facultyId/specialities' component={Specialities}/>
                 <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
                 <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules' component={Schedule}/>
-            </Route>
-            {/*<Route onEnter={requireAuth}>
+            </Route>*/}
+            <Route onEnter={requireAuth}>
                 <IndexRedirect to='/faculties' />
                 <Route path='/faculties' component={Faculties}/>
                 <Route path='/faculties/:facultyId/specialities' component={Specialities}/>
                 <Route path='/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
                 <Route path='/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules' component={Schedule}/>
-            </Route>*/}
+            </Route>
             <Route path='login' component={Login} />
         </Route>
     );
