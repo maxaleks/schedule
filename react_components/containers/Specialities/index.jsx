@@ -14,9 +14,6 @@ const Specialities = React.createClass({
     render() {
         const { params: { universityId, facultyId }, openManagePopup, role } = this.props;
         const specialities = this.props.specialities.map((item, index) =>
-            // <Link key={index} to={`/universities/${universityId}/faculties/${facultyId}/specialities/${item.id}/courses`}>
-            //     <div className='speciality'>{item.name}</div>
-            // </Link>
             <Link key={index} to={`faculties/${facultyId}/specialities/${item.id}/courses`}>
                 <div className='speciality'>{item.name}</div>
             </Link>
@@ -26,7 +23,6 @@ const Specialities = React.createClass({
             <div className='specialities'>
                 <Title
                   text='Специальности'
-                //  linkUrl={`/universities/${universityId}/faculties`}
                   linkUrl={`/faculties`}
                   managing={admin}
                   managingText='Управление специальностями'

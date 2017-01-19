@@ -5,10 +5,11 @@ import { makeRequireAuth } from './modules/auth';
 
 import Login from './containers/Login';
 import Schedule from './containers/Schedule';
-import Universities from './containers/Universities';
 import Faculties from './containers/Faculties';
 import Specialities from './containers/Specialities';
 import Courses from './containers/Courses';
+import Menu from './containers/Menu';
+import Users from './containers/Users';
 
 
 function getWaite(dispatch) {
@@ -20,18 +21,12 @@ function getWaite(dispatch) {
 export default ({ dispatch, getState }) => {
     const dispatchAction = getWaite(dispatch);
     const requireAuth = makeRequireAuth(dispatch, getState);
+    const admin = getState().auth.role === 'admin';
     return (
         <Route path='/'>
-            {/*<Route onEnter={requireAuth}>
-                <IndexRedirect to='/universities' />
-                <Route path='universities' component={Universities}/>
-                <Route path='universities/:universityId/faculties' component={Faculties}/>
-                <Route path='universities/:universityId/faculties/:facultyId/specialities' component={Specialities}/>
-                <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
-                <Route path='universities/:universityId/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules' component={Schedule}/>
-            </Route>*/}
             <Route onEnter={requireAuth}>
-                <IndexRedirect to='/faculties' />
+                <IndexRoute component={Menu} />
+                <Route path='/users' component={Users}/>
                 <Route path='/faculties' component={Faculties}/>
                 <Route path='/faculties/:facultyId/specialities' component={Specialities}/>
                 <Route path='/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>

@@ -51,7 +51,7 @@
     "react-keydown": "^1.6.5",
     "react-redux": "4.4.5",
     "react-router": "2.4.1",
-    "react-select": "1.0.0-beta14",
+    "react-select": "^1.0.0-rc.2",
     "react-time-input": "^0.0.13",
     "react-tooltip": "^3.2.2",
     "redux": "3.5.2",

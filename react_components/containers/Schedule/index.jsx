@@ -50,7 +50,6 @@ class Schedule extends React.Component {
             <div className='schedule-page'>
                 <Title
                   text='Расписания'
-                //  linkUrl={`/universities/${idUniversity}/faculties/${idFaculty}/specialities/${idSpecialty}/courses`}
                   linkUrl={`/faculties/${idFaculty}/specialities/${idSpecialty}/courses`}
                   managing
                   managingText='Управление группами'
