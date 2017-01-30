@@ -61555,7 +61555,11 @@
 	            }
 	        case 'SET_COUPLE':
 	            {
-	                return _extends({}, state, { couple: action.payload });
+	                var couple = action.payload;
+	                if (!couple.typeSubject) {
+	                    couple.typeSubject = 1;
+	                }
+	                return _extends({}, state, { couple: couple });
 	            }
 	        case 'SET_COPY_COUPLE':
 	            {
@@ -61915,7 +61919,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    'form',
-	                    { onSubmit: handleSubmit(id.value ? saveCouple : addCouple), className: 'couple-form' },
+	                    { onSubmit: handleSubmit(id.value ? saveCouple : addCouple), className: 'couple-form', autoComplete: 'on' },
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Modal.Body,
 	                        null,
@@ -61994,6 +61998,7 @@
 	                                ),
 	                                _react2.default.createElement(_Input2.default, _extends({}, housing, {
 	                                    type: 'text',
+	                                    autoComplete: 'off',
 	                                    className: (0, _classnames2.default)('', { 'has-error': housing.touched && housing.error })
 	                                }))
 	                            ),
@@ -62007,6 +62012,7 @@
 	                                ),
 	                                _react2.default.createElement(_Input2.default, _extends({}, lectureRoom, {
 	                                    type: 'text',
+	                                    autoComplete: 'off',
 	                                    className: (0, _classnames2.default)('', { 'has-error': lectureRoom.touched && lectureRoom.error })
 	                                }))
 	                            ),
@@ -62020,6 +62026,7 @@
 	                                ),
 	                                _react2.default.createElement(_Input2.default, _extends({}, nameSubject, {
 	                                    type: 'text',
+	                                    name: 'subject-name',
 	                                    className: (0, _classnames2.default)('', { 'has-error': nameSubject.touched && nameSubject.error })
 	                                }))
 	                            ),
@@ -62033,6 +62040,7 @@
 	                                ),
 	                                _react2.default.createElement(_Input2.default, _extends({}, nameProfessor, {
 	                                    type: 'text',
+	                                    name: 'professor-name',
 	                                    className: (0, _classnames2.default)('', { 'has-error': nameProfessor.touched && nameProfessor.error })
 	                                }))
 	                            )

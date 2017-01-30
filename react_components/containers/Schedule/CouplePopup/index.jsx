@@ -41,7 +41,7 @@ const GroupPopup = React.createClass({
                     <Modal.Header closeButton>
                         <Modal.Title>{id.value ? 'Редактировать пару' : 'Добавить пару'}</Modal.Title>
                     </Modal.Header>
-                    <form onSubmit={handleSubmit(id.value ? saveCouple : addCouple)} className='couple-form'>
+                    <form onSubmit={handleSubmit(id.value ? saveCouple : addCouple)} className='couple-form' autoComplete='on'>
                         <Modal.Body>
                             <Grid fluid>
                                 <div className='radio-btns-block'>
@@ -80,6 +80,7 @@ const GroupPopup = React.createClass({
                                     <Input
                                       {...housing}
                                       type='text'
+                                      autoComplete='off'
                                       className={cx('', { 'has-error': housing.touched && housing.error })}
                                     />
                                 </div>
@@ -88,6 +89,7 @@ const GroupPopup = React.createClass({
                                     <Input
                                       {...lectureRoom}
                                       type='text'
+                                      autoComplete='off'
                                       className={cx('', { 'has-error': lectureRoom.touched && lectureRoom.error })}
                                     />
                                 </div>
@@ -96,6 +98,7 @@ const GroupPopup = React.createClass({
                                     <Input
                                       {...nameSubject}
                                       type='text'
+                                      name='subject-name'
                                       className={cx('', { 'has-error': nameSubject.touched && nameSubject.error })}
                                     />
                                 </div>
@@ -104,6 +107,7 @@ const GroupPopup = React.createClass({
                                     <Input
                                       {...nameProfessor}
                                       type='text'
+                                      name='professor-name'
                                       className={cx('', { 'has-error': nameProfessor.touched && nameProfessor.error })}
                                     />
                                 </div>

@@ -30,7 +30,11 @@ export function reducer(state = initState, action) {
             return { ...state, showCouplePopup: false };
         }
         case 'SET_COUPLE': {
-            return { ...state, couple: action.payload };
+            const couple = action.payload;
+            if (!couple.typeSubject) {
+                couple.typeSubject = 1;
+            }
+            return { ...state, couple };
         }
         case 'SET_COPY_COUPLE': {
             return { ...state, copyCouple: action.payload };
