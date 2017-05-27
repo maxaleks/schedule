@@ -84620,7 +84620,8 @@
 	    getInitialState: function getInitialState() {
 	        return { group: null };
 	    },
-	    addGroup: function addGroup() {
+	    addGroup: function addGroup(e) {
+	        e.preventDefault();
 	        if (this.state.group) {
 	            this.props.addGroup(this.state.group);
 	            this.setState({ group: null });
@@ -84664,8 +84665,8 @@
 	                            errorText
 	                        ),
 	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'add' },
+	                            'form',
+	                            { className: 'add', onSubmit: this.addGroup },
 	                            _react2.default.createElement(_Input2.default, {
 	                                value: this.state.group,
 	                                onChange: function onChange(e) {
@@ -84677,7 +84678,7 @@
 	                            }),
 	                            _react2.default.createElement(
 	                                _Button2.default,
-	                                { className: 'btn-primary add-btn', onClick: this.addGroup },
+	                                { className: 'btn-primary add-btn', type: 'submit' },
 	                                '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
 	                            )
 	                        ),

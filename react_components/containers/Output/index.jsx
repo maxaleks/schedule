@@ -15,7 +15,8 @@ const Output = React.createClass({
     getInitialState() {
         return { group: null };
     },
-    addGroup() {
+    addGroup(e) {
+        e.preventDefault();
         if (this.state.group) {
             this.props.addGroup(this.state.group);
             this.setState({ group: null });
@@ -40,7 +41,7 @@ const Output = React.createClass({
                         <Col xs={12} md={3} />
                         <Col xs={12} md={6}>
                             {errorText && <Alert bsStyle='danger'>{errorText}</Alert>}
-                            <div className='add'>
+                            <form className='add' onSubmit={this.addGroup}>
                                 <Input
                                   value={this.state.group}
                                   onChange={(e) => this.setState({ group: e.target.value })}
@@ -48,8 +49,8 @@ const Output = React.createClass({
                                   type='text'
                                   className='name'
                                 />
-                                <Button className='btn-primary add-btn' onClick={this.addGroup}>Добавить</Button>
-                            </div>
+                                <Button className='btn-primary add-btn' type='submit'>Добавить</Button>
+                            </form>
                             <div className='group-labels-container'>
                               {groups}
                             </div>
