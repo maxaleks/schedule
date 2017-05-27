@@ -58,7 +58,7 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _actions = __webpack_require__(781);
+	var _actions = __webpack_require__(808);
 
 	var _reactRedux = __webpack_require__(226);
 
@@ -66,11 +66,11 @@
 
 	var _redux = __webpack_require__(233);
 
-	var _reduxThunk = __webpack_require__(782);
+	var _reduxThunk = __webpack_require__(809);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _scrollBehavior = __webpack_require__(783);
+	var _scrollBehavior = __webpack_require__(810);
 
 	var _scrollBehavior2 = _interopRequireDefault(_scrollBehavior);
 
@@ -78,11 +78,11 @@
 
 	var _createHashHistory2 = _interopRequireDefault(_createHashHistory);
 
-	var _reducers = __webpack_require__(786);
+	var _reducers = __webpack_require__(813);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	__webpack_require__(787);
+	__webpack_require__(814);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -445,6 +445,10 @@
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+
+	process.listeners = function (name) { return [] }
 
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -19821,25 +19825,29 @@
 
 	var _Schedule2 = _interopRequireDefault(_Schedule);
 
-	var _Faculties = __webpack_require__(752);
+	var _Faculties = __webpack_require__(775);
 
 	var _Faculties2 = _interopRequireDefault(_Faculties);
 
-	var _Specialities = __webpack_require__(759);
+	var _Specialities = __webpack_require__(782);
 
 	var _Specialities2 = _interopRequireDefault(_Specialities);
 
-	var _Courses = __webpack_require__(766);
+	var _Courses = __webpack_require__(789);
 
 	var _Courses2 = _interopRequireDefault(_Courses);
 
-	var _Menu = __webpack_require__(769);
+	var _Menu = __webpack_require__(792);
 
 	var _Menu2 = _interopRequireDefault(_Menu);
 
-	var _Users = __webpack_require__(772);
+	var _Users = __webpack_require__(795);
 
 	var _Users2 = _interopRequireDefault(_Users);
+
+	var _Output = __webpack_require__(804);
+
+	var _Output2 = _interopRequireDefault(_Output);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19869,7 +19877,8 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties', component: _Faculties2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties/:facultyId/specialities', component: _Specialities2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties/:facultyId/specialities/:specialityId/courses', component: _Courses2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules', component: _Schedule2.default })
+	            _react2.default.createElement(_reactRouter.Route, { path: '/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules', component: _Schedule2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/output', component: _Output2.default })
 	        ),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _Login2.default })
 	    );
@@ -26739,8 +26748,7 @@
 	  if (value == null) {
 	    return value === undefined ? undefinedTag : nullTag;
 	  }
-	  value = Object(value);
-	  return (symToStringTag && symToStringTag in value)
+	  return (symToStringTag && symToStringTag in Object(value))
 	    ? getRawTag(value)
 	    : objectToString(value);
 	}
@@ -57704,8 +57712,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -58046,6 +58054,8 @@
 	    value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -58056,14 +58066,18 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 	var CustomButton = function CustomButton(_ref) {
 	    var onClick = _ref.onClick,
 	        type = _ref.type,
 	        children = _ref.children,
-	        className = _ref.className;
+	        className = _ref.className,
+	        props = _objectWithoutProperties(_ref, ['onClick', 'type', 'children', 'className']);
+
 	    return _react2.default.createElement(
 	        _reactBootstrap.Button,
-	        { onClick: onClick, type: type, className: 'custom-button ' + className },
+	        _extends({ onClick: onClick, type: type, className: 'custom-button ' + className }, props),
 	        children
 	    );
 	};
@@ -58086,8 +58100,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -58183,8 +58197,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -58241,21 +58255,21 @@
 
 	var _Layouts = __webpack_require__(591);
 
-	var _Group = __webpack_require__(604);
+	var _Group = __webpack_require__(615);
 
 	var _Group2 = _interopRequireDefault(_Group);
 
-	var _ManagePopup = __webpack_require__(607);
+	var _ManagePopup = __webpack_require__(618);
 
 	var _ManagePopup2 = _interopRequireDefault(_ManagePopup);
 
-	var _CouplePopup = __webpack_require__(611);
+	var _CouplePopup = __webpack_require__(622);
 
 	var _CouplePopup2 = _interopRequireDefault(_CouplePopup);
 
-	var _reducer = __webpack_require__(608);
+	var _reducer = __webpack_require__(619);
 
-	var _need = __webpack_require__(749);
+	var _need = __webpack_require__(772);
 
 	var _need2 = _interopRequireDefault(_need);
 
@@ -58296,7 +58310,7 @@
 	    return desc;
 	}
 
-	__webpack_require__(750);
+	__webpack_require__(773);
 
 	var Schedule = (_dec = (0, _reactKeydown2.default)(13), _dec2 = (0, _reactKeydown2.default)(27), (_class = function (_React$Component) {
 	    _inherits(Schedule, _React$Component);
@@ -58414,22 +58428,21 @@
 /* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// polyfill array.from (mainly for IE)
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Keys = exports.setBinding = exports.keydownScoped = exports.default = undefined;
 
-	function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
+	var _decorators = __webpack_require__(578);
 
-	__webpack_require__(578);
-
-	// @keydown and @keydownScoped
-
-	var _decorators = __webpack_require__(579);
-
-	exports['default'] = _interopRequire(_decorators);
+	Object.defineProperty(exports, 'default', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_decorators).default;
+	  }
+	});
 	Object.defineProperty(exports, 'keydownScoped', {
 	  enumerable: true,
 	  get: function get() {
@@ -58437,9 +58450,7 @@
 	  }
 	});
 
-	// setBinding - only useful if you're not going to use decorators
-
-	var _store = __webpack_require__(581);
+	var _store = __webpack_require__(580);
 
 	Object.defineProperty(exports, 'setBinding', {
 	  enumerable: true,
@@ -58448,22 +58459,1131 @@
 	  }
 	});
 
-	// Keys - use this to find key codes for strings. for example: Keys.j, Keys.enter
+	var _keys = __webpack_require__(581);
 
-	var _libKeys = __webpack_require__(582);
+	Object.defineProperty(exports, 'Keys', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_keys).default;
+	  }
+	});
 
-	exports.Keys = _interopRequire(_libKeys);
+	__webpack_require__(590);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
 /* 578 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.keydownScoped = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
+	                                                                                                                                                                                                                                                                               * @module decorators
+	                                                                                                                                                                                                                                                                               *
+	                                                                                                                                                                                                                                                                               */
+
+
+	var _class_decorator = __webpack_require__(579);
+
+	var _class_decorator2 = _interopRequireDefault(_class_decorator);
+
+	var _method_decorator = __webpack_require__(588);
+
+	var _method_decorator2 = _interopRequireDefault(_method_decorator);
+
+	var _method_decorator_scoped = __webpack_require__(589);
+
+	var _method_decorator_scoped2 = _interopRequireDefault(_method_decorator_scoped);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * _decorator
+	 *
+	 * @access private
+	 * @param {Function} methodFn The method wrapper to delegate to, based on whether user has specified a scoped decorator or not
+	 * @param {Array} ...args Remainder of arguments passed in
+	 * @return {Function} The decorated class or method
+	 */
+	function _decorator(methodFn) {
+	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	    args[_key - 1] = arguments[_key];
+	  }
+
+	  // check the first argument to see if it's a user-supplied keycode or array
+	  // of keycodes, or if it's the wrapped class or method
+	  var testArg = args[0];
+	  var isArray = Array.isArray(testArg);
+
+	  // if the test argument is not an object or function, it is user-supplied
+	  // keycodes. else there are no arguments and it's just the wrapped class
+	  // (method decorators must have keycode arguments).
+	  if (isArray || ~['string', 'number'].indexOf(typeof testArg === 'undefined' ? 'undefined' : _typeof(testArg))) {
+	    var keys = isArray ? testArg : args;
+
+	    // return the decorator function, which on the next call will look for
+	    // the presence of a method name to determine if this is a wrapped method
+	    // or component
+	    return function (target, methodName, descriptor) {
+	      return methodName ? methodFn({ target: target, descriptor: descriptor, keys: keys }) : (0, _class_decorator2.default)(target, keys);
+	    };
+	  } else {
+	    var methodName = args[1];
+
+	    // method decorators without keycode (which) arguments are not allowed.
+	    if (!methodName) {
+	      return _class_decorator2.default.apply(undefined, args);
+	    } else {
+	      console.warn(methodName + ': Method decorators must have keycode arguments, so the decorator for this method will not do anything');
+	    }
+	  }
+	}
+
+	/**
+	 * keydownScoped
+	 *
+	 * Method decorator that will look for changes to its targeted component's
+	 * `keydown` props to decide when to trigger, rather than responding directly
+	 * to keydown events. This lets you specify a @keydown decorated class higher
+	 * up in the view hierarchy for larger scoping of keydown events, or for
+	 * programmatically sending keydown events as props into the components in order
+	 * to trigger decorated methods with matching keys.
+	 *
+	 * @access public
+	 * @param {Array} ...args  All (or no) arguments passed in from decoration
+	 * @return {Function} The decorated class or method
+	 */
+	function keydownScoped() {
+	  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	    args[_key2] = arguments[_key2];
+	  }
+
+	  return _decorator.apply(undefined, [_method_decorator_scoped2.default].concat(args));
+	}
+
+	/**
+	 * keydown
+	 *
+	 * The main decorator and default export, handles both classes and methods.
+	 *
+	 * @access public
+	 * @param {Array} ...args  All (or no) arguments passed in from decoration
+	 * @return {Function} The decorated class or method
+	 */
+	function keydown() {
+	  for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	    args[_key3] = arguments[_key3];
+	  }
+
+	  return _decorator.apply(undefined, [_method_decorator2.default].concat(args));
+	}
+
+	exports.default = keydown;
+	exports.keydownScoped = keydownScoped;
+
+/***/ },
+/* 579 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _store = __webpack_require__(580);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _event_handlers = __webpack_require__(585);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @module componentWrapper
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	/**
+	 * componentWrapper
+	 *
+	 * @access public
+	 * @param {object} WrappedComponent React component class to be wrapped
+	 * @param {array} [keys] The key(s) bound to the class
+	 * @return {object} The higher-order function that wraps the decorated class
+	 */
+	function componentWrapper(WrappedComponent) {
+	  var keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+	  var KeyBoardHelper = function (_React$Component) {
+	    _inherits(KeyBoardHelper, _React$Component);
+
+	    function KeyBoardHelper(props) {
+	      _classCallCheck(this, KeyBoardHelper);
+
+	      var _this = _possibleConstructorReturn(this, (KeyBoardHelper.__proto__ || Object.getPrototypeOf(KeyBoardHelper)).call(this, props));
+
+	      _this.state = {
+	        event: null
+	      };
+	      return _this;
+	    }
+
+	    _createClass(KeyBoardHelper, [{
+	      key: 'componentDidMount',
+	      value: function componentDidMount() {
+	        (0, _event_handlers.onMount)(this);
+	      }
+	    }, {
+	      key: 'componentWillUnmount',
+	      value: function componentWillUnmount() {
+	        (0, _event_handlers.onUnmount)(this);
+	      }
+	    }, {
+	      key: 'handleKeyDown',
+	      value: function handleKeyDown(event) {
+	        var _this2 = this;
+
+	        // to simulate a keypress, set the event and then clear it in the callback
+	        this.setState({ event: event }, function () {
+	          return _this2.setState({ event: null });
+	        });
+	      }
+	    }, {
+	      key: 'render',
+	      value: function render() {
+	        return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { keydown: this.state }));
+	      }
+	    }]);
+
+	    return KeyBoardHelper;
+	  }(_react2.default.Component);
+
+	  _store2.default.setBinding({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
+
+	  return KeyBoardHelper;
+	}
+
+	exports.default = componentWrapper;
+
+/***/ },
+/* 580 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	exports._resetStore = _resetStore;
+
+	var _keys = __webpack_require__(581);
+
+	var _match_keys = __webpack_require__(582);
+
+	var _match_keys2 = _interopRequireDefault(_match_keys);
+
+	var _parse_keys = __webpack_require__(583);
+
+	var _parse_keys2 = _interopRequireDefault(_parse_keys);
+
+	var _uuid = __webpack_require__(584);
+
+	var _uuid2 = _interopRequireDefault(_uuid);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /**
+	                                                                                                                                                                                                     * @module store
+	                                                                                                                                                                                                     *
+	                                                                                                                                                                                                     */
+
+
+	/**
+	 * private
+	 * 
+	 */
+
+	// dict for class prototypes => bindings
+	var _handlers = new Map();
+
+	// all mounted instances that have keybindings
+	var _instances = new Set();
+
+	// for testing
+	function _resetStore() {
+	  _handlers.clear();
+	  _instances.clear();
+	}
+
+	/**
+	 * public
+	 *
+	 */
+
+	var Store = {
+
+	  /**
+	   * activate
+	   *
+	   * @access public
+	   * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
+	   */
+	  activate: function activate(instances) {
+	    var instancesArray = [].concat(instances);
+
+	    // if no components were found as ancestors of the event target,
+	    // effectively deactivate keydown handling by capping the set of instances
+	    // with `null`.
+	    if (!instancesArray.length) {
+	      _instances.add(null);
+	    } else {
+	      _instances.delete(null);
+
+	      // deleting and then adding the instance(s) has the effect of sorting the set
+	      // according to instance activation (ascending)
+	      instancesArray.forEach(function (instance) {
+	        _instances.delete(instance);
+	        _instances.add(instance);
+	      });
+	    }
+	  },
+
+
+	  /**
+	   * deleteInstance
+	   *
+	   * @access public
+	   * @param {object} target Instantiated class that extended React.Component
+	   * @return {boolean} The value set.has( target ) would have returned prior to deletion
+	   */
+	  deleteInstance: function deleteInstance(target) {
+	    _instances.delete(target);
+	  },
+	  findBindingForEvent: function findBindingForEvent(event) {
+	    if (!_instances.has(null)) {
+	      var keyMatchesEvent = function keyMatchesEvent(keySet) {
+	        return (0, _match_keys2.default)({ keySet: keySet, event: event });
+	      };
+
+	      // loop through instances in reverse activation order so that most
+	      // recently activated instance gets first dibs on event
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+
+	      try {
+	        for (var _iterator = [].concat(_toConsumableArray(_instances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var instance = _step.value;
+
+	          var bindings = this.getBinding(instance.constructor.prototype);
+	          var _iteratorNormalCompletion2 = true;
+	          var _didIteratorError2 = false;
+	          var _iteratorError2 = undefined;
+
+	          try {
+	            for (var _iterator2 = bindings[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	              var _step2$value = _slicedToArray(_step2.value, 2),
+	                  keySets = _step2$value[0],
+	                  fn = _step2$value[1];
+
+	              if ((0, _keys.allKeys)(keySets) || keySets.some(keyMatchesEvent)) {
+	                // return when matching keybinding is found - i.e. only one
+	                // keybound component can respond to a given key code. to get around this,
+	                // scope a common ancestor component class with @keydown and use
+	                // @keydownScoped to bind the duplicate keys in your child components
+	                // (or just inspect nextProps.keydown.event).
+	                return { fn: fn, instance: instance };
+	              }
+	            }
+	          } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	          } finally {
+	            try {
+	              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	              }
+	            } finally {
+	              if (_didIteratorError2) {
+	                throw _iteratorError2;
+	              }
+	            }
+	          }
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	    }
+	    return null;
+	  },
+
+
+	  /**
+	   * getBinding
+	   *
+	   * @access public
+	   * @param {object} target Class used as key in dict of key bindings
+	   * @return {object} The object containing bindings for the given class
+	   */
+	  getBinding: function getBinding(_ref) {
+	    var __reactKeydownUUID = _ref.__reactKeydownUUID;
+
+	    return _handlers.get(__reactKeydownUUID);
+	  },
+
+
+	  /**
+	   * getInstances
+	   *
+	   * @access public
+	   * @return {set} All stored instances (all mounted component instances with keybindings)
+	   */
+	  getInstances: function getInstances() {
+	    return _instances;
+	  },
+
+
+	  /**
+	   * isEmpty
+	   *
+	   * @access public
+	   * @return {number} Size of the set of all stored instances
+	   */
+	  isEmpty: function isEmpty() {
+	    return !_instances.size;
+	  },
+
+
+	  /**
+	   * setBinding
+	   *
+	   * @access public
+	   * @param {object} args All arguments necessary to set the binding
+	   * @param {array} args.keys Key codes that should trigger the fn
+	   * @param {function} args.fn The callback to be triggered when given keys are pressed
+	   * @param {object} args.target The decorated class
+	   */
+	  setBinding: function setBinding(_ref2) {
+	    var keys = _ref2.keys,
+	        fn = _ref2.fn,
+	        target = _ref2.target;
+
+	    var keySets = keys ? (0, _parse_keys2.default)(keys) : (0, _keys.allKeys)();
+	    var __reactKeydownUUID = target.__reactKeydownUUID;
+
+	    if (!__reactKeydownUUID) {
+	      target.__reactKeydownUUID = (0, _uuid2.default)();
+	      _handlers.set(target.__reactKeydownUUID, new Map([[keySets, fn]]));
+	    } else {
+	      _handlers.get(__reactKeydownUUID).set(keySets, fn);
+	    }
+	  }
+	};
+
+	exports.default = Store;
+
+/***/ },
+/* 581 */
 /***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	exports.allKeys = allKeys;
+	// TODO: Need better, more complete, and more methodical key definitions
+
+	var Keys = {
+	  backspace: 8,
+	  del: 46,
+	  delete: 46,
+	  tab: 9,
+	  enter: 13,
+	  'return': 13,
+	  esc: 27,
+	  space: 32,
+	  left: 37,
+	  up: 38,
+	  right: 39,
+	  down: 40,
+	  ';': 186,
+	  '=': 187,
+	  ',': 188,
+	  '-': 189,
+	  '.': 190,
+	  '/': 191,
+	  '`': 192,
+	  '[': 219,
+	  '\\': 220,
+	  ']': 221
+	};
+
+	// Add uppercase versions of keys above for backwards compatibility
+	Object.keys(Keys).forEach(function (key) {
+	  return Keys[key.toUpperCase()] = Keys[key];
+	});
+
+	'0123456789'.split('').forEach(function (num, index) {
+	  return Keys[num] = index + 48;
+	});
+
+	'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
+	  Keys[letter] = index + 65;
+	  Keys[letter.toLowerCase()] = index + 65;
+	});
+
+	// fn keys
+	[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach(function (item, index) {
+	  return Keys['f' + index] = 111 + index;
+	});
+
+	var modifiers = exports.modifiers = {
+	  control: 'ctrl',
+	  ctrl: 'ctrl',
+	  shift: 'shift',
+	  meta: 'meta',
+	  cmd: 'meta',
+	  command: 'meta',
+	  option: 'alt',
+	  alt: 'alt'
+	};
+
+	function allKeys(arg) {
+	  return arg ? arg.constructor === Symbol || (typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'symbol' : Symbol('allKeys');
+	}
+
+	exports.default = Keys;
+
+/***/ },
+/* 582 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _keys = __webpack_require__(581);
+
+	var modKeys = Object.keys(_keys.modifiers);
+
+	function matchKeys(_ref) {
+	  var _ref$keySet = _ref.keySet,
+	      key = _ref$keySet.key,
+	      _ref$keySet$modifiers = _ref$keySet.modifiers,
+	      modifiers = _ref$keySet$modifiers === undefined ? [] : _ref$keySet$modifiers,
+	      event = _ref.event;
+
+	  var keysMatch = false;
+	  if (key === event.which) {
+	    var evtModKeys = modKeys.filter(function (modKey) {
+	      return event[modKey + 'Key'];
+	    }).sort();
+	    keysMatch = modifiers.length === evtModKeys.length && modifiers.every(function (modKey, index) {
+	      return evtModKeys[index] === modKey;
+	    });
+	  }
+	  return keysMatch;
+	}
+
+	exports.default = matchKeys;
+
+/***/ },
+/* 583 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _keys = __webpack_require__(581);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function parseKeys(keysArray) {
+	  return keysArray.map(function (key) {
+	    var keySet = { key: key };
+	    if (typeof key === 'string') {
+	      var keyString = key.toLowerCase().trim();
+	      var matches = keyString.split(/\s?\+\s?/);
+	      keySet = matches.length === 1 ? { key: _keys2.default[keyString] } : {
+	        key: _keys2.default[matches.pop()],
+	        modifiers: matches.map(function (modKey) {
+	          return _keys.modifiers[modKey];
+	        }).sort()
+	      };
+	    }
+	    return keySet;
+	  });
+	}
+
+	exports.default = parseKeys;
+
+/***/ },
+/* 584 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = uuid;
+	// Counter being incremented. JS is single-threaded, so it'll Just Work™.
+	var __counter = 1;
+
+	/**
+	 * Returns a process-wide unique identifier.
+	 */
+	function uuid() {
+	  return "uid-" + __counter++;
+	}
+
+/***/ },
+/* 585 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.onUnmount = exports.onMount = undefined;
+	exports._onClick = _onClick;
+	exports._onKeyDown = _onKeyDown;
+	exports._shouldConsider = _shouldConsider;
+
+	var _dom_helpers = __webpack_require__(586);
+
+	var _dom_helpers2 = _interopRequireDefault(_dom_helpers);
+
+	var _listeners = __webpack_require__(587);
+
+	var _listeners2 = _interopRequireDefault(_listeners);
+
+	var _store = __webpack_require__(580);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /* eslint-disable no-use-before-define */
+	/**
+	 * @module eventHandlers
+	 *
+	 */
+
+
+	/**
+	 * private
+	 *
+	 */
+
+	/**
+	 * _onClick
+	 *
+	 * @access private
+	 * @param {object} event The click event object
+	 * @param {object} event.target The DOM node from the click event
+	 */
+	function _onClick(_ref) {
+	  var target = _ref.target;
+
+	  _store2.default.activate([].concat(_toConsumableArray(_store2.default.getInstances())).reduce(_dom_helpers2.default.findContainerNodes(target), []).sort(_dom_helpers2.default.sortByDOMPosition).map(function (item) {
+	    return item.instance;
+	  }));
+	}
+
+	/**
+	 * _onKeyDown: The keydown event callback
+	 *
+	 * @access private
+	 * @param {object} event The keydown event object
+	 * @param {number} event.which The key code (which) received from the keydown event
+	 */
+	function _onKeyDown(event) {
+	  var forceConsider = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+	  if (forceConsider || _shouldConsider(event)) {
+	    var _ref2 = _store2.default.findBindingForEvent(event) || {},
+	        fn = _ref2.fn,
+	        instance = _ref2.instance;
+
+	    if (fn) {
+	      fn.call(instance, event);
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+
+	/**
+	 * _shouldConsider: Conditions for proceeding with key event handling
+	 *
+	 * @access private
+	 * @param {object} event The keydown event object
+	 * @param {object} event.target The node origin of the event
+	 * @return {boolean} Whether to continue procesing the keydown event
+	 */
+	function _shouldConsider(_ref3) {
+	  var ctrlKey = _ref3.ctrlKey,
+	      target = _ref3.target;
+
+	  return ctrlKey || !~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(target.tagName) && target.getAttribute('role') !== 'textbox';
+	}
+
+	/**
+	 * public
+	 *
+	 */
+
+	/**
+	 * onMount
+	 *
+	 * @access public
+	 */
+	function onMount(instance) {
+	  // have to bump this to next event loop because component mounting routinely
+	  // preceeds the dom click event that triggered the mount (wtf?)
+	  setTimeout(function () {
+	    return _store2.default.activate(instance);
+	  }, 0);
+	  _listeners2.default.bindKeys(_onKeyDown);
+	  _listeners2.default.bindClicks(_onClick);
+	  _dom_helpers2.default.bindFocusables(instance, _store2.default.activate);
+	}
+
+	/**
+	 * onUnmount
+	 *
+	 * @access public
+	 */
+	function onUnmount(instance) {
+	  _store2.default.deleteInstance(instance);
+	  if (_store2.default.isEmpty()) {
+	    _listeners2.default.unbindClicks(_onClick);
+	    _listeners2.default.unbindKeys(_onKeyDown);
+	  }
+	}
+
+	exports.onMount = onMount;
+	exports.onUnmount = onUnmount;
+
+/***/ },
+/* 586 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var focusableSelector = 'a[href], button, input, object, select, textarea, [tabindex]';
+
+	/**
+	 * bindFocusables: Find any focusable child elements of the component instance and
+	 * add an onFocus handler to focus our keydown handlers on the parent component
+	 * when user keys applies focus to the element.
+	 *
+	 * NOTE: One limitation of this right now is that if you tab out of the
+	 * component, _focusedInstance will still be set until next click or mount or
+	 * controlled focus.
+	 *
+	 * @access public
+	 * @param {object} instance The key-bound component instance
+	 * @param {callback} activateOnFocus The fn to fire when element is focused
+	 */
+	/**
+	 * @module domHelpers
+	 *
+	 */
+	function bindFocusables(instance, activateOnFocus) {
+	  if (document.querySelectorAll) {
+	    var node = _reactDom2.default.findDOMNode(instance);
+	    if (node) {
+	      var focusables = node.querySelectorAll(focusableSelector);
+	      if (focusables.length) {
+	        var onFocus = function onFocus(element) {
+	          var onFocusPrev = element.onfocus;
+	          return function (event) {
+	            activateOnFocus(instance);
+	            if (onFocusPrev) onFocusPrev.call(element, event);
+	          };
+	        };
+	        Array.prototype.slice.call(focusables).forEach(function (element) {
+	          return element.onfocus = onFocus(element);
+	        });
+	      }
+	    }
+	  }
+	}
+
+	/**
+	 * findContainerNodes: Called by our click handler to find instances with nodes
+	 * that are equal to or that contain the click target. Any that pass this test
+	 * will be recipients of the next keydown event.
+	 *
+	 * @access public
+	 * @param {object} target The click event.target DOM element
+	 * @return {function} Reducer function
+	 */
+	function findContainerNodes(target) {
+	  return function (memo, instance) {
+	    try {
+	      var node = _reactDom2.default.findDOMNode(instance);
+	      if (node && (node === target || node.contains(target))) {
+	        memo.push({ instance: instance, node: node });
+	      }
+	    } finally {
+	      return memo;
+	    }
+	  };
+	}
+
+	/**
+	 * sortByDOMPosition: Called by our click handler to sort a list of instances
+	 * according to least -> most nested. This is so that if multiple keybound
+	 * instances have nodes that are ancestors of the click target, they will be
+	 * sorted to let the instance closest to the click target get first dibs on the
+	 * next key down event.
+	 */
+	function sortByDOMPosition(a, b) {
+	  return a.node.compareDocumentPosition(b.node) === 10 ? 1 : -1;
+	}
+
+	exports.default = { bindFocusables: bindFocusables, findContainerNodes: findContainerNodes, sortByDOMPosition: sortByDOMPosition };
+
+/***/ },
+/* 587 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * @module Listeners
+	 *
+	 */
+
+	// flag for whether click listener has been bound to document
+	var _clicksBound = false;
+
+	// flag for whether keydown listener has been bound to document
+	var _keysBound = false;
+
+	var Listeners = {
+	  /**
+	   * _bindKeys
+	   *
+	   * @access public
+	   */
+	  bindKeys: function bindKeys(callback) {
+	    if (!_keysBound) {
+	      document.addEventListener('keydown', callback);
+	      _keysBound = true;
+	    }
+	  },
+
+
+	  /**
+	   * unbindKeys
+	   *
+	   * @access public
+	   */
+	  unbindKeys: function unbindKeys(callback) {
+	    if (_keysBound) {
+	      document.removeEventListener('keydown', callback);
+	      _keysBound = false;
+	    }
+	  },
+
+
+	  /**
+	   * bindClicks
+	   *
+	   * @access public
+	   */
+	  bindClicks: function bindClicks(callback) {
+	    if (!_clicksBound) {
+	      document.addEventListener('click', callback);
+	      _clicksBound = true;
+	    }
+	  },
+
+
+	  /**
+	   * unbindClicks
+	   *
+	   * @access public
+	   */
+	  unbindClicks: function unbindClicks(callback) {
+	    if (_clicksBound) {
+	      document.removeEventListener('click', callback);
+	      _clicksBound = false;
+	    }
+	  }
+	};
+
+	exports.default = Listeners;
+
+/***/ },
+/* 588 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
+	                                                                                                                                                                                                                                                                               * @module methodWrapper
+	                                                                                                                                                                                                                                                                               *
+	                                                                                                                                                                                                                                                                               */
+
+
+	var _store = __webpack_require__(580);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _event_handlers = __webpack_require__(585);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * _isReactKeyDown
+	 *
+	 * @access private
+	 * @param {object} event The possibly synthetic event passed as an argument with
+	 * the method invocation.
+	 * @return {boolean}
+	 */
+	function _isReactKeyDown(event) {
+	  return event && (typeof event === 'undefined' ? 'undefined' : _typeof(event)) === 'object' && event.nativeEvent instanceof window.KeyboardEvent && event.type === 'keydown';
+	}
+
+	/**
+	 * methodWrapper
+	 *
+	 * @access public
+	 * @param {object} args All arguments necessary for wrapping method
+	 * @param {object} args.target The decorated class
+	 * @param {object} args.descriptor Method descriptor
+	 * @param {array} args.keys The array of keys bound to the given method
+	 * @return {object} The method descriptor
+	 */
+	function methodWrapper(_ref) {
+	  var target = _ref.target,
+	      descriptor = _ref.descriptor,
+	      keys = _ref.keys;
+
+
+	  var fn = descriptor.value;
+
+	  // if we haven't already created a binding for this class (via another
+	  // decorated method), wrap these lifecycle methods.
+	  if (!_store2.default.getBinding(target)) {
+	    var componentDidMount = target.componentDidMount,
+	        componentWillUnmount = target.componentWillUnmount;
+
+
+	    target.componentDidMount = function () {
+	      (0, _event_handlers.onMount)(this);
+	      if (componentDidMount) return componentDidMount.call(this);
+	    };
+
+	    target.componentWillUnmount = function () {
+	      (0, _event_handlers.onUnmount)(this);
+	      if (componentWillUnmount) return componentWillUnmount.call(this);
+	    };
+	  }
+
+	  // add this binding of keys and method to the target's bindings
+	  _store2.default.setBinding({ keys: keys, target: target, fn: fn });
+
+	  descriptor.value = function () {
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    var maybeEvent = args[0];
+
+	    if (_isReactKeyDown(maybeEvent)) {
+	      // proxy method in order to use @keydown as filter for keydown events coming
+	      // from an actual onKeyDown binding (as identified by react's addition of
+	      // 'nativeEvent' + type === 'keydown')
+	      if (!maybeEvent.ctrlKey) {
+	        // we already whitelist shortcuts with ctrl modifiers so if we were to
+	        // fire it again here the method would trigger twice. see https://github.com/glortho/react-keydown/issues/38
+	        return (0, _event_handlers._onKeyDown)(maybeEvent, true);
+	      }
+	    } else if (!maybeEvent || !(maybeEvent instanceof window.KeyboardEvent) || maybeEvent.type !== 'keydown') {
+	      // if our first argument is a keydown event it is being handled by our
+	      // binding system. if it's anything else, just pass through.
+	      return fn.call.apply(fn, [this].concat(args));
+	    }
+	  };
+
+	  return descriptor;
+	}
+
+	exports.default = methodWrapper;
+
+/***/ },
+/* 589 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _match_keys = __webpack_require__(582);
+
+	var _match_keys2 = _interopRequireDefault(_match_keys);
+
+	var _parse_keys = __webpack_require__(583);
+
+	var _parse_keys2 = _interopRequireDefault(_parse_keys);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * _shouldTrigger
+	 *
+	 * @access private
+	 * @param {object} thisProps Exsting props from the wrapped component
+	 * @param {object} thisProps.keydown The namespaced state from the higher-order
+	 * component (class_decorator)
+	 * @param {object} nextProps The incoming props from the wrapped component
+	 * @param {object} nextProps.keydown The namescaped state from the higher-order
+	 * component (class_decorator)
+	 * @param {array} keys The keys bound to the decorated method
+	 * @return {boolean} Whether all tests have passed
+	 */
+	/**
+	 * @module methodWrapperScoped
+	 *
+	 */
+	function _shouldTrigger(_ref, keydownNext) {
+	  var keydownThis = _ref.keydown;
+
+	  return keydownNext && keydownNext.event && !keydownThis.event;
+	}
+
+	/**
+	 * methodWrapperScoped
+	 *
+	 * @access public
+	 * @param {object} args All args necessary for decorating the method
+	 * @param {object} args.target The decorated method's class object
+	 * @param {object} args.descriptor The method's descriptor object
+	 * @param {array} args.keys The key codes bound to the decorated method
+	 * @return {object} The method's descriptor object
+	 */
+	function methodWrapperScoped(_ref2) {
+	  var target = _ref2.target,
+	      descriptor = _ref2.descriptor,
+	      keys = _ref2.keys;
+	  var componentWillReceiveProps = target.componentWillReceiveProps;
+
+	  var fn = descriptor.value;
+	  if (!keys) {
+	    console.warn(fn + ': keydownScoped requires one or more keys');
+	  } else {
+	    var keySets = (0, _parse_keys2.default)(keys);
+
+	    // wrap the component's lifecycle method to intercept key codes coming down
+	    // from the wrapped/scoped component up the view hierarchy. if new keydown
+	    // event has arrived and the key codes match what was specified in the
+	    // decorator, call the wrapped method.
+	    target.componentWillReceiveProps = function (nextProps) {
+	      var keydown = nextProps.keydown;
+
+	      if (_shouldTrigger(this.props, keydown)) {
+	        if (keySets.some(function (keySet) {
+	          return (0, _match_keys2.default)({ keySet: keySet, event: keydown.event });
+	        })) {
+	          return fn.call(this, keydown.event);
+	        }
+	      }
+
+	      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	      }
+
+	      if (componentWillReceiveProps) return componentWillReceiveProps.call.apply(componentWillReceiveProps, [this, nextProps].concat(args));
+	    };
+	  }
+
+	  return descriptor;
+	}
+
+	exports.default = methodWrapperScoped;
+
+/***/ },
+/* 590 */
+/***/ function(module, exports) {
+
+	'use strict';
 
 	// Production steps of ECMA-262, Edition 6, 22.1.2.1
 	// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
-	'use strict';
-
 	if (!Array.from) {
-	  Array.from = (function () {
+	  Array.from = function () {
 	    var toStr = Object.prototype.toString;
 	    var isCallable = function isCallable(fn) {
 	      return typeof fn === 'function' || toStr.call(fn) === '[object Function]';
@@ -58518,7 +59638,7 @@
 	      var len = toLength(items.length);
 
 	      // 13. If IsConstructor(C) is true, then
-	      // 13. a. Let A be the result of calling the [[Construct]] internal method
+	      // 13. a. Let A be the result of calling the [[Construct]] internal method 
 	      // of C with an argument list containing the single item len.
 	      // 14. a. Else, Let A be ArrayCreate(len).
 	      var A = isCallable(C) ? Object(new C(len)) : new Array(len);
@@ -58541,1120 +59661,8 @@
 	      // 20. Return A.
 	      return A;
 	    };
-	  })();
+	  }();
 	}
-
-/***/ },
-/* 579 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @module decorators
-	 *
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _class_decorator = __webpack_require__(580);
-
-	var _class_decorator2 = _interopRequireDefault(_class_decorator);
-
-	var _method_decorator = __webpack_require__(589);
-
-	var _method_decorator2 = _interopRequireDefault(_method_decorator);
-
-	var _method_decorator_scoped = __webpack_require__(590);
-
-	var _method_decorator_scoped2 = _interopRequireDefault(_method_decorator_scoped);
-
-	/**
-	 * _decorator
-	 *
-	 * @access private
-	 * @param {Function} methodFn The method wrapper to delegate to, based on whether user has specified a scoped decorator or not
-	 * @param {Array} ...args Remainder of arguments passed in
-	 * @return {Function} The decorated class or method
-	 */
-	function _decorator(methodFn) {
-	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	    args[_key - 1] = arguments[_key];
-	  }
-
-	  // check the first argument to see if it's a user-supplied keycode or array
-	  // of keycodes, or if it's the wrapped class or method
-	  var testArg = args[0];
-	  var isArray = Array.isArray(testArg);
-
-	  // if the test argument is not an object or function, it is user-supplied
-	  // keycodes. else there are no arguments and it's just the wrapped class
-	  // (method decorators must have keycode arguments).
-	  if (isArray || ~['string', 'number'].indexOf(typeof testArg)) {
-	    var _ret = (function () {
-	      var keys = isArray ? testArg : args;
-
-	      // return the decorator function, which on the next call will look for
-	      // the presence of a method name to determine if this is a wrapped method
-	      // or component
-	      return {
-	        v: function (target, methodName, descriptor) {
-	          return methodName ? methodFn({ target: target, descriptor: descriptor, keys: keys }) : (0, _class_decorator2['default'])(target, keys);
-	        }
-	      };
-	    })();
-
-	    if (typeof _ret === 'object') return _ret.v;
-	  } else {
-	    var methodName = args[1];
-
-	    // method decorators without keycode (which) arguments are not allowed.
-	    if (!methodName) {
-	      return _class_decorator2['default'].apply(undefined, args);
-	    } else {
-	      console.warn(methodName + ': Method decorators must have keycode arguments, so the decorator for this method will not do anything');
-	    }
-	  }
-	}
-
-	/**
-	 * keydownScoped
-	 *
-	 * Method decorator that will look for changes to its targeted component's
-	 * `keydown` props to decide when to trigger, rather than responding directly
-	 * to keydown events. This lets you specify a @keydown decorated class higher
-	 * up in the view hierarchy for larger scoping of keydown events, or for
-	 * programmatically sending keydown events as props into the components in order
-	 * to trigger decorated methods with matching keys.
-	 *
-	 * @access public
-	 * @param {Array} ...args  All (or no) arguments passed in from decoration
-	 * @return {Function} The decorated class or method
-	 */
-	function keydownScoped() {
-	  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-	    args[_key2] = arguments[_key2];
-	  }
-
-	  return _decorator.apply(undefined, [_method_decorator_scoped2['default']].concat(args));
-	}
-
-	/**
-	 * keydown
-	 *
-	 * The main decorator and default export, handles both classes and methods.
-	 *
-	 * @access public
-	 * @param {Array} ...args  All (or no) arguments passed in from decoration
-	 * @return {Function} The decorated class or method
-	 */
-	function keydown() {
-	  for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-	    args[_key3] = arguments[_key3];
-	  }
-
-	  return _decorator.apply(undefined, [_method_decorator2['default']].concat(args));
-	}
-
-	exports['default'] = keydown;
-	exports.keydownScoped = keydownScoped;
-
-/***/ },
-/* 580 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @module componentWrapper
-	 *
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _store = __webpack_require__(581);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	var _event_handlers = __webpack_require__(586);
-
-	/**
-	 * componentWrapper
-	 *
-	 * @access public
-	 * @param {object} WrappedComponent React component class to be wrapped
-	 * @param {array} [keys] The key(s) bound to the class
-	 * @return {object} The higher-order function that wraps the decorated class
-	 */
-	function componentWrapper(WrappedComponent) {
-	  var keys = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-
-	  var KeyBoardHelper = (function (_React$Component) {
-	    _inherits(KeyBoardHelper, _React$Component);
-
-	    function KeyBoardHelper(props) {
-	      _classCallCheck(this, KeyBoardHelper);
-
-	      _get(Object.getPrototypeOf(KeyBoardHelper.prototype), 'constructor', this).call(this, props);
-	      this.state = {
-	        event: null
-	      };
-	    }
-
-	    _createClass(KeyBoardHelper, [{
-	      key: 'componentDidMount',
-	      value: function componentDidMount() {
-	        (0, _event_handlers.onMount)(this);
-	      }
-	    }, {
-	      key: 'componentWillUnmount',
-	      value: function componentWillUnmount() {
-	        (0, _event_handlers.onUnmount)(this);
-	      }
-	    }, {
-	      key: 'handleKeyDown',
-	      value: function handleKeyDown(event) {
-	        var _this = this;
-
-	        // to simulate a keypress, set the event and then clear it in the callback
-	        this.setState({ event: event }, function () {
-	          return _this.setState({ event: null });
-	        });
-	      }
-	    }, {
-	      key: 'render',
-	      value: function render() {
-	        return _react2['default'].createElement(WrappedComponent, _extends({}, this.props, { keydown: this.state }));
-	      }
-	    }]);
-
-	    return KeyBoardHelper;
-	  })(_react2['default'].Component);
-
-	  _store2['default'].setBinding({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
-
-	  return KeyBoardHelper;
-	}
-
-	exports['default'] = componentWrapper;
-	module.exports = exports['default'];
-
-/***/ },
-/* 581 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @module store
-	 *
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-
-	exports._resetStore = _resetStore;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-	var _libKeys = __webpack_require__(582);
-
-	var _libMatch_keys = __webpack_require__(583);
-
-	var _libMatch_keys2 = _interopRequireDefault(_libMatch_keys);
-
-	var _libParse_keys = __webpack_require__(584);
-
-	var _libParse_keys2 = _interopRequireDefault(_libParse_keys);
-
-	var _libUuid = __webpack_require__(585);
-
-	var _libUuid2 = _interopRequireDefault(_libUuid);
-
-	/**
-	 * private
-	 * 
-	 */
-
-	// dict for class prototypes => bindings
-	var _handlers = new Map();
-
-	// all mounted instances that have keybindings
-	var _instances = new Set();
-
-	// for testing
-
-	function _resetStore() {
-	  _handlers.clear();
-	  _instances.clear();
-	}
-
-	/**
-	 * public
-	 *
-	 */
-
-	var Store = {
-
-	  /**
-	   * activate
-	   *
-	   * @access public
-	   * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
-	   */
-	  activate: function activate(instances) {
-	    var instancesArray = [].concat(instances);
-
-	    // if no components were found as ancestors of the event target,
-	    // effectively deactivate keydown handling by capping the set of instances
-	    // with `null`.
-	    if (!instancesArray.length) {
-	      _instances.add(null);
-	    } else {
-	      _instances['delete'](null);
-
-	      // deleting and then adding the instance(s) has the effect of sorting the set
-	      // according to instance activation (ascending)
-	      instancesArray.forEach(function (instance) {
-	        _instances['delete'](instance);
-	        _instances.add(instance);
-	      });
-	    }
-	  },
-
-	  /**
-	   * deleteInstance
-	   *
-	   * @access public
-	   * @param {object} target Instantiated class that extended React.Component
-	   * @return {boolean} The value set.has( target ) would have returned prior to deletion
-	   */
-	  deleteInstance: function deleteInstance(target) {
-	    _instances['delete'](target);
-	  },
-
-	  findBindingForEvent: function findBindingForEvent(event) {
-	    if (!_instances.has(null)) {
-	      var keyMatchesEvent = function keyMatchesEvent(keySet) {
-	        return (0, _libMatch_keys2['default'])({ keySet: keySet, event: event });
-	      };
-
-	      // loop through instances in reverse activation order so that most
-	      // recently activated instance gets first dibs on event
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-
-	      try {
-	        for (var _iterator = [].concat(_toConsumableArray(_instances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var instance = _step.value;
-
-	          var bindings = this.getBinding(instance.constructor.prototype);
-	          var _iteratorNormalCompletion2 = true;
-	          var _didIteratorError2 = false;
-	          var _iteratorError2 = undefined;
-
-	          try {
-	            for (var _iterator2 = bindings[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	              var _step2$value = _slicedToArray(_step2.value, 2);
-
-	              var keySets = _step2$value[0];
-	              var fn = _step2$value[1];
-
-	              if ((0, _libKeys.allKeys)(keySets) || keySets.some(keyMatchesEvent)) {
-	                // return when matching keybinding is found - i.e. only one
-	                // keybound component can respond to a given key code. to get around this,
-	                // scope a common ancestor component class with @keydown and use
-	                // @keydownScoped to bind the duplicate keys in your child components
-	                // (or just inspect nextProps.keydown.event).
-	                return { fn: fn, instance: instance };
-	              }
-	            }
-	          } catch (err) {
-	            _didIteratorError2 = true;
-	            _iteratorError2 = err;
-	          } finally {
-	            try {
-	              if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-	                _iterator2['return']();
-	              }
-	            } finally {
-	              if (_didIteratorError2) {
-	                throw _iteratorError2;
-	              }
-	            }
-	          }
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator['return']) {
-	            _iterator['return']();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
-	      }
-	    }
-	    return null;
-	  },
-
-	  /**
-	   * getBinding
-	   *
-	   * @access public
-	   * @param {object} target Class used as key in dict of key bindings
-	   * @return {object} The object containing bindings for the given class
-	   */
-	  getBinding: function getBinding(_ref) {
-	    var __reactKeydownUUID = _ref.__reactKeydownUUID;
-
-	    return _handlers.get(__reactKeydownUUID);
-	  },
-
-	  /**
-	   * getInstances
-	   *
-	   * @access public
-	   * @return {set} All stored instances (all mounted component instances with keybindings)
-	   */
-	  getInstances: function getInstances() {
-	    return _instances;
-	  },
-
-	  /**
-	   * isEmpty
-	   *
-	   * @access public
-	   * @return {number} Size of the set of all stored instances
-	   */
-	  isEmpty: function isEmpty() {
-	    return !_instances.size;
-	  },
-
-	  /**
-	   * setBinding
-	   *
-	   * @access public
-	   * @param {object} args All arguments necessary to set the binding
-	   * @param {array} args.keys Key codes that should trigger the fn
-	   * @param {function} args.fn The callback to be triggered when given keys are pressed
-	   * @param {object} args.target The decorated class
-	   */
-	  setBinding: function setBinding(_ref2) {
-	    var keys = _ref2.keys;
-	    var fn = _ref2.fn;
-	    var target = _ref2.target;
-
-	    var keySets = keys ? (0, _libParse_keys2['default'])(keys) : (0, _libKeys.allKeys)();
-	    var __reactKeydownUUID = target.__reactKeydownUUID;
-
-	    if (!__reactKeydownUUID) {
-	      target.__reactKeydownUUID = (0, _libUuid2['default'])();
-	      _handlers.set(target.__reactKeydownUUID, new Map([[keySets, fn]]));
-	    } else {
-	      _handlers.get(__reactKeydownUUID).set(keySets, fn);
-	    }
-	  }
-	};
-
-	exports['default'] = Store;
-
-/***/ },
-/* 582 */
-/***/ function(module, exports) {
-
-	// TODO: Need better, more complete, and more methodical key definitions
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports.allKeys = allKeys;
-	var Keys = {
-	  backspace: 8,
-	  del: 46,
-	  'delete': 46,
-	  tab: 9,
-	  enter: 13,
-	  'return': 13,
-	  esc: 27,
-	  space: 32,
-	  left: 37,
-	  up: 38,
-	  right: 39,
-	  down: 40,
-	  ';': 186,
-	  '=': 187,
-	  ',': 188,
-	  '-': 189,
-	  '.': 190,
-	  '/': 191,
-	  '`': 192,
-	  '[': 219,
-	  '\\': 220,
-	  ']': 221
-	};
-
-	// Add uppercase versions of keys above for backwards compatibility
-	Object.keys(Keys).forEach(function (key) {
-	  return Keys[key.toUpperCase()] = Keys[key];
-	});
-
-	'0123456789'.split('').forEach(function (num, index) {
-	  return Keys[num] = index + 48;
-	});
-
-	'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
-	  Keys[letter] = index + 65;
-	  Keys[letter.toLowerCase()] = index + 65;
-	});
-
-	// fn keys
-	[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach(function (item, index) {
-	  return Keys['f' + index] = 111 + index;
-	});
-
-	var modifiers = {
-	  control: 'ctrl',
-	  ctrl: 'ctrl',
-	  shift: 'shift',
-	  meta: 'meta',
-	  cmd: 'meta',
-	  command: 'meta',
-	  option: 'alt',
-	  alt: 'alt'
-	};
-
-	exports.modifiers = modifiers;
-
-	function allKeys(arg) {
-	  return arg ? typeof arg === 'symbol' : Symbol('allKeys');
-	}
-
-	exports['default'] = Keys;
-
-/***/ },
-/* 583 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _keys = __webpack_require__(582);
-
-	var modKeys = Object.keys(_keys.modifiers);
-
-	function matchKeys(_ref) {
-	  var _ref$keySet = _ref.keySet;
-	  var key = _ref$keySet.key;
-	  var _ref$keySet$modifiers = _ref$keySet.modifiers;
-	  var modifiers = _ref$keySet$modifiers === undefined ? [] : _ref$keySet$modifiers;
-	  var event = _ref.event;
-
-	  var keysMatch = false;
-	  if (key === event.which) {
-	    (function () {
-	      var evtModKeys = modKeys.filter(function (modKey) {
-	        return event[modKey + 'Key'];
-	      }).sort();
-	      keysMatch = modifiers.length === evtModKeys.length && modifiers.every(function (modKey, index) {
-	        return evtModKeys[index] === modKey;
-	      });
-	    })();
-	  }
-	  return keysMatch;
-	}
-
-	exports['default'] = matchKeys;
-	module.exports = exports['default'];
-
-/***/ },
-/* 584 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _keys = __webpack_require__(582);
-
-	var _keys2 = _interopRequireDefault(_keys);
-
-	function parseKeys(keysArray) {
-	  return keysArray.map(function (key) {
-	    var keySet = { key: key };
-	    if (typeof key === 'string') {
-	      var keyString = key.toLowerCase().trim();
-	      var matches = keyString.split(/\s?\+\s?/);
-	      keySet = matches.length === 1 ? { key: _keys2['default'][keyString] } : {
-	        key: _keys2['default'][matches.pop()],
-	        modifiers: matches.map(function (modKey) {
-	          return _keys.modifiers[modKey];
-	        }).sort()
-	      };
-	    }
-	    return keySet;
-	  });
-	}
-
-	exports['default'] = parseKeys;
-	module.exports = exports['default'];
-
-/***/ },
-/* 585 */
-/***/ function(module, exports) {
-
-	// Counter being incremented. JS is single-threaded, so it'll Just Work™.
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports["default"] = uuid;
-	var __counter = 1;
-
-	/**
-	 * Returns a process-wide unique identifier.
-	 */
-
-	function uuid() {
-	  return "uid-" + __counter++;
-	}
-
-	module.exports = exports["default"];
-
-/***/ },
-/* 586 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* eslint-disable no-use-before-define */
-	/**
-	 * @module eventHandlers
-	 *
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports._onClick = _onClick;
-	exports._onKeyDown = _onKeyDown;
-	exports._shouldConsider = _shouldConsider;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-	var _libDom_helpers = __webpack_require__(587);
-
-	var _libDom_helpers2 = _interopRequireDefault(_libDom_helpers);
-
-	var _libListeners = __webpack_require__(588);
-
-	var _libListeners2 = _interopRequireDefault(_libListeners);
-
-	var _store = __webpack_require__(581);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	/**
-	 * private
-	 *
-	 */
-
-	/**
-	 * _onClick
-	 *
-	 * @access private
-	 * @param {object} event The click event object
-	 * @param {object} event.target The DOM node from the click event
-	 */
-
-	function _onClick(_ref) {
-	  var target = _ref.target;
-
-	  _store2['default'].activate([].concat(_toConsumableArray(_store2['default'].getInstances())).reduce(_libDom_helpers2['default'].findContainerNodes(target), []).sort(_libDom_helpers2['default'].sortByDOMPosition).map(function (item) {
-	    return item.instance;
-	  }));
-	}
-
-	/**
-	 * _onKeyDown: The keydown event callback
-	 *
-	 * @access private
-	 * @param {object} event The keydown event object
-	 * @param {number} event.which The key code (which) received from the keydown event
-	 */
-
-	function _onKeyDown(event) {
-	  var forceConsider = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
-
-	  if (forceConsider || _shouldConsider(event)) {
-	    var _ref2 = _store2['default'].findBindingForEvent(event) || {};
-
-	    var fn = _ref2.fn;
-	    var instance = _ref2.instance;
-
-	    if (fn) {
-	      fn.call(instance, event);
-	      return true;
-	    }
-	  }
-	  return false;
-	}
-
-	/**
-	 * _shouldConsider: Conditions for proceeding with key event handling
-	 *
-	 * @access private
-	 * @param {object} event The keydown event object
-	 * @param {object} event.target The node origin of the event
-	 * @param {string} event.target.tagName The name of the element tag
-	 * @param {number} event.target.which The key pressed
-	 * @return {boolean} Whether to continue procesing the keydown event
-	 */
-
-	function _shouldConsider(_ref3) {
-	  var ctrlKey = _ref3.ctrlKey;
-	  var tagName = _ref3.target.tagName;
-
-	  return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName) || ctrlKey;
-	}
-
-	/**
-	 * public
-	 *
-	 */
-
-	/**
-	 * onMount
-	 *
-	 * @access public
-	 */
-	function onMount(instance) {
-	  // have to bump this to next event loop because component mounting routinely
-	  // preceeds the dom click event that triggered the mount (wtf?)
-	  setTimeout(function () {
-	    return _store2['default'].activate(instance);
-	  }, 0);
-	  _libListeners2['default'].bindKeys(_onKeyDown);
-	  _libListeners2['default'].bindClicks(_onClick);
-	  _libDom_helpers2['default'].bindFocusables(instance, _store2['default'].activate);
-	}
-
-	/**
-	 * onUnmount
-	 *
-	 * @access public
-	 */
-	function onUnmount(instance) {
-	  _store2['default'].deleteInstance(instance);
-	  if (_store2['default'].isEmpty()) {
-	    _libListeners2['default'].unbindClicks(_onClick);
-	    _libListeners2['default'].unbindKeys(_onKeyDown);
-	  }
-	}
-
-	exports.onMount = onMount;
-	exports.onUnmount = onUnmount;
-
-/***/ },
-/* 587 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @module domHelpers
-	 *
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _reactDom = __webpack_require__(158);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var focusableSelector = 'a[href], button, input, object, select, textarea, [tabindex]';
-
-	/**
-	 * bindFocusables: Find any focusable child elements of the component instance and
-	 * add an onFocus handler to focus our keydown handlers on the parent component
-	 * when user keys applies focus to the element.
-	 *
-	 * NOTE: One limitation of this right now is that if you tab out of the
-	 * component, _focusedInstance will still be set until next click or mount or
-	 * controlled focus.
-	 *
-	 * @access public
-	 * @param {object} instance The key-bound component instance
-	 * @param {callback} activateOnFocus The fn to fire when element is focused
-	 */
-	function bindFocusables(instance, activateOnFocus) {
-	  if (document.querySelectorAll) {
-	    var node = _reactDom2['default'].findDOMNode(instance);
-	    if (node) {
-	      var focusables = node.querySelectorAll(focusableSelector);
-	      if (focusables.length) {
-	        (function () {
-	          var onFocus = function onFocus(element) {
-	            var onFocusPrev = element.onfocus;
-	            return function (event) {
-	              activateOnFocus(instance);
-	              if (onFocusPrev) onFocusPrev.call(element, event);
-	            };
-	          };
-	          Array.prototype.slice.call(focusables).forEach(function (element) {
-	            return element.onfocus = onFocus(element);
-	          });
-	        })();
-	      }
-	    }
-	  }
-	}
-
-	/**
-	 * findContainerNodes: Called by our click handler to find instances with nodes
-	 * that are equal to or that contain the click target. Any that pass this test
-	 * will be recipients of the next keydown event.
-	 *
-	 * @access public
-	 * @param {object} target The click event.target DOM element
-	 * @return {function} Reducer function
-	 */
-	function findContainerNodes(target) {
-	  return function (memo, instance) {
-	    try {
-	      var node = _reactDom2['default'].findDOMNode(instance);
-	      if (node && (node === target || node.contains(target))) {
-	        memo.push({ instance: instance, node: node });
-	      }
-	    } finally {
-	      return memo;
-	    }
-	  };
-	}
-
-	/**
-	 * sortByDOMPosition: Called by our click handler to sort a list of instances
-	 * according to least -> most nested. This is so that if multiple keybound
-	 * instances have nodes that are ancestors of the click target, they will be
-	 * sorted to let the instance closest to the click target get first dibs on the
-	 * next key down event.
-	 */
-	function sortByDOMPosition(a, b) {
-	  return a.node.compareDocumentPosition(b.node) === 10 ? 1 : -1;
-	}
-
-	exports['default'] = { bindFocusables: bindFocusables, findContainerNodes: findContainerNodes, sortByDOMPosition: sortByDOMPosition };
-	module.exports = exports['default'];
-
-/***/ },
-/* 588 */
-/***/ function(module, exports) {
-
-	/**
-	 * @module Listeners
-	 *
-	 */
-
-	// flag for whether click listener has been bound to document
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	var _clicksBound = false;
-
-	// flag for whether keydown listener has been bound to document
-	var _keysBound = false;
-
-	var Listeners = {
-	  /**
-	   * _bindKeys
-	   *
-	   * @access public
-	   */
-	  bindKeys: function bindKeys(callback) {
-	    if (!_keysBound) {
-	      document.addEventListener('keydown', callback);
-	      _keysBound = true;
-	    }
-	  },
-
-	  /**
-	   * unbindKeys
-	   *
-	   * @access public
-	   */
-	  unbindKeys: function unbindKeys(callback) {
-	    if (_keysBound) {
-	      document.removeEventListener('keydown', callback);
-	      _keysBound = false;
-	    }
-	  },
-
-	  /**
-	   * bindClicks
-	   *
-	   * @access public
-	   */
-	  bindClicks: function bindClicks(callback) {
-	    if (!_clicksBound) {
-	      document.addEventListener('click', callback);
-	      _clicksBound = true;
-	    }
-	  },
-
-	  /**
-	   * unbindClicks
-	   *
-	   * @access public
-	   */
-	  unbindClicks: function unbindClicks(callback) {
-	    if (_clicksBound) {
-	      document.removeEventListener('click', callback);
-	      _clicksBound = false;
-	    }
-	  }
-	};
-
-	exports['default'] = Listeners;
-	module.exports = exports['default'];
-
-/***/ },
-/* 589 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @module methodWrapper
-	 *
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _store = __webpack_require__(581);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	var _event_handlers = __webpack_require__(586);
-
-	/**
-	 * _isReactKeyDown
-	 *
-	 * @access private
-	 * @param {object} event The possibly synthetic event passed as an argument with
-	 * the method invocation.
-	 * @return {boolean}
-	 */
-	function _isReactKeyDown(event) {
-	  return event && typeof event === 'object' && event.nativeEvent instanceof window.KeyboardEvent && event.type === 'keydown';
-	}
-
-	/**
-	 * methodWrapper
-	 *
-	 * @access public
-	 * @param {object} args All arguments necessary for wrapping method
-	 * @param {object} args.target The decorated class
-	 * @param {object} args.descriptor Method descriptor
-	 * @param {array} args.keys The array of keys bound to the given method
-	 * @return {object} The method descriptor
-	 */
-	function methodWrapper(_ref) {
-	  var target = _ref.target;
-	  var descriptor = _ref.descriptor;
-	  var keys = _ref.keys;
-
-	  var fn = descriptor.value;
-
-	  // if we haven't already created a binding for this class (via another
-	  // decorated method), wrap these lifecycle methods.
-	  if (!_store2['default'].getBinding(target)) {
-	    (function () {
-	      var componentDidMount = target.componentDidMount;
-	      var componentWillUnmount = target.componentWillUnmount;
-
-	      target.componentDidMount = function () {
-	        (0, _event_handlers.onMount)(this);
-	        if (componentDidMount) return componentDidMount.call(this);
-	      };
-
-	      target.componentWillUnmount = function () {
-	        (0, _event_handlers.onUnmount)(this);
-	        if (componentWillUnmount) return componentWillUnmount.call(this);
-	      };
-	    })();
-	  }
-
-	  // add this binding of keys and method to the target's bindings
-	  _store2['default'].setBinding({ keys: keys, target: target, fn: fn });
-
-	  descriptor.value = function () {
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    var maybeEvent = args[0];
-
-	    if (_isReactKeyDown(maybeEvent)) {
-	      // proxy method in order to use @keydown as filter for keydown events coming
-	      // from an actual onKeyDown binding (as identified by react's addition of
-	      // 'nativeEvent' + type === 'keydown')
-	      return (0, _event_handlers._onKeyDown)(maybeEvent, true);
-	    } else if (!maybeEvent || !(maybeEvent instanceof window.KeyboardEvent) || maybeEvent.type !== 'keydown') {
-	      // if our first argument is a keydown event it is being handled by our
-	      // binding system. if it's anything else, just pass through.
-	      return fn.call.apply(fn, [this].concat(args));
-	    }
-	  };
-
-	  return descriptor;
-	}
-
-	exports['default'] = methodWrapper;
-	module.exports = exports['default'];
-
-/***/ },
-/* 590 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @module methodWrapperScoped
-	 *
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _libMatch_keys = __webpack_require__(583);
-
-	var _libMatch_keys2 = _interopRequireDefault(_libMatch_keys);
-
-	var _libParse_keys = __webpack_require__(584);
-
-	var _libParse_keys2 = _interopRequireDefault(_libParse_keys);
-
-	/**
-	 * _shouldTrigger
-	 *
-	 * @access private
-	 * @param {object} thisProps Exsting props from the wrapped component
-	 * @param {object} thisProps.keydown The namespaced state from the higher-order
-	 * component (class_decorator)
-	 * @param {object} nextProps The incoming props from the wrapped component
-	 * @param {object} nextProps.keydown The namescaped state from the higher-order
-	 * component (class_decorator)
-	 * @param {array} keys The keys bound to the decorated method
-	 * @return {boolean} Whether all tests have passed
-	 */
-	function _shouldTrigger(_ref, keydownNext) {
-	  var keydownThis = _ref.keydown;
-
-	  return keydownNext && keydownNext.event && !keydownThis.event;
-	}
-
-	/**
-	 * methodWrapperScoped
-	 *
-	 * @access public
-	 * @param {object} args All args necessary for decorating the method
-	 * @param {object} args.target The decorated method's class object
-	 * @param {object} args.descriptor The method's descriptor object
-	 * @param {array} args.keys The key codes bound to the decorated method
-	 * @return {object} The method's descriptor object
-	 */
-	function methodWrapperScoped(_ref2) {
-	  var target = _ref2.target;
-	  var descriptor = _ref2.descriptor;
-	  var keys = _ref2.keys;
-	  var componentWillReceiveProps = target.componentWillReceiveProps;
-
-	  var fn = descriptor.value;
-	  if (!keys) {
-	    console.warn(fn + ': keydownScoped requires one or more keys');
-	  } else {
-	    (function () {
-	      var keySets = (0, _libParse_keys2['default'])(keys);
-
-	      // wrap the component's lifecycle method to intercept key codes coming down
-	      // from the wrapped/scoped component up the view hierarchy. if new keydown
-	      // event has arrived and the key codes match what was specified in the
-	      // decorator, call the wrapped method.
-	      target.componentWillReceiveProps = function (nextProps) {
-	        var keydown = nextProps.keydown;
-
-	        if (_shouldTrigger(this.props, keydown)) {
-	          if (keySets.some(function (keySet) {
-	            return (0, _libMatch_keys2['default'])({ keySet: keySet, event: keydown.event });
-	          })) {
-	            return fn.call(this, keydown.event);
-	          }
-	        }
-
-	        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	          args[_key - 1] = arguments[_key];
-	        }
-
-	        if (componentWillReceiveProps) return componentWillReceiveProps.call.apply(componentWillReceiveProps, [this, nextProps].concat(args));
-	      };
-	    })();
-	  }
-
-	  return descriptor;
-	}
-
-	exports['default'] = methodWrapperScoped;
-	module.exports = exports['default'];
 
 /***/ },
 /* 591 */
@@ -59679,7 +59687,7 @@
 
 	var _reactTooltip2 = _interopRequireDefault(_reactTooltip);
 
-	__webpack_require__(602);
+	__webpack_require__(613);
 
 	var _reactBootstrap = __webpack_require__(330);
 
@@ -59792,6 +59800,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(593);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _reactDom = __webpack_require__(158);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
@@ -59800,33 +59812,45 @@
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _staticMethods = __webpack_require__(593);
+	var _staticMethods = __webpack_require__(601);
 
 	var _staticMethods2 = _interopRequireDefault(_staticMethods);
 
-	var _windowListener = __webpack_require__(595);
+	var _windowListener = __webpack_require__(603);
 
 	var _windowListener2 = _interopRequireDefault(_windowListener);
 
-	var _customEvent = __webpack_require__(596);
+	var _customEvent = __webpack_require__(604);
 
 	var _customEvent2 = _interopRequireDefault(_customEvent);
 
-	var _isCapture = __webpack_require__(597);
+	var _isCapture = __webpack_require__(605);
 
 	var _isCapture2 = _interopRequireDefault(_isCapture);
 
-	var _getPosition = __webpack_require__(598);
+	var _getEffect = __webpack_require__(606);
+
+	var _getEffect2 = _interopRequireDefault(_getEffect);
+
+	var _trackRemoval = __webpack_require__(607);
+
+	var _trackRemoval2 = _interopRequireDefault(_trackRemoval);
+
+	var _getPosition = __webpack_require__(608);
 
 	var _getPosition2 = _interopRequireDefault(_getPosition);
 
-	var _getTipContent = __webpack_require__(599);
+	var _getTipContent = __webpack_require__(609);
 
 	var _getTipContent2 = _interopRequireDefault(_getTipContent);
 
-	var _aria = __webpack_require__(600);
+	var _aria = __webpack_require__(610);
 
-	var _style = __webpack_require__(601);
+	var _nodeListToArray = __webpack_require__(611);
+
+	var _nodeListToArray2 = _interopRequireDefault(_nodeListToArray);
+
+	var _style = __webpack_require__(612);
 
 	var _style2 = _interopRequireDefault(_style);
 
@@ -59838,7 +59862,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.default)(_class = (0, _customEvent2.default)(_class = (0, _isCapture2.default)(_class = (_temp = _class2 = function (_Component) {
+	var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.default)(_class = (0, _customEvent2.default)(_class = (0, _isCapture2.default)(_class = (0, _getEffect2.default)(_class = (0, _trackRemoval2.default)(_class = (_temp = _class2 = function (_Component) {
 	  _inherits(ReactTooltip, _Component);
 
 	  function ReactTooltip(props) {
@@ -59893,9 +59917,9 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _props = this.props;
-	      var insecure = _props.insecure;
-	      var resizeHide = _props.resizeHide;
+	      var _props = this.props,
+	          insecure = _props.insecure,
+	          resizeHide = _props.resizeHide;
 
 	      if (insecure) {
 	        this.setStyleHeader(); // Set the style to the <link>
@@ -59937,20 +59961,14 @@
 	    key: 'getTargetArray',
 	    value: function getTargetArray(id) {
 	      var targetArray = void 0;
-
 	      if (!id) {
 	        targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
 	      } else {
-	        targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
+	        var escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+	        targetArray = document.querySelectorAll('[data-tip][data-for="' + escaped + '"]');
 	      }
-
 	      // targetArray is a NodeList, convert it to a real array
-	      // I hope I can use Object.values...
-	      return Object.keys(targetArray).filter(function (key) {
-	        return key !== 'length';
-	      }).map(function (key) {
-	        return targetArray[key];
-	      });
+	      return (0, _nodeListToArray2.default)(targetArray);
 	    }
 
 	    /**
@@ -59963,14 +59981,15 @@
 	    value: function bindListener() {
 	      var _this3 = this;
 
-	      var _props2 = this.props;
-	      var id = _props2.id;
-	      var globalEventOff = _props2.globalEventOff;
+	      var _props2 = this.props,
+	          id = _props2.id,
+	          globalEventOff = _props2.globalEventOff;
 
 	      var targetArray = this.getTargetArray(id);
 
 	      targetArray.forEach(function (target) {
 	        var isCaptureMode = _this3.isCapture(target);
+	        var effect = _this3.getEffect(target);
 	        if (target.getAttribute('currentItem') === null) {
 	          target.setAttribute('currentItem', 'false');
 	        }
@@ -59982,7 +60001,7 @@
 	        }
 
 	        target.addEventListener('mouseenter', _this3.showTooltip, isCaptureMode);
-	        if (_this3.state.effect === 'float') {
+	        if (effect === 'float') {
 	          target.addEventListener('mousemove', _this3.updateTooltip, isCaptureMode);
 	        }
 	        target.addEventListener('mouseleave', _this3.hideTooltip, isCaptureMode);
@@ -59993,6 +60012,9 @@
 	        window.removeEventListener(globalEventOff, this.hideTooltip);
 	        window.addEventListener(globalEventOff, this.hideTooltip, false);
 	      }
+
+	      // Track removal of targetArray elements from DOM
+	      this.bindRemovalTracker();
 	    }
 
 	    /**
@@ -60004,9 +60026,9 @@
 	    value: function unbindListener() {
 	      var _this4 = this;
 
-	      var _props3 = this.props;
-	      var id = _props3.id;
-	      var globalEventOff = _props3.globalEventOff;
+	      var _props3 = this.props,
+	          id = _props3.id,
+	          globalEventOff = _props3.globalEventOff;
 
 	      var targetArray = this.getTargetArray(id);
 	      targetArray.forEach(function (target) {
@@ -60015,6 +60037,7 @@
 	      });
 
 	      if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip);
+	      this.unbindRemovalTracker();
 	    }
 
 	    /**
@@ -60051,10 +60074,10 @@
 	      }
 	      // Get the tooltip content
 	      // calculate in this phrase so that tip width height can be detected
-	      var _props4 = this.props;
-	      var children = _props4.children;
-	      var multiline = _props4.multiline;
-	      var getContent = _props4.getContent;
+	      var _props4 = this.props,
+	          children = _props4.children,
+	          multiline = _props4.multiline,
+	          getContent = _props4.getContent;
 
 	      var originTooltip = e.currentTarget.getAttribute('data-tip');
 	      var isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false;
@@ -60082,18 +60105,21 @@
 	        scrollHide = this.props.scrollHide;
 	      }
 
+	      // To prevent previously created timers from triggering
+	      this.clearTimer();
+
 	      this.setState({
 	        placeholder: placeholder,
 	        isEmptyTip: isEmptyTip,
 	        place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
 	        type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-	        effect: switchToSolid && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+	        effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
 	        offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
 	        html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') === 'true' : this.props.html || false,
 	        delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
 	        delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
 	        border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border || false,
-	        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || '',
+	        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || this.props.className || '',
 	        disable: e.currentTarget.getAttribute('data-tip-disable') ? e.currentTarget.getAttribute('data-tip-disable') === 'true' : this.props.disable || false
 	      }, function () {
 	        if (scrollHide) _this5.addScrollListener(e);
@@ -60125,11 +60151,11 @@
 	    value: function updateTooltip(e) {
 	      var _this6 = this;
 
-	      var _state = this.state;
-	      var delayShow = _state.delayShow;
-	      var show = _state.show;
-	      var isEmptyTip = _state.isEmptyTip;
-	      var disable = _state.disable;
+	      var _state = this.state,
+	          delayShow = _state.delayShow,
+	          show = _state.show,
+	          isEmptyTip = _state.isEmptyTip,
+	          disable = _state.disable;
 	      var afterShow = this.props.afterShow;
 	      var placeholder = this.state.placeholder;
 
@@ -60170,10 +60196,10 @@
 	    value: function hideTooltip(e, hasTarget) {
 	      var _this7 = this;
 
-	      var _state2 = this.state;
-	      var delayHide = _state2.delayHide;
-	      var isEmptyTip = _state2.isEmptyTip;
-	      var disable = _state2.disable;
+	      var _state2 = this.state,
+	          delayHide = _state2.delayHide,
+	          isEmptyTip = _state2.isEmptyTip,
+	          disable = _state2.disable;
 	      var afterHide = this.props.afterHide;
 
 	      if (!this.mount) return;
@@ -60228,12 +60254,12 @@
 	    value: function updatePosition() {
 	      var _this8 = this;
 
-	      var _state3 = this.state;
-	      var currentEvent = _state3.currentEvent;
-	      var currentTarget = _state3.currentTarget;
-	      var place = _state3.place;
-	      var effect = _state3.effect;
-	      var offset = _state3.offset;
+	      var _state3 = this.state,
+	          currentEvent = _state3.currentEvent,
+	          currentTarget = _state3.currentTarget,
+	          place = _state3.place,
+	          effect = _state3.effect,
+	          offset = _state3.offset;
 
 	      var node = _reactDom2.default.findDOMNode(this);
 	      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
@@ -60279,23 +60305,29 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _state4 = this.state;
-	      var placeholder = _state4.placeholder;
-	      var extraClass = _state4.extraClass;
-	      var html = _state4.html;
-	      var ariaProps = _state4.ariaProps;
-	      var disable = _state4.disable;
-	      var isEmptyTip = _state4.isEmptyTip;
+	      var _state4 = this.state,
+	          placeholder = _state4.placeholder,
+	          extraClass = _state4.extraClass,
+	          html = _state4.html,
+	          ariaProps = _state4.ariaProps,
+	          disable = _state4.disable,
+	          isEmptyTip = _state4.isEmptyTip;
 
 	      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+
+	      var Wrapper = this.props.wrapper;
+	      if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
+	        Wrapper = ReactTooltip.defaultProps.wrapper;
+	      }
+
 	      if (html) {
-	        return _react2.default.createElement('div', _extends({ className: tooltipClass + ' ' + extraClass
+	        return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass
 	        }, ariaProps, {
 	          'data-id': 'tooltip',
 	          dangerouslySetInnerHTML: { __html: placeholder } }));
 	      } else {
 	        return _react2.default.createElement(
-	          'div',
+	          Wrapper,
 	          _extends({ className: tooltipClass + ' ' + extraClass
 	          }, ariaProps, {
 	            'data-id': 'tooltip' }),
@@ -60307,34 +60339,37 @@
 
 	  return ReactTooltip;
 	}(_react.Component), _class2.propTypes = {
-	  children: _react.PropTypes.any,
-	  place: _react.PropTypes.string,
-	  type: _react.PropTypes.string,
-	  effect: _react.PropTypes.string,
-	  offset: _react.PropTypes.object,
-	  multiline: _react.PropTypes.bool,
-	  border: _react.PropTypes.bool,
-	  insecure: _react.PropTypes.bool,
-	  class: _react.PropTypes.string,
-	  id: _react.PropTypes.string,
-	  html: _react.PropTypes.bool,
-	  delayHide: _react.PropTypes.number,
-	  delayShow: _react.PropTypes.number,
-	  event: _react.PropTypes.string,
-	  eventOff: _react.PropTypes.string,
-	  watchWindow: _react.PropTypes.bool,
-	  isCapture: _react.PropTypes.bool,
-	  globalEventOff: _react.PropTypes.string,
-	  getContent: _react.PropTypes.any,
-	  afterShow: _react.PropTypes.func,
-	  afterHide: _react.PropTypes.func,
-	  disable: _react.PropTypes.bool,
-	  scrollHide: _react.PropTypes.bool,
-	  resizeHide: _react.PropTypes.bool
+	  children: _propTypes2.default.any,
+	  place: _propTypes2.default.string,
+	  type: _propTypes2.default.string,
+	  effect: _propTypes2.default.string,
+	  offset: _propTypes2.default.object,
+	  multiline: _propTypes2.default.bool,
+	  border: _propTypes2.default.bool,
+	  insecure: _propTypes2.default.bool,
+	  class: _propTypes2.default.string,
+	  className: _propTypes2.default.string,
+	  id: _propTypes2.default.string,
+	  html: _propTypes2.default.bool,
+	  delayHide: _propTypes2.default.number,
+	  delayShow: _propTypes2.default.number,
+	  event: _propTypes2.default.string,
+	  eventOff: _propTypes2.default.string,
+	  watchWindow: _propTypes2.default.bool,
+	  isCapture: _propTypes2.default.bool,
+	  globalEventOff: _propTypes2.default.string,
+	  getContent: _propTypes2.default.any,
+	  afterShow: _propTypes2.default.func,
+	  afterHide: _propTypes2.default.func,
+	  disable: _propTypes2.default.bool,
+	  scrollHide: _propTypes2.default.bool,
+	  resizeHide: _propTypes2.default.bool,
+	  wrapper: _propTypes2.default.string
 	}, _class2.defaultProps = {
 	  insecure: true,
-	  resizeHide: true
-	}, _temp)) || _class) || _class) || _class) || _class;
+	  resizeHide: true,
+	  wrapper: 'div'
+	}, _class2.supportedWrappers = ['div', 'span'], _temp)) || _class) || _class) || _class) || _class) || _class) || _class;
 
 	/* export default not fit for standalone, it will exports {default:...} */
 
@@ -60343,6 +60378,891 @@
 
 /***/ },
 /* 593 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	if (process.env.NODE_ENV !== 'production') {
+	  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+	    Symbol.for &&
+	    Symbol.for('react.element')) ||
+	    0xeac7;
+
+	  var isValidElement = function(object) {
+	    return typeof object === 'object' &&
+	      object !== null &&
+	      object.$$typeof === REACT_ELEMENT_TYPE;
+	  };
+
+	  // By explicitly using `prop-types` you are opting into new development behavior.
+	  // http://fb.me/prop-types-in-prod
+	  var throwOnDirectAccess = true;
+	  module.exports = __webpack_require__(594)(isValidElement, throwOnDirectAccess);
+	} else {
+	  // By explicitly using `prop-types` you are opting into new production behavior.
+	  // http://fb.me/prop-types-in-prod
+	  module.exports = __webpack_require__(600)();
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 594 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	'use strict';
+
+	var emptyFunction = __webpack_require__(595);
+	var invariant = __webpack_require__(596);
+	var warning = __webpack_require__(597);
+
+	var ReactPropTypesSecret = __webpack_require__(598);
+	var checkPropTypes = __webpack_require__(599);
+
+	module.exports = function(isValidElement, throwOnDirectAccess) {
+	  /* global Symbol */
+	  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+	  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+	  /**
+	   * Returns the iterator method function contained on the iterable object.
+	   *
+	   * Be sure to invoke the function with the iterable as context:
+	   *
+	   *     var iteratorFn = getIteratorFn(myIterable);
+	   *     if (iteratorFn) {
+	   *       var iterator = iteratorFn.call(myIterable);
+	   *       ...
+	   *     }
+	   *
+	   * @param {?object} maybeIterable
+	   * @return {?function}
+	   */
+	  function getIteratorFn(maybeIterable) {
+	    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+	    if (typeof iteratorFn === 'function') {
+	      return iteratorFn;
+	    }
+	  }
+
+	  /**
+	   * Collection of methods that allow declaration and validation of props that are
+	   * supplied to React components. Example usage:
+	   *
+	   *   var Props = require('ReactPropTypes');
+	   *   var MyArticle = React.createClass({
+	   *     propTypes: {
+	   *       // An optional string prop named "description".
+	   *       description: Props.string,
+	   *
+	   *       // A required enum prop named "category".
+	   *       category: Props.oneOf(['News','Photos']).isRequired,
+	   *
+	   *       // A prop named "dialog" that requires an instance of Dialog.
+	   *       dialog: Props.instanceOf(Dialog).isRequired
+	   *     },
+	   *     render: function() { ... }
+	   *   });
+	   *
+	   * A more formal specification of how these methods are used:
+	   *
+	   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+	   *   decl := ReactPropTypes.{type}(.isRequired)?
+	   *
+	   * Each and every declaration produces a function with the same signature. This
+	   * allows the creation of custom validation functions. For example:
+	   *
+	   *  var MyLink = React.createClass({
+	   *    propTypes: {
+	   *      // An optional string or URI prop named "href".
+	   *      href: function(props, propName, componentName) {
+	   *        var propValue = props[propName];
+	   *        if (propValue != null && typeof propValue !== 'string' &&
+	   *            !(propValue instanceof URI)) {
+	   *          return new Error(
+	   *            'Expected a string or an URI for ' + propName + ' in ' +
+	   *            componentName
+	   *          );
+	   *        }
+	   *      }
+	   *    },
+	   *    render: function() {...}
+	   *  });
+	   *
+	   * @internal
+	   */
+
+	  var ANONYMOUS = '<<anonymous>>';
+
+	  // Important!
+	  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+	  var ReactPropTypes = {
+	    array: createPrimitiveTypeChecker('array'),
+	    bool: createPrimitiveTypeChecker('boolean'),
+	    func: createPrimitiveTypeChecker('function'),
+	    number: createPrimitiveTypeChecker('number'),
+	    object: createPrimitiveTypeChecker('object'),
+	    string: createPrimitiveTypeChecker('string'),
+	    symbol: createPrimitiveTypeChecker('symbol'),
+
+	    any: createAnyTypeChecker(),
+	    arrayOf: createArrayOfTypeChecker,
+	    element: createElementTypeChecker(),
+	    instanceOf: createInstanceTypeChecker,
+	    node: createNodeChecker(),
+	    objectOf: createObjectOfTypeChecker,
+	    oneOf: createEnumTypeChecker,
+	    oneOfType: createUnionTypeChecker,
+	    shape: createShapeTypeChecker
+	  };
+
+	  /**
+	   * inlined Object.is polyfill to avoid requiring consumers ship their own
+	   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	   */
+	  /*eslint-disable no-self-compare*/
+	  function is(x, y) {
+	    // SameValue algorithm
+	    if (x === y) {
+	      // Steps 1-5, 7-10
+	      // Steps 6.b-6.e: +0 != -0
+	      return x !== 0 || 1 / x === 1 / y;
+	    } else {
+	      // Step 6.a: NaN == NaN
+	      return x !== x && y !== y;
+	    }
+	  }
+	  /*eslint-enable no-self-compare*/
+
+	  /**
+	   * We use an Error-like object for backward compatibility as people may call
+	   * PropTypes directly and inspect their output. However, we don't use real
+	   * Errors anymore. We don't inspect their stack anyway, and creating them
+	   * is prohibitively expensive if they are created too often, such as what
+	   * happens in oneOfType() for any type before the one that matched.
+	   */
+	  function PropTypeError(message) {
+	    this.message = message;
+	    this.stack = '';
+	  }
+	  // Make `instanceof Error` still work for returned errors.
+	  PropTypeError.prototype = Error.prototype;
+
+	  function createChainableTypeChecker(validate) {
+	    if (process.env.NODE_ENV !== 'production') {
+	      var manualPropTypeCallCache = {};
+	      var manualPropTypeWarningCount = 0;
+	    }
+	    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+	      componentName = componentName || ANONYMOUS;
+	      propFullName = propFullName || propName;
+
+	      if (secret !== ReactPropTypesSecret) {
+	        if (throwOnDirectAccess) {
+	          // New behavior only for users of `prop-types` package
+	          invariant(
+	            false,
+	            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+	            'Use `PropTypes.checkPropTypes()` to call them. ' +
+	            'Read more at http://fb.me/use-check-prop-types'
+	          );
+	        } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
+	          // Old behavior for people using React.PropTypes
+	          var cacheKey = componentName + ':' + propName;
+	          if (
+	            !manualPropTypeCallCache[cacheKey] &&
+	            // Avoid spamming the console because they are often not actionable except for lib authors
+	            manualPropTypeWarningCount < 3
+	          ) {
+	            warning(
+	              false,
+	              'You are manually calling a React.PropTypes validation ' +
+	              'function for the `%s` prop on `%s`. This is deprecated ' +
+	              'and will throw in the standalone `prop-types` package. ' +
+	              'You may be seeing this warning due to a third-party PropTypes ' +
+	              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
+	              propFullName,
+	              componentName
+	            );
+	            manualPropTypeCallCache[cacheKey] = true;
+	            manualPropTypeWarningCount++;
+	          }
+	        }
+	      }
+	      if (props[propName] == null) {
+	        if (isRequired) {
+	          if (props[propName] === null) {
+	            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
+	          }
+	          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+	        }
+	        return null;
+	      } else {
+	        return validate(props, propName, componentName, location, propFullName);
+	      }
+	    }
+
+	    var chainedCheckType = checkType.bind(null, false);
+	    chainedCheckType.isRequired = checkType.bind(null, true);
+
+	    return chainedCheckType;
+	  }
+
+	  function createPrimitiveTypeChecker(expectedType) {
+	    function validate(props, propName, componentName, location, propFullName, secret) {
+	      var propValue = props[propName];
+	      var propType = getPropType(propValue);
+	      if (propType !== expectedType) {
+	        // `propValue` being instance of, say, date/regexp, pass the 'object'
+	        // check, but we can offer a more precise error message here rather than
+	        // 'of type `object`'.
+	        var preciseType = getPreciseType(propValue);
+
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createAnyTypeChecker() {
+	    return createChainableTypeChecker(emptyFunction.thatReturnsNull);
+	  }
+
+	  function createArrayOfTypeChecker(typeChecker) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (typeof typeChecker !== 'function') {
+	        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
+	      }
+	      var propValue = props[propName];
+	      if (!Array.isArray(propValue)) {
+	        var propType = getPropType(propValue);
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
+	      }
+	      for (var i = 0; i < propValue.length; i++) {
+	        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
+	        if (error instanceof Error) {
+	          return error;
+	        }
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createElementTypeChecker() {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      var propValue = props[propName];
+	      if (!isValidElement(propValue)) {
+	        var propType = getPropType(propValue);
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createInstanceTypeChecker(expectedClass) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (!(props[propName] instanceof expectedClass)) {
+	        var expectedClassName = expectedClass.name || ANONYMOUS;
+	        var actualClassName = getClassName(props[propName]);
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createEnumTypeChecker(expectedValues) {
+	    if (!Array.isArray(expectedValues)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+	      return emptyFunction.thatReturnsNull;
+	    }
+
+	    function validate(props, propName, componentName, location, propFullName) {
+	      var propValue = props[propName];
+	      for (var i = 0; i < expectedValues.length; i++) {
+	        if (is(propValue, expectedValues[i])) {
+	          return null;
+	        }
+	      }
+
+	      var valuesString = JSON.stringify(expectedValues);
+	      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createObjectOfTypeChecker(typeChecker) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (typeof typeChecker !== 'function') {
+	        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
+	      }
+	      var propValue = props[propName];
+	      var propType = getPropType(propValue);
+	      if (propType !== 'object') {
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
+	      }
+	      for (var key in propValue) {
+	        if (propValue.hasOwnProperty(key)) {
+	          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+	          if (error instanceof Error) {
+	            return error;
+	          }
+	        }
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createUnionTypeChecker(arrayOfTypeCheckers) {
+	    if (!Array.isArray(arrayOfTypeCheckers)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+	      return emptyFunction.thatReturnsNull;
+	    }
+
+	    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+	      var checker = arrayOfTypeCheckers[i];
+	      if (typeof checker !== 'function') {
+	        warning(
+	          false,
+	          'Invalid argument supplid to oneOfType. Expected an array of check functions, but ' +
+	          'received %s at index %s.',
+	          getPostfixForTypeWarning(checker),
+	          i
+	        );
+	        return emptyFunction.thatReturnsNull;
+	      }
+	    }
+
+	    function validate(props, propName, componentName, location, propFullName) {
+	      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+	        var checker = arrayOfTypeCheckers[i];
+	        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
+	          return null;
+	        }
+	      }
+
+	      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createNodeChecker() {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      if (!isNode(props[propName])) {
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function createShapeTypeChecker(shapeTypes) {
+	    function validate(props, propName, componentName, location, propFullName) {
+	      var propValue = props[propName];
+	      var propType = getPropType(propValue);
+	      if (propType !== 'object') {
+	        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+	      }
+	      for (var key in shapeTypes) {
+	        var checker = shapeTypes[key];
+	        if (!checker) {
+	          continue;
+	        }
+	        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+	        if (error) {
+	          return error;
+	        }
+	      }
+	      return null;
+	    }
+	    return createChainableTypeChecker(validate);
+	  }
+
+	  function isNode(propValue) {
+	    switch (typeof propValue) {
+	      case 'number':
+	      case 'string':
+	      case 'undefined':
+	        return true;
+	      case 'boolean':
+	        return !propValue;
+	      case 'object':
+	        if (Array.isArray(propValue)) {
+	          return propValue.every(isNode);
+	        }
+	        if (propValue === null || isValidElement(propValue)) {
+	          return true;
+	        }
+
+	        var iteratorFn = getIteratorFn(propValue);
+	        if (iteratorFn) {
+	          var iterator = iteratorFn.call(propValue);
+	          var step;
+	          if (iteratorFn !== propValue.entries) {
+	            while (!(step = iterator.next()).done) {
+	              if (!isNode(step.value)) {
+	                return false;
+	              }
+	            }
+	          } else {
+	            // Iterator will provide entry [k,v] tuples rather than values.
+	            while (!(step = iterator.next()).done) {
+	              var entry = step.value;
+	              if (entry) {
+	                if (!isNode(entry[1])) {
+	                  return false;
+	                }
+	              }
+	            }
+	          }
+	        } else {
+	          return false;
+	        }
+
+	        return true;
+	      default:
+	        return false;
+	    }
+	  }
+
+	  function isSymbol(propType, propValue) {
+	    // Native Symbol.
+	    if (propType === 'symbol') {
+	      return true;
+	    }
+
+	    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+	    if (propValue['@@toStringTag'] === 'Symbol') {
+	      return true;
+	    }
+
+	    // Fallback for non-spec compliant Symbols which are polyfilled.
+	    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
+	      return true;
+	    }
+
+	    return false;
+	  }
+
+	  // Equivalent of `typeof` but with special handling for array and regexp.
+	  function getPropType(propValue) {
+	    var propType = typeof propValue;
+	    if (Array.isArray(propValue)) {
+	      return 'array';
+	    }
+	    if (propValue instanceof RegExp) {
+	      // Old webkits (at least until Android 4.0) return 'function' rather than
+	      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+	      // passes PropTypes.object.
+	      return 'object';
+	    }
+	    if (isSymbol(propType, propValue)) {
+	      return 'symbol';
+	    }
+	    return propType;
+	  }
+
+	  // This handles more types than `getPropType`. Only used for error messages.
+	  // See `createPrimitiveTypeChecker`.
+	  function getPreciseType(propValue) {
+	    if (typeof propValue === 'undefined' || propValue === null) {
+	      return '' + propValue;
+	    }
+	    var propType = getPropType(propValue);
+	    if (propType === 'object') {
+	      if (propValue instanceof Date) {
+	        return 'date';
+	      } else if (propValue instanceof RegExp) {
+	        return 'regexp';
+	      }
+	    }
+	    return propType;
+	  }
+
+	  // Returns a string that is postfixed to a warning about an invalid type.
+	  // For example, "undefined" or "of type array"
+	  function getPostfixForTypeWarning(value) {
+	    var type = getPreciseType(value);
+	    switch (type) {
+	      case 'array':
+	      case 'object':
+	        return 'an ' + type;
+	      case 'boolean':
+	      case 'date':
+	      case 'regexp':
+	        return 'a ' + type;
+	      default:
+	        return type;
+	    }
+	  }
+
+	  // Returns class name of the object, if any.
+	  function getClassName(propValue) {
+	    if (!propValue.constructor || !propValue.constructor.name) {
+	      return ANONYMOUS;
+	    }
+	    return propValue.constructor.name;
+	  }
+
+	  ReactPropTypes.checkPropTypes = checkPropTypes;
+	  ReactPropTypes.PropTypes = ReactPropTypes;
+
+	  return ReactPropTypes;
+	};
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 595 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * 
+	 */
+
+	function makeEmptyFunction(arg) {
+	  return function () {
+	    return arg;
+	  };
+	}
+
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	var emptyFunction = function emptyFunction() {};
+
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function () {
+	  return this;
+	};
+	emptyFunction.thatReturnsArgument = function (arg) {
+	  return arg;
+	};
+
+	module.exports = emptyFunction;
+
+/***/ },
+/* 596 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+
+	var validateFormat = function validateFormat(format) {};
+
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  };
+	}
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error(format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	      error.name = 'Invariant Violation';
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	}
+
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 597 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	var emptyFunction = __webpack_require__(595);
+
+	/**
+	 * Similar to invariant but only logs a warning if the condition is not met.
+	 * This can be used to log issues in development environments in critical
+	 * paths. Removing the logging code for production environments will keep the
+	 * same logic and follow the same code paths.
+	 */
+
+	var warning = emptyFunction;
+
+	if (process.env.NODE_ENV !== 'production') {
+	  (function () {
+	    var printWarning = function printWarning(format) {
+	      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	      }
+
+	      var argIndex = 0;
+	      var message = 'Warning: ' + format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      });
+	      if (typeof console !== 'undefined') {
+	        console.error(message);
+	      }
+	      try {
+	        // --- Welcome to debugging React ---
+	        // This error was thrown as a convenience so that you can use this stack
+	        // to find the callsite that caused this warning to fire.
+	        throw new Error(message);
+	      } catch (x) {}
+	    };
+
+	    warning = function warning(condition, format) {
+	      if (format === undefined) {
+	        throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+	      }
+
+	      if (format.indexOf('Failed Composite propType: ') === 0) {
+	        return; // Ignore CompositeComponent proptype check.
+	      }
+
+	      if (!condition) {
+	        for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+	          args[_key2 - 2] = arguments[_key2];
+	        }
+
+	        printWarning.apply(undefined, [format].concat(args));
+	      }
+	    };
+	  })();
+	}
+
+	module.exports = warning;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 598 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	'use strict';
+
+	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+	module.exports = ReactPropTypesSecret;
+
+
+/***/ },
+/* 599 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	'use strict';
+
+	if (process.env.NODE_ENV !== 'production') {
+	  var invariant = __webpack_require__(596);
+	  var warning = __webpack_require__(597);
+	  var ReactPropTypesSecret = __webpack_require__(598);
+	  var loggedTypeFailures = {};
+	}
+
+	/**
+	 * Assert that the values match with the type specs.
+	 * Error messages are memorized and will only be shown once.
+	 *
+	 * @param {object} typeSpecs Map of name to a ReactPropType
+	 * @param {object} values Runtime values that need to be type-checked
+	 * @param {string} location e.g. "prop", "context", "child context"
+	 * @param {string} componentName Name of the component for error messages.
+	 * @param {?Function} getStack Returns the component stack.
+	 * @private
+	 */
+	function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    for (var typeSpecName in typeSpecs) {
+	      if (typeSpecs.hasOwnProperty(typeSpecName)) {
+	        var error;
+	        // Prop type validation may throw. In case they do, we don't want to
+	        // fail the render phase where it didn't fail before. So we log it.
+	        // After these have been cleaned up, we'll let them throw.
+	        try {
+	          // This is intentionally an invariant that gets caught. It's the same
+	          // behavior as without this statement except with a better message.
+	          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', componentName || 'React class', location, typeSpecName);
+	          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+	        } catch (ex) {
+	          error = ex;
+	        }
+	        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
+	        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+	          // Only monitor this failure once because there tends to be a lot of the
+	          // same error.
+	          loggedTypeFailures[error.message] = true;
+
+	          var stack = getStack ? getStack() : '';
+
+	          warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
+	        }
+	      }
+	    }
+	  }
+	}
+
+	module.exports = checkPropTypes;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 600 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	'use strict';
+
+	var emptyFunction = __webpack_require__(595);
+	var invariant = __webpack_require__(596);
+	var ReactPropTypesSecret = __webpack_require__(598);
+
+	module.exports = function() {
+	  function shim(props, propName, componentName, location, propFullName, secret) {
+	    if (secret === ReactPropTypesSecret) {
+	      // It is still safe when called from React.
+	      return;
+	    }
+	    invariant(
+	      false,
+	      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+	      'Use PropTypes.checkPropTypes() to call them. ' +
+	      'Read more at http://fb.me/use-check-prop-types'
+	    );
+	  };
+	  shim.isRequired = shim;
+	  function getShim() {
+	    return shim;
+	  };
+	  // Important!
+	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+	  var ReactPropTypes = {
+	    array: shim,
+	    bool: shim,
+	    func: shim,
+	    number: shim,
+	    object: shim,
+	    string: shim,
+	    symbol: shim,
+
+	    any: shim,
+	    arrayOf: getShim,
+	    element: shim,
+	    instanceOf: getShim,
+	    node: shim,
+	    objectOf: getShim,
+	    oneOf: getShim,
+	    oneOfType: getShim,
+	    shape: getShim
+	  };
+
+	  ReactPropTypes.checkPropTypes = emptyFunction;
+	  ReactPropTypes.PropTypes = ReactPropTypes;
+
+	  return ReactPropTypes;
+	};
+
+
+/***/ },
+/* 601 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60400,7 +61320,7 @@
 	  };
 	};
 
-	var _constant = __webpack_require__(594);
+	var _constant = __webpack_require__(602);
 
 	var _constant2 = _interopRequireDefault(_constant);
 
@@ -60425,7 +61345,7 @@
 	    */
 
 /***/ },
-/* 594 */
+/* 602 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -60443,7 +61363,7 @@
 	};
 
 /***/ },
-/* 595 */
+/* 603 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60489,14 +61409,14 @@
 	  };
 	};
 
-	var _constant = __webpack_require__(594);
+	var _constant = __webpack_require__(602);
 
 	var _constant2 = _interopRequireDefault(_constant);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 596 */
+/* 604 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -60516,9 +61436,9 @@
 	  target.prototype.customBindListener = function (ele) {
 	    var _this = this;
 
-	    var _state = this.state;
-	    var event = _state.event;
-	    var eventOff = _state.eventOff;
+	    var _state = this.state,
+	        event = _state.event,
+	        eventOff = _state.eventOff;
 
 	    var dataEvent = ele.getAttribute('data-event') || event;
 	    var dataEventOff = ele.getAttribute('data-event-off') || eventOff;
@@ -60538,9 +61458,9 @@
 
 	  /* Unbind listener for custom event */
 	  target.prototype.customUnbindListener = function (ele) {
-	    var _state2 = this.state;
-	    var event = _state2.event;
-	    var eventOff = _state2.eventOff;
+	    var _state2 = this.state,
+	        event = _state2.event,
+	        eventOff = _state2.eventOff;
 
 	    var dataEvent = event || ele.getAttribute('data-event');
 	    var dataEventOff = eventOff || ele.getAttribute('data-event-off');
@@ -60589,7 +61509,7 @@
 	var customListener = void 0;
 
 /***/ },
-/* 597 */
+/* 605 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -60606,7 +61526,120 @@
 	};
 
 /***/ },
-/* 598 */
+/* 606 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function (target) {
+	  target.prototype.getEffect = function (currentTarget) {
+	    var dataEffect = currentTarget.getAttribute('data-effect');
+	    return dataEffect || this.props.effect || 'float';
+	  };
+	};
+
+/***/ },
+/* 607 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function (target) {
+	  target.prototype.bindRemovalTracker = function () {
+	    var _this = this;
+
+	    var MutationObserver = getMutationObserverClass();
+	    if (MutationObserver == null) return;
+
+	    var observer = new MutationObserver(function (mutations) {
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+
+	      try {
+	        for (var _iterator = mutations[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var mutation = _step.value;
+	          var _iteratorNormalCompletion2 = true;
+	          var _didIteratorError2 = false;
+	          var _iteratorError2 = undefined;
+
+	          try {
+	            for (var _iterator2 = mutation.removedNodes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	              var element = _step2.value;
+
+	              if (element === _this.state.currentTarget) {
+	                _this.hideTooltip();
+	                return;
+	              }
+	            }
+	          } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	          } finally {
+	            try {
+	              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	              }
+	            } finally {
+	              if (_didIteratorError2) {
+	                throw _iteratorError2;
+	              }
+	            }
+	          }
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	    });
+
+	    observer.observe(window.document, { childList: true, subtree: true });
+
+	    this.removalTracker = observer;
+	  };
+
+	  target.prototype.unbindRemovalTracker = function () {
+	    if (this.removalTracker) {
+	      this.removalTracker.disconnect();
+	      this.removalTracker = null;
+	    }
+	  };
+	};
+
+	/**
+	 * Tracking target removing from DOM.
+	 * It's nessesary to hide tooltip when it's target disappears.
+	 * Otherwise, the tooltip would be shown forever until another target
+	 * is triggered.
+	 *
+	 * If MutationObserver is not available, this feature just doesn't work.
+	 */
+
+	// https://hacks.mozilla.org/2012/05/dom-mutationobserver-reacting-to-dom-changes-without-killing-browser-performance/
+	var getMutationObserverClass = function getMutationObserverClass() {
+	  return window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+	};
+
+/***/ },
+/* 608 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -60619,28 +61652,25 @@
 	  var tipWidth = node.clientWidth;
 	  var tipHeight = node.clientHeight;
 
-	  var _getCurrentOffset = getCurrentOffset(e, target, effect);
-
-	  var mouseX = _getCurrentOffset.mouseX;
-	  var mouseY = _getCurrentOffset.mouseY;
+	  var _getCurrentOffset = getCurrentOffset(e, target, effect),
+	      mouseX = _getCurrentOffset.mouseX,
+	      mouseY = _getCurrentOffset.mouseY;
 
 	  var defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight);
 
-	  var _calculateOffset = calculateOffset(offset);
-
-	  var extraOffset_X = _calculateOffset.extraOffset_X;
-	  var extraOffset_Y = _calculateOffset.extraOffset_Y;
-
+	  var _calculateOffset = calculateOffset(offset),
+	      extraOffset_X = _calculateOffset.extraOffset_X,
+	      extraOffset_Y = _calculateOffset.extraOffset_Y;
 
 	  var windowWidth = window.innerWidth;
 	  var windowHeight = window.innerHeight;
 
-	  var _getParent = getParent(node);
-
-	  var parentTop = _getParent.parentTop;
-	  var parentLeft = _getParent.parentLeft;
+	  var _getParent = getParent(node),
+	      parentTop = _getParent.parentTop,
+	      parentLeft = _getParent.parentLeft;
 
 	  // Get the edge offset of the tooltip
+
 
 	  var getTipOffsetLeft = function getTipOffsetLeft(place) {
 	    var offset_X = defaultOffset[place].l;
@@ -60673,10 +61703,10 @@
 	    return { result: result, newPlace: newPlace };
 	  };
 	  var outsideLeft = function outsideLeft() {
-	    var _outsideVertical = outsideVertical();
+	    var _outsideVertical = outsideVertical(),
+	        result = _outsideVertical.result,
+	        newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
 
-	    var result = _outsideVertical.result;
-	    var newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
 
 	    if (result && outsideHorizontal().result) {
 	      return { result: false }; // No need to change, if change to vertical will out of space
@@ -60688,10 +61718,9 @@
 	    return { result: result, newPlace: newPlace };
 	  };
 	  var outsideRight = function outsideRight() {
-	    var _outsideVertical2 = outsideVertical();
-
-	    var result = _outsideVertical2.result;
-	    var newPlace = _outsideVertical2.newPlace;
+	    var _outsideVertical2 = outsideVertical(),
+	        result = _outsideVertical2.result,
+	        newPlace = _outsideVertical2.newPlace;
 
 	    if (result && outsideHorizontal().result) {
 	      return { result: false }; // No need to change, if change to vertical will out of space
@@ -60716,10 +61745,9 @@
 	    return { result: result, newPlace: newPlace };
 	  };
 	  var outsideTop = function outsideTop() {
-	    var _outsideHorizontal = outsideHorizontal();
-
-	    var result = _outsideHorizontal.result;
-	    var newPlace = _outsideHorizontal.newPlace;
+	    var _outsideHorizontal = outsideHorizontal(),
+	        result = _outsideHorizontal.result,
+	        newPlace = _outsideHorizontal.newPlace;
 
 	    if (result && outsideVertical().result) {
 	      return { result: false };
@@ -60731,10 +61759,9 @@
 	    return { result: result, newPlace: newPlace };
 	  };
 	  var outsideBottom = function outsideBottom() {
-	    var _outsideHorizontal2 = outsideHorizontal();
-
-	    var result = _outsideHorizontal2.result;
-	    var newPlace = _outsideHorizontal2.newPlace;
+	    var _outsideHorizontal2 = outsideHorizontal(),
+	        result = _outsideHorizontal2.result,
+	        newPlace = _outsideHorizontal2.newPlace;
 
 	    if (result && outsideVertical().result) {
 	      return { result: false };
@@ -60924,7 +61951,7 @@
 	};
 
 /***/ },
-/* 599 */
+/* 609 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60961,7 +61988,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 600 */
+/* 610 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -60990,7 +62017,27 @@
 	}
 
 /***/ },
-/* 601 */
+/* 611 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function (nodeList) {
+	  var length = nodeList.length;
+	  if (nodeList.hasOwnProperty) {
+	    return Array.prototype.slice.call(nodeList);
+	  }
+	  return new Array(length).fill().map(function (index) {
+	    return nodeList[index];
+	  });
+	};
+
+/***/ },
+/* 612 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61001,13 +62048,13 @@
 	exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.type-dark{color:#fff;background-color:#222}.__react_component_tooltip.type-dark.place-top:after{border-top-color:#222;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-dark.place-bottom:after{border-bottom-color:#222;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-dark.place-left:after{border-left-color:#222;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-dark.place-right:after{border-right-color:#222;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-dark.border{border:1px solid #fff}.__react_component_tooltip.type-dark.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-dark.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-dark.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-dark.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-success{color:#fff;background-color:#8DC572}.__react_component_tooltip.type-success.place-top:after{border-top-color:#8DC572;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-success.place-bottom:after{border-bottom-color:#8DC572;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-success.place-left:after{border-left-color:#8DC572;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-success.place-right:after{border-right-color:#8DC572;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-success.border{border:1px solid #fff}.__react_component_tooltip.type-success.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-success.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-success.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-success.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-warning{color:#fff;background-color:#F0AD4E}.__react_component_tooltip.type-warning.place-top:after{border-top-color:#F0AD4E;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-warning.place-bottom:after{border-bottom-color:#F0AD4E;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-warning.place-left:after{border-left-color:#F0AD4E;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-warning.place-right:after{border-right-color:#F0AD4E;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-warning.border{border:1px solid #fff}.__react_component_tooltip.type-warning.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-warning.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-warning.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-warning.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-error{color:#fff;background-color:#BE6464}.__react_component_tooltip.type-error.place-top:after{border-top-color:#BE6464;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-error.place-bottom:after{border-bottom-color:#BE6464;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-error.place-left:after{border-left-color:#BE6464;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-error.place-right:after{border-right-color:#BE6464;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-error.border{border:1px solid #fff}.__react_component_tooltip.type-error.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-error.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-error.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-error.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-info{color:#fff;background-color:#337AB7}.__react_component_tooltip.type-info.place-top:after{border-top-color:#337AB7;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-info.place-bottom:after{border-bottom-color:#337AB7;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-info.place-left:after{border-left-color:#337AB7;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-info.place-right:after{border-right-color:#337AB7;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-info.border{border:1px solid #fff}.__react_component_tooltip.type-info.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-info.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-info.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-info.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-light{color:#222;background-color:#fff}.__react_component_tooltip.type-light.place-top:after{border-top-color:#fff;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-light.place-bottom:after{border-bottom-color:#fff;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-light.place-left:after{border-left-color:#fff;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-light.place-right:after{border-right-color:#fff;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-light.border{border:1px solid #222}.__react_component_tooltip.type-light.border.place-top:before{border-top:8px solid #222}.__react_component_tooltip.type-light.border.place-bottom:before{border-bottom:8px solid #222}.__react_component_tooltip.type-light.border.place-left:before{border-left:8px solid #222}.__react_component_tooltip.type-light.border.place-right:before{border-right:8px solid #222}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:before{border-left:10px solid transparent;border-right:10px solid transparent;bottom:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-top:after{border-left:8px solid transparent;border-right:8px solid transparent;bottom:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparent;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
 
 /***/ },
-/* 602 */
+/* 613 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(603);
+	var content = __webpack_require__(614);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -61016,8 +62063,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -61027,7 +62074,7 @@
 	}
 
 /***/ },
-/* 603 */
+/* 614 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -61041,7 +62088,7 @@
 
 
 /***/ },
-/* 604 */
+/* 615 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61066,7 +62113,7 @@
 
 	var _reactTooltip2 = _interopRequireDefault(_reactTooltip);
 
-	__webpack_require__(605);
+	__webpack_require__(616);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61236,13 +62283,13 @@
 	exports.default = Group;
 
 /***/ },
-/* 605 */
+/* 616 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(606);
+	var content = __webpack_require__(617);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -61251,8 +62298,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -61262,7 +62309,7 @@
 	}
 
 /***/ },
-/* 606 */
+/* 617 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -61276,7 +62323,7 @@
 
 
 /***/ },
-/* 607 */
+/* 618 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61307,9 +62354,9 @@
 
 	var _Button2 = _interopRequireDefault(_Button);
 
-	var _reducer = __webpack_require__(608);
+	var _reducer = __webpack_require__(619);
 
-	__webpack_require__(609);
+	__webpack_require__(620);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61480,7 +62527,7 @@
 	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addGroup, edit: _reducer.editGroup, remove: _reducer.deleteGroup })(ManagePopup);
 
 /***/ },
-/* 608 */
+/* 619 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61781,13 +62828,13 @@
 	}
 
 /***/ },
-/* 609 */
+/* 620 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(610);
+	var content = __webpack_require__(621);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -61796,8 +62843,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -61807,7 +62854,7 @@
 	}
 
 /***/ },
-/* 610 */
+/* 621 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -61821,7 +62868,7 @@
 
 
 /***/ },
-/* 611 */
+/* 622 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61844,15 +62891,15 @@
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _reactSelect = __webpack_require__(612);
+	var _reactSelect = __webpack_require__(623);
 
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 
-	var _moment = __webpack_require__(624);
+	var _moment = __webpack_require__(640);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _timeInput = __webpack_require__(735);
+	var _timeInput = __webpack_require__(758);
 
 	var _timeInput2 = _interopRequireDefault(_timeInput);
 
@@ -61864,9 +62911,9 @@
 
 	var _Button2 = _interopRequireDefault(_Button);
 
-	var _reducer = __webpack_require__(608);
+	var _reducer = __webpack_require__(619);
 
-	__webpack_require__(747);
+	__webpack_require__(770);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62109,7 +63156,7 @@
 	}, { closeCouplePopup: _reducer.closeCouplePopup, saveCouple: _reducer.saveCouple, addCouple: _reducer.addCouple, removeCouple: _reducer.removeCouple })(GroupPopup);
 
 /***/ },
-/* 612 */
+/* 623 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62136,47 +63183,59 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _createReactClass = __webpack_require__(624);
+
+	var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+	var _propTypes = __webpack_require__(593);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _reactDom = __webpack_require__(158);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactInputAutosize = __webpack_require__(613);
+	var _reactInputAutosize = __webpack_require__(628);
 
 	var _reactInputAutosize2 = _interopRequireDefault(_reactInputAutosize);
 
-	var _classnames = __webpack_require__(614);
+	var _classnames = __webpack_require__(629);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _utilsDefaultArrowRenderer = __webpack_require__(615);
+	var _utilsDefaultArrowRenderer = __webpack_require__(630);
 
 	var _utilsDefaultArrowRenderer2 = _interopRequireDefault(_utilsDefaultArrowRenderer);
 
-	var _utilsDefaultFilterOptions = __webpack_require__(616);
+	var _utilsDefaultFilterOptions = __webpack_require__(631);
 
 	var _utilsDefaultFilterOptions2 = _interopRequireDefault(_utilsDefaultFilterOptions);
 
-	var _utilsDefaultMenuRenderer = __webpack_require__(618);
+	var _utilsDefaultMenuRenderer = __webpack_require__(633);
 
 	var _utilsDefaultMenuRenderer2 = _interopRequireDefault(_utilsDefaultMenuRenderer);
 
-	var _Async = __webpack_require__(619);
+	var _utilsDefaultClearRenderer = __webpack_require__(634);
+
+	var _utilsDefaultClearRenderer2 = _interopRequireDefault(_utilsDefaultClearRenderer);
+
+	var _Async = __webpack_require__(635);
 
 	var _Async2 = _interopRequireDefault(_Async);
 
-	var _AsyncCreatable = __webpack_require__(620);
+	var _AsyncCreatable = __webpack_require__(636);
 
 	var _AsyncCreatable2 = _interopRequireDefault(_AsyncCreatable);
 
-	var _Creatable = __webpack_require__(621);
+	var _Creatable = __webpack_require__(637);
 
 	var _Creatable2 = _interopRequireDefault(_Creatable);
 
-	var _Option = __webpack_require__(622);
+	var _Option = __webpack_require__(638);
 
 	var _Option2 = _interopRequireDefault(_Option);
 
-	var _Value = __webpack_require__(623);
+	var _Value = __webpack_require__(639);
 
 	var _Value2 = _interopRequireDefault(_Value);
 
@@ -62193,82 +63252,85 @@
 		}
 	}
 
-	var stringOrNode = _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.node]);
+	var stringOrNode = _propTypes2['default'].oneOfType([_propTypes2['default'].string, _propTypes2['default'].node]);
 
 	var instanceId = 1;
 
-	var Select = _react2['default'].createClass({
+	var Select = (0, _createReactClass2['default'])({
 
 		displayName: 'Select',
 
 		propTypes: {
-			addLabelText: _react2['default'].PropTypes.string, // placeholder displayed when you want to add a label on a multi-value input
-			'aria-label': _react2['default'].PropTypes.string, // Aria label (for assistive tech)
-			'aria-labelledby': _react2['default'].PropTypes.string, // HTML ID of an element that should be used as the label (for assistive tech)
-			arrowRenderer: _react2['default'].PropTypes.func, // Create drop-down caret element
-			autoBlur: _react2['default'].PropTypes.bool, // automatically blur the component when an option is selected
-			autofocus: _react2['default'].PropTypes.bool, // autofocus the component on mount
-			autosize: _react2['default'].PropTypes.bool, // whether to enable autosizing or not
-			backspaceRemoves: _react2['default'].PropTypes.bool, // whether backspace removes an item if there is no text input
-			backspaceToRemoveMessage: _react2['default'].PropTypes.string, // Message to use for screenreaders to press backspace to remove the current item - {label} is replaced with the item label
-			className: _react2['default'].PropTypes.string, // className for the outer element
+			addLabelText: _propTypes2['default'].string, // placeholder displayed when you want to add a label on a multi-value input
+			'aria-describedby': _propTypes2['default'].string, // HTML ID(s) of element(s) that should be used to describe this input (for assistive tech)
+			'aria-label': _propTypes2['default'].string, // Aria label (for assistive tech)
+			'aria-labelledby': _propTypes2['default'].string, // HTML ID of an element that should be used as the label (for assistive tech)
+			arrowRenderer: _propTypes2['default'].func, // Create drop-down caret element
+			autoBlur: _propTypes2['default'].bool, // automatically blur the component when an option is selected
+			autofocus: _propTypes2['default'].bool, // autofocus the component on mount
+			autosize: _propTypes2['default'].bool, // whether to enable autosizing or not
+			backspaceRemoves: _propTypes2['default'].bool, // whether backspace removes an item if there is no text input
+			backspaceToRemoveMessage: _propTypes2['default'].string, // Message to use for screenreaders to press backspace to remove the current item - {label} is replaced with the item label
+			className: _propTypes2['default'].string, // className for the outer element
 			clearAllText: stringOrNode, // title for the "clear" control when multi: true
+			clearRenderer: _propTypes2['default'].func, // create clearable x element
 			clearValueText: stringOrNode, // title for the "clear" control
-			clearable: _react2['default'].PropTypes.bool, // should it be possible to reset value
-			delimiter: _react2['default'].PropTypes.string, // delimiter to use to join multiple values for the hidden field value
-			disabled: _react2['default'].PropTypes.bool, // whether the Select is disabled or not
-			escapeClearsValue: _react2['default'].PropTypes.bool, // whether escape clears the value when the menu is closed
-			filterOption: _react2['default'].PropTypes.func, // method to filter a single option (option, filterString)
-			filterOptions: _react2['default'].PropTypes.any, // boolean to enable default filtering or function to filter the options array ([options], filterString, [values])
-			ignoreAccents: _react2['default'].PropTypes.bool, // whether to strip diacritics when filtering
-			ignoreCase: _react2['default'].PropTypes.bool, // whether to perform case-insensitive filtering
-			inputProps: _react2['default'].PropTypes.object, // custom attributes for the Input
-			inputRenderer: _react2['default'].PropTypes.func, // returns a custom input component
-			instanceId: _react2['default'].PropTypes.string, // set the components instanceId
-			isLoading: _react2['default'].PropTypes.bool, // whether the Select is loading externally or not (such as options being loaded)
-			joinValues: _react2['default'].PropTypes.bool, // joins multiple values into a single form field with the delimiter (legacy mode)
-			labelKey: _react2['default'].PropTypes.string, // path of the label value in option objects
-			matchPos: _react2['default'].PropTypes.string, // (any|start) match the start or entire string when filtering
-			matchProp: _react2['default'].PropTypes.string, // (any|label|value) which option property to filter on
-			menuBuffer: _react2['default'].PropTypes.number, // optional buffer (in px) between the bottom of the viewport and the bottom of the menu
-			menuContainerStyle: _react2['default'].PropTypes.object, // optional style to apply to the menu container
-			menuRenderer: _react2['default'].PropTypes.func, // renders a custom menu with options
-			menuStyle: _react2['default'].PropTypes.object, // optional style to apply to the menu
-			multi: _react2['default'].PropTypes.bool, // multi-value input
-			name: _react2['default'].PropTypes.string, // generates a hidden <input /> tag with this field name for html forms
+			clearable: _propTypes2['default'].bool, // should it be possible to reset value
+			deleteRemoves: _propTypes2['default'].bool, // whether backspace removes an item if there is no text input
+			delimiter: _propTypes2['default'].string, // delimiter to use to join multiple values for the hidden field value
+			disabled: _propTypes2['default'].bool, // whether the Select is disabled or not
+			escapeClearsValue: _propTypes2['default'].bool, // whether escape clears the value when the menu is closed
+			filterOption: _propTypes2['default'].func, // method to filter a single option (option, filterString)
+			filterOptions: _propTypes2['default'].any, // boolean to enable default filtering or function to filter the options array ([options], filterString, [values])
+			ignoreAccents: _propTypes2['default'].bool, // whether to strip diacritics when filtering
+			ignoreCase: _propTypes2['default'].bool, // whether to perform case-insensitive filtering
+			inputProps: _propTypes2['default'].object, // custom attributes for the Input
+			inputRenderer: _propTypes2['default'].func, // returns a custom input component
+			instanceId: _propTypes2['default'].string, // set the components instanceId
+			isLoading: _propTypes2['default'].bool, // whether the Select is loading externally or not (such as options being loaded)
+			joinValues: _propTypes2['default'].bool, // joins multiple values into a single form field with the delimiter (legacy mode)
+			labelKey: _propTypes2['default'].string, // path of the label value in option objects
+			matchPos: _propTypes2['default'].string, // (any|start) match the start or entire string when filtering
+			matchProp: _propTypes2['default'].string, // (any|label|value) which option property to filter on
+			menuBuffer: _propTypes2['default'].number, // optional buffer (in px) between the bottom of the viewport and the bottom of the menu
+			menuContainerStyle: _propTypes2['default'].object, // optional style to apply to the menu container
+			menuRenderer: _propTypes2['default'].func, // renders a custom menu with options
+			menuStyle: _propTypes2['default'].object, // optional style to apply to the menu
+			multi: _propTypes2['default'].bool, // multi-value input
+			name: _propTypes2['default'].string, // generates a hidden <input /> tag with this field name for html forms
 			noResultsText: stringOrNode, // placeholder displayed when there are no matching search results
-			onBlur: _react2['default'].PropTypes.func, // onBlur handler: function (event) {}
-			onBlurResetsInput: _react2['default'].PropTypes.bool, // whether input is cleared on blur
-			onChange: _react2['default'].PropTypes.func, // onChange handler: function (newValue) {}
-			onClose: _react2['default'].PropTypes.func, // fires when the menu is closed
-			onCloseResetsInput: _react2['default'].PropTypes.bool, // whether input is cleared when menu is closed through the arrow
-			onFocus: _react2['default'].PropTypes.func, // onFocus handler: function (event) {}
-			onInputChange: _react2['default'].PropTypes.func, // onInputChange handler: function (inputValue) {}
-			onInputKeyDown: _react2['default'].PropTypes.func, // input keyDown handler: function (event) {}
-			onMenuScrollToBottom: _react2['default'].PropTypes.func, // fires when the menu is scrolled to the bottom; can be used to paginate options
-			onOpen: _react2['default'].PropTypes.func, // fires when the menu is opened
-			onValueClick: _react2['default'].PropTypes.func, // onClick handler for value labels: function (value, event) {}
-			openAfterFocus: _react2['default'].PropTypes.bool, // boolean to enable opening dropdown when focused
-			openOnFocus: _react2['default'].PropTypes.bool, // always open options menu on focus
-			optionClassName: _react2['default'].PropTypes.string, // additional class(es) to apply to the <Option /> elements
-			optionComponent: _react2['default'].PropTypes.func, // option component to render in dropdown
-			optionRenderer: _react2['default'].PropTypes.func, // optionRenderer: function (option) {}
-			options: _react2['default'].PropTypes.array, // array of options
-			pageSize: _react2['default'].PropTypes.number, // number of entries to page when using page up/down keys
+			onBlur: _propTypes2['default'].func, // onBlur handler: function (event) {}
+			onBlurResetsInput: _propTypes2['default'].bool, // whether input is cleared on blur
+			onChange: _propTypes2['default'].func, // onChange handler: function (newValue) {}
+			onClose: _propTypes2['default'].func, // fires when the menu is closed
+			onCloseResetsInput: _propTypes2['default'].bool, // whether input is cleared when menu is closed through the arrow
+			onFocus: _propTypes2['default'].func, // onFocus handler: function (event) {}
+			onInputChange: _propTypes2['default'].func, // onInputChange handler: function (inputValue) {}
+			onInputKeyDown: _propTypes2['default'].func, // input keyDown handler: function (event) {}
+			onMenuScrollToBottom: _propTypes2['default'].func, // fires when the menu is scrolled to the bottom; can be used to paginate options
+			onOpen: _propTypes2['default'].func, // fires when the menu is opened
+			onValueClick: _propTypes2['default'].func, // onClick handler for value labels: function (value, event) {}
+			openAfterFocus: _propTypes2['default'].bool, // boolean to enable opening dropdown when focused
+			openOnFocus: _propTypes2['default'].bool, // always open options menu on focus
+			optionClassName: _propTypes2['default'].string, // additional class(es) to apply to the <Option /> elements
+			optionComponent: _propTypes2['default'].func, // option component to render in dropdown
+			optionRenderer: _propTypes2['default'].func, // optionRenderer: function (option) {}
+			options: _propTypes2['default'].array, // array of options
+			pageSize: _propTypes2['default'].number, // number of entries to page when using page up/down keys
 			placeholder: stringOrNode, // field placeholder, displayed when there's no value
-			required: _react2['default'].PropTypes.bool, // applies HTML5 required attribute when needed
-			resetValue: _react2['default'].PropTypes.any, // value to use when you clear the control
-			scrollMenuIntoView: _react2['default'].PropTypes.bool, // boolean to enable the viewport to shift so that the full menu fully visible when engaged
-			searchable: _react2['default'].PropTypes.bool, // whether to enable searching feature or not
-			simpleValue: _react2['default'].PropTypes.bool, // pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
-			style: _react2['default'].PropTypes.object, // optional style to apply to the control
-			tabIndex: _react2['default'].PropTypes.string, // optional tab index of the control
-			tabSelectsValue: _react2['default'].PropTypes.bool, // whether to treat tabbing out while focused to be value selection
-			value: _react2['default'].PropTypes.any, // initial field value
-			valueComponent: _react2['default'].PropTypes.func, // value component to render
-			valueKey: _react2['default'].PropTypes.string, // path of the label value in option objects
-			valueRenderer: _react2['default'].PropTypes.func, // valueRenderer: function (option) {}
-			wrapperStyle: _react2['default'].PropTypes.object },
+			required: _propTypes2['default'].bool, // applies HTML5 required attribute when needed
+			resetValue: _propTypes2['default'].any, // value to use when you clear the control
+			scrollMenuIntoView: _propTypes2['default'].bool, // boolean to enable the viewport to shift so that the full menu fully visible when engaged
+			searchable: _propTypes2['default'].bool, // whether to enable searching feature or not
+			simpleValue: _propTypes2['default'].bool, // pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
+			style: _propTypes2['default'].object, // optional style to apply to the control
+			tabIndex: _propTypes2['default'].string, // optional tab index of the control
+			tabSelectsValue: _propTypes2['default'].bool, // whether to treat tabbing out while focused to be value selection
+			value: _propTypes2['default'].any, // initial field value
+			valueComponent: _propTypes2['default'].func, // value component to render
+			valueKey: _propTypes2['default'].string, // path of the label value in option objects
+			valueRenderer: _propTypes2['default'].func, // valueRenderer: function (option) {}
+			wrapperStyle: _propTypes2['default'].object },
 
 		// optional style to apply to the component wrapper
 		statics: { Async: _Async2['default'], AsyncCreatable: _AsyncCreatable2['default'], Creatable: _Creatable2['default'] },
@@ -62282,7 +63344,9 @@
 				backspaceToRemoveMessage: 'Press backspace to remove {label}',
 				clearable: true,
 				clearAllText: 'Clear all',
+				clearRenderer: _utilsDefaultClearRenderer2['default'],
 				clearValueText: 'Clear value',
+				deleteRemoves: true,
 				delimiter: ',',
 				disabled: false,
 				escapeClearsValue: true,
@@ -62301,7 +63365,6 @@
 				noResultsText: 'No results found',
 				onBlurResetsInput: true,
 				onCloseResetsInput: true,
-				openAfterFocus: false,
 				optionComponent: _Option2['default'],
 				pageSize: 5,
 				placeholder: 'Select...',
@@ -62394,14 +63457,26 @@
 		},
 
 		componentWillUnmount: function componentWillUnmount() {
-			document.removeEventListener('touchstart', this.handleTouchOutside);
+			if (!document.removeEventListener && document.detachEvent) {
+				document.detachEvent('ontouchstart', this.handleTouchOutside);
+			} else {
+				document.removeEventListener('touchstart', this.handleTouchOutside);
+			}
 		},
 
 		toggleTouchOutsideEvent: function toggleTouchOutsideEvent(enabled) {
 			if (enabled) {
-				document.addEventListener('touchstart', this.handleTouchOutside);
+				if (!document.addEventListener && document.attachEvent) {
+					document.attachEvent('ontouchstart', this.handleTouchOutside);
+				} else {
+					document.addEventListener('touchstart', this.handleTouchOutside);
+				}
 			} else {
-				document.removeEventListener('touchstart', this.handleTouchOutside);
+				if (!document.removeEventListener && document.detachEvent) {
+					document.detachEvent('ontouchstart', this.handleTouchOutside);
+				} else {
+					document.removeEventListener('touchstart', this.handleTouchOutside);
+				}
 			}
 		},
 
@@ -62415,12 +63490,6 @@
 		focus: function focus() {
 			if (!this.input) return;
 			this.input.focus();
-
-			if (this.props.openAfterFocus) {
-				this.setState({
-					isOpen: true
-				});
-			}
 		},
 
 		blurInput: function blurInput() {
@@ -62676,6 +63745,13 @@
 					}
 					this.focusStartOption();
 					break;
+				case 46:
+					// backspace
+					if (!this.state.inputValue && this.props.deleteRemoves) {
+						event.preventDefault();
+						this.popValue();
+					}
+					return;
 				default:
 					return;
 			}
@@ -62793,7 +63869,18 @@
 
 		addValue: function addValue(value) {
 			var valueArray = this.getValueArray(this.props.value);
+			var visibleOptions = this._visibleOptions.filter(function (val) {
+				return !val.disabled;
+			});
+			var lastValueIndex = visibleOptions.indexOf(value);
 			this.setValue(valueArray.concat(value));
+			if (visibleOptions.length - 1 === lastValueIndex) {
+				// the last option was selected; focus the second-last one
+				this.focusOption(visibleOptions[lastValueIndex - 1]);
+			} else if (visibleOptions.length > lastValueIndex) {
+				// focus the option below the selected one
+				this.focusOption(visibleOptions[lastValueIndex + 1]);
+			}
 		},
 
 		popValue: function popValue() {
@@ -62877,7 +63964,7 @@
 				this.setState({
 					isOpen: true,
 					inputValue: '',
-					focusedOption: this._focusedOption || options[dir === 'next' ? 0 : options.length - 1].option
+					focusedOption: this._focusedOption || (options.length ? options[dir === 'next' ? 0 : options.length - 1].option : null)
 				});
 				return;
 			}
@@ -63001,74 +64088,79 @@
 		},
 
 		renderInput: function renderInput(valueArray, focusedOptionIndex) {
-			var _this5 = this;
+			var _classNames,
+			    _this5 = this;
+
+			var className = (0, _classnames2['default'])('Select-input', this.props.inputProps.className);
+			var isOpen = !!this.state.isOpen;
+
+			var ariaOwns = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, this._instancePrefix + '-list', isOpen), _defineProperty(_classNames, this._instancePrefix + '-backspace-remove-message', this.props.multi && !this.props.disabled && this.state.isFocused && !this.state.inputValue), _classNames));
+
+			// TODO: Check how this project includes Object.assign()
+			var inputProps = _extends({}, this.props.inputProps, {
+				role: 'combobox',
+				'aria-expanded': '' + isOpen,
+				'aria-owns': ariaOwns,
+				'aria-haspopup': '' + isOpen,
+				'aria-activedescendant': isOpen ? this._instancePrefix + '-option-' + focusedOptionIndex : this._instancePrefix + '-value',
+				'aria-describedby': this.props['aria-describedby'],
+				'aria-labelledby': this.props['aria-labelledby'],
+				'aria-label': this.props['aria-label'],
+				className: className,
+				tabIndex: this.props.tabIndex,
+				onBlur: this.handleInputBlur,
+				onChange: this.handleInputChange,
+				onFocus: this.handleInputFocus,
+				ref: function ref(_ref) {
+					return _this5.input = _ref;
+				},
+				required: this.state.required,
+				value: this.state.inputValue
+			});
 
 			if (this.props.inputRenderer) {
-				return this.props.inputRenderer();
-			} else {
-				var _classNames;
-
-				var className = (0, _classnames2['default'])('Select-input', this.props.inputProps.className);
-				var isOpen = !!this.state.isOpen;
-
-				var ariaOwns = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, this._instancePrefix + '-list', isOpen), _defineProperty(_classNames, this._instancePrefix + '-backspace-remove-message', this.props.multi && !this.props.disabled && this.state.isFocused && !this.state.inputValue), _classNames));
-
-				// TODO: Check how this project includes Object.assign()
-				var inputProps = _extends({}, this.props.inputProps, {
-					role: 'combobox',
-					'aria-expanded': '' + isOpen,
-					'aria-owns': ariaOwns,
-					'aria-haspopup': '' + isOpen,
-					'aria-activedescendant': isOpen ? this._instancePrefix + '-option-' + focusedOptionIndex : this._instancePrefix + '-value',
-					'aria-labelledby': this.props['aria-labelledby'],
-					'aria-label': this.props['aria-label'],
-					className: className,
-					tabIndex: this.props.tabIndex,
-					onBlur: this.handleInputBlur,
-					onChange: this.handleInputChange,
-					onFocus: this.handleInputFocus,
-					ref: function ref(_ref) {
-						return _this5.input = _ref;
-					},
-					required: this.state.required,
-					value: this.state.inputValue
-				});
-
-				if (this.props.disabled || !this.props.searchable) {
-					var _props$inputProps = this.props.inputProps;
-					var inputClassName = _props$inputProps.inputClassName;
-
-					var divProps = _objectWithoutProperties(_props$inputProps, ['inputClassName']);
-
-					return _react2['default'].createElement('div', _extends({}, divProps, {
-						role: 'combobox',
-						'aria-expanded': isOpen,
-						'aria-owns': isOpen ? this._instancePrefix + '-list' : this._instancePrefix + '-value',
-						'aria-activedescendant': isOpen ? this._instancePrefix + '-option-' + focusedOptionIndex : this._instancePrefix + '-value',
-						className: className,
-						tabIndex: this.props.tabIndex || 0,
-						onBlur: this.handleInputBlur,
-						onFocus: this.handleInputFocus,
-						ref: function (ref) {
-							return _this5.input = ref;
-						},
-						'aria-readonly': '' + !!this.props.disabled,
-						style: { border: 0, width: 1, display: 'inline-block' } }));
-				}
-
-				if (this.props.autosize) {
-					return _react2['default'].createElement(_reactInputAutosize2['default'], _extends({}, inputProps, { minWidth: '5px' }));
-				}
-				return _react2['default'].createElement(
-					'div',
-					{ className: className },
-					_react2['default'].createElement('input', inputProps)
-				);
+				return this.props.inputRenderer(inputProps);
 			}
+
+			if (this.props.disabled || !this.props.searchable) {
+				var _props$inputProps = this.props.inputProps;
+				var inputClassName = _props$inputProps.inputClassName;
+
+				var divProps = _objectWithoutProperties(_props$inputProps, ['inputClassName']);
+
+				var _ariaOwns = (0, _classnames2['default'])(_defineProperty({}, this._instancePrefix + '-list', isOpen));
+
+				return _react2['default'].createElement('div', _extends({}, divProps, {
+					role: 'combobox',
+					'aria-expanded': isOpen,
+					'aria-owns': _ariaOwns,
+					'aria-activedescendant': isOpen ? this._instancePrefix + '-option-' + focusedOptionIndex : this._instancePrefix + '-value',
+					className: className,
+					tabIndex: this.props.tabIndex || 0,
+					onBlur: this.handleInputBlur,
+					onFocus: this.handleInputFocus,
+					ref: function (ref) {
+						return _this5.input = ref;
+					},
+					'aria-readonly': '' + !!this.props.disabled,
+					style: { border: 0, width: 1, display: 'inline-block' } }));
+			}
+
+			if (this.props.autosize) {
+				return _react2['default'].createElement(_reactInputAutosize2['default'], _extends({}, inputProps, { minWidth: '5' }));
+			}
+			return _react2['default'].createElement(
+				'div',
+				{ className: className },
+				_react2['default'].createElement('input', inputProps)
+			);
 		},
 
 		renderClear: function renderClear() {
-			if (!this.props.clearable || !this.props.value || this.props.value === 0 || this.props.multi && !this.props.value.length || this.props.disabled || this.props.isLoading) return;
+
+			if (!this.props.clearable || this.props.value === undefined || this.props.value === null || this.props.multi && !this.props.value.length || this.props.disabled || this.props.isLoading) return;
+			var clear = this.props.clearRenderer();
+
 			return _react2['default'].createElement(
 				'span',
 				{ className: 'Select-clear-zone', title: this.props.multi ? this.props.clearAllText : this.props.clearValueText,
@@ -63078,13 +64170,14 @@
 					onTouchMove: this.handleTouchMove,
 					onTouchEnd: this.handleTouchEndClearValue
 				},
-				_react2['default'].createElement('span', { className: 'Select-clear', dangerouslySetInnerHTML: { __html: '&times;' } })
+				clear
 			);
 		},
 
 		renderArrow: function renderArrow() {
 			var onMouseDown = this.handleMouseDownOnArrow;
-			var arrow = this.props.arrowRenderer({ onMouseDown: onMouseDown });
+			var isOpen = this.state.isOpen;
+			var arrow = this.props.arrowRenderer({ onMouseDown: onMouseDown, isOpen: isOpen });
 
 			return _react2['default'].createElement(
 				'span',
@@ -63183,9 +64276,17 @@
 			var options = this._visibleOptions;
 			if (!options.length) return null;
 
+			var valueKey = this.props.valueKey;
 			var focusedOption = this.state.focusedOption || selectedOption;
 			if (focusedOption && !focusedOption.disabled) {
-				var focusedOptionIndex = options.indexOf(focusedOption);
+				var focusedOptionIndex = -1;
+				options.some(function (option, index) {
+					var isOptionEqual = option[valueKey] === focusedOption[valueKey];
+					if (isOptionEqual) {
+						focusedOptionIndex = index;
+					}
+					return isOptionEqual;
+				});
 				if (focusedOptionIndex !== -1) {
 					return focusedOptionIndex;
 				}
@@ -63241,6 +64342,7 @@
 			var className = (0, _classnames2['default'])('Select', this.props.className, {
 				'Select--multi': this.props.multi,
 				'Select--single': !this.props.multi,
+				'is-clearable': this.props.clearable,
 				'is-disabled': this.props.disabled,
 				'is-focused': this.state.isFocused,
 				'is-loading': this.props.isLoading,
@@ -63301,7 +64403,888 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 613 */
+/* 624 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var factory = __webpack_require__(625);
+
+	// Hack to grab NoopUpdateQueue from isomorphic React
+	var ReactNoopUpdateQueue = new React.Component().updater;
+
+	module.exports = factory(
+	  React.Component,
+	  React.isValidElement,
+	  ReactNoopUpdateQueue
+	);
+
+
+/***/ },
+/* 625 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	var _assign = __webpack_require__(626);
+
+	var emptyObject = __webpack_require__(627);
+	var _invariant = __webpack_require__(596);
+
+	if (process.env.NODE_ENV !== 'production') {
+	  var warning = __webpack_require__(597);
+	}
+
+	var MIXINS_KEY = 'mixins';
+
+	// Helper function to allow the creation of anonymous functions which do not
+	// have .name set to the name of the variable being assigned to.
+	function identity(fn) {
+	  return fn;
+	}
+
+	var ReactPropTypeLocationNames;
+	if (process.env.NODE_ENV !== 'production') {
+	  ReactPropTypeLocationNames = {
+	    prop: 'prop',
+	    context: 'context',
+	    childContext: 'child context',
+	  };
+	} else {
+	  ReactPropTypeLocationNames = {};
+	}
+
+	function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
+	  /**
+	   * Policies that describe methods in `ReactClassInterface`.
+	   */
+
+
+	  var injectedMixins = [];
+
+	  /**
+	   * Composite components are higher-level components that compose other composite
+	   * or host components.
+	   *
+	   * To create a new type of `ReactClass`, pass a specification of
+	   * your new class to `React.createClass`. The only requirement of your class
+	   * specification is that you implement a `render` method.
+	   *
+	   *   var MyComponent = React.createClass({
+	   *     render: function() {
+	   *       return <div>Hello World</div>;
+	   *     }
+	   *   });
+	   *
+	   * The class specification supports a specific protocol of methods that have
+	   * special meaning (e.g. `render`). See `ReactClassInterface` for
+	   * more the comprehensive protocol. Any other properties and methods in the
+	   * class specification will be available on the prototype.
+	   *
+	   * @interface ReactClassInterface
+	   * @internal
+	   */
+	  var ReactClassInterface = {
+
+	    /**
+	     * An array of Mixin objects to include when defining your component.
+	     *
+	     * @type {array}
+	     * @optional
+	     */
+	    mixins: 'DEFINE_MANY',
+
+	    /**
+	     * An object containing properties and methods that should be defined on
+	     * the component's constructor instead of its prototype (static methods).
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    statics: 'DEFINE_MANY',
+
+	    /**
+	     * Definition of prop types for this component.
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    propTypes: 'DEFINE_MANY',
+
+	    /**
+	     * Definition of context types for this component.
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    contextTypes: 'DEFINE_MANY',
+
+	    /**
+	     * Definition of context types this component sets for its children.
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    childContextTypes: 'DEFINE_MANY',
+
+	    // ==== Definition methods ====
+
+	    /**
+	     * Invoked when the component is mounted. Values in the mapping will be set on
+	     * `this.props` if that prop is not specified (i.e. using an `in` check).
+	     *
+	     * This method is invoked before `getInitialState` and therefore cannot rely
+	     * on `this.state` or use `this.setState`.
+	     *
+	     * @return {object}
+	     * @optional
+	     */
+	    getDefaultProps: 'DEFINE_MANY_MERGED',
+
+	    /**
+	     * Invoked once before the component is mounted. The return value will be used
+	     * as the initial value of `this.state`.
+	     *
+	     *   getInitialState: function() {
+	     *     return {
+	     *       isOn: false,
+	     *       fooBaz: new BazFoo()
+	     *     }
+	     *   }
+	     *
+	     * @return {object}
+	     * @optional
+	     */
+	    getInitialState: 'DEFINE_MANY_MERGED',
+
+	    /**
+	     * @return {object}
+	     * @optional
+	     */
+	    getChildContext: 'DEFINE_MANY_MERGED',
+
+	    /**
+	     * Uses props from `this.props` and state from `this.state` to render the
+	     * structure of the component.
+	     *
+	     * No guarantees are made about when or how often this method is invoked, so
+	     * it must not have side effects.
+	     *
+	     *   render: function() {
+	     *     var name = this.props.name;
+	     *     return <div>Hello, {name}!</div>;
+	     *   }
+	     *
+	     * @return {ReactComponent}
+	     * @nosideeffects
+	     * @required
+	     */
+	    render: 'DEFINE_ONCE',
+
+	    // ==== Delegate methods ====
+
+	    /**
+	     * Invoked when the component is initially created and about to be mounted.
+	     * This may have side effects, but any external subscriptions or data created
+	     * by this method must be cleaned up in `componentWillUnmount`.
+	     *
+	     * @optional
+	     */
+	    componentWillMount: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked when the component has been mounted and has a DOM representation.
+	     * However, there is no guarantee that the DOM node is in the document.
+	     *
+	     * Use this as an opportunity to operate on the DOM when the component has
+	     * been mounted (initialized and rendered) for the first time.
+	     *
+	     * @param {DOMElement} rootNode DOM element representing the component.
+	     * @optional
+	     */
+	    componentDidMount: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked before the component receives new props.
+	     *
+	     * Use this as an opportunity to react to a prop transition by updating the
+	     * state using `this.setState`. Current props are accessed via `this.props`.
+	     *
+	     *   componentWillReceiveProps: function(nextProps, nextContext) {
+	     *     this.setState({
+	     *       likesIncreasing: nextProps.likeCount > this.props.likeCount
+	     *     });
+	     *   }
+	     *
+	     * NOTE: There is no equivalent `componentWillReceiveState`. An incoming prop
+	     * transition may cause a state change, but the opposite is not true. If you
+	     * need it, you are probably looking for `componentWillUpdate`.
+	     *
+	     * @param {object} nextProps
+	     * @optional
+	     */
+	    componentWillReceiveProps: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked while deciding if the component should be updated as a result of
+	     * receiving new props, state and/or context.
+	     *
+	     * Use this as an opportunity to `return false` when you're certain that the
+	     * transition to the new props/state/context will not require a component
+	     * update.
+	     *
+	     *   shouldComponentUpdate: function(nextProps, nextState, nextContext) {
+	     *     return !equal(nextProps, this.props) ||
+	     *       !equal(nextState, this.state) ||
+	     *       !equal(nextContext, this.context);
+	     *   }
+	     *
+	     * @param {object} nextProps
+	     * @param {?object} nextState
+	     * @param {?object} nextContext
+	     * @return {boolean} True if the component should update.
+	     * @optional
+	     */
+	    shouldComponentUpdate: 'DEFINE_ONCE',
+
+	    /**
+	     * Invoked when the component is about to update due to a transition from
+	     * `this.props`, `this.state` and `this.context` to `nextProps`, `nextState`
+	     * and `nextContext`.
+	     *
+	     * Use this as an opportunity to perform preparation before an update occurs.
+	     *
+	     * NOTE: You **cannot** use `this.setState()` in this method.
+	     *
+	     * @param {object} nextProps
+	     * @param {?object} nextState
+	     * @param {?object} nextContext
+	     * @param {ReactReconcileTransaction} transaction
+	     * @optional
+	     */
+	    componentWillUpdate: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked when the component's DOM representation has been updated.
+	     *
+	     * Use this as an opportunity to operate on the DOM when the component has
+	     * been updated.
+	     *
+	     * @param {object} prevProps
+	     * @param {?object} prevState
+	     * @param {?object} prevContext
+	     * @param {DOMElement} rootNode DOM element representing the component.
+	     * @optional
+	     */
+	    componentDidUpdate: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked when the component is about to be removed from its parent and have
+	     * its DOM representation destroyed.
+	     *
+	     * Use this as an opportunity to deallocate any external resources.
+	     *
+	     * NOTE: There is no `componentDidUnmount` since your component will have been
+	     * destroyed by that point.
+	     *
+	     * @optional
+	     */
+	    componentWillUnmount: 'DEFINE_MANY',
+
+	    // ==== Advanced methods ====
+
+	    /**
+	     * Updates the component's currently mounted DOM representation.
+	     *
+	     * By default, this implements React's rendering and reconciliation algorithm.
+	     * Sophisticated clients may wish to override this.
+	     *
+	     * @param {ReactReconcileTransaction} transaction
+	     * @internal
+	     * @overridable
+	     */
+	    updateComponent: 'OVERRIDE_BASE'
+
+	  };
+
+	  /**
+	   * Mapping from class specification keys to special processing functions.
+	   *
+	   * Although these are declared like instance properties in the specification
+	   * when defining classes using `React.createClass`, they are actually static
+	   * and are accessible on the constructor instead of the prototype. Despite
+	   * being static, they must be defined outside of the "statics" key under
+	   * which all other static methods are defined.
+	   */
+	  var RESERVED_SPEC_KEYS = {
+	    displayName: function (Constructor, displayName) {
+	      Constructor.displayName = displayName;
+	    },
+	    mixins: function (Constructor, mixins) {
+	      if (mixins) {
+	        for (var i = 0; i < mixins.length; i++) {
+	          mixSpecIntoComponent(Constructor, mixins[i]);
+	        }
+	      }
+	    },
+	    childContextTypes: function (Constructor, childContextTypes) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        validateTypeDef(Constructor, childContextTypes, 'childContext');
+	      }
+	      Constructor.childContextTypes = _assign({}, Constructor.childContextTypes, childContextTypes);
+	    },
+	    contextTypes: function (Constructor, contextTypes) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        validateTypeDef(Constructor, contextTypes, 'context');
+	      }
+	      Constructor.contextTypes = _assign({}, Constructor.contextTypes, contextTypes);
+	    },
+	    /**
+	     * Special case getDefaultProps which should move into statics but requires
+	     * automatic merging.
+	     */
+	    getDefaultProps: function (Constructor, getDefaultProps) {
+	      if (Constructor.getDefaultProps) {
+	        Constructor.getDefaultProps = createMergedResultFunction(Constructor.getDefaultProps, getDefaultProps);
+	      } else {
+	        Constructor.getDefaultProps = getDefaultProps;
+	      }
+	    },
+	    propTypes: function (Constructor, propTypes) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        validateTypeDef(Constructor, propTypes, 'prop');
+	      }
+	      Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
+	    },
+	    statics: function (Constructor, statics) {
+	      mixStaticSpecIntoComponent(Constructor, statics);
+	    },
+	    autobind: function () {} };
+
+	  function validateTypeDef(Constructor, typeDef, location) {
+	    for (var propName in typeDef) {
+	      if (typeDef.hasOwnProperty(propName)) {
+	        // use a warning instead of an _invariant so components
+	        // don't show up in prod but only in __DEV__
+	        process.env.NODE_ENV !== 'production' ? warning(typeof typeDef[propName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', Constructor.displayName || 'ReactClass', ReactPropTypeLocationNames[location], propName) : void 0;
+	      }
+	    }
+	  }
+
+	  function validateMethodOverride(isAlreadyDefined, name) {
+	    var specPolicy = ReactClassInterface.hasOwnProperty(name) ? ReactClassInterface[name] : null;
+
+	    // Disallow overriding of base class methods unless explicitly allowed.
+	    if (ReactClassMixin.hasOwnProperty(name)) {
+	      _invariant(specPolicy === 'OVERRIDE_BASE', 'ReactClassInterface: You are attempting to override ' + '`%s` from your class specification. Ensure that your method names ' + 'do not overlap with React methods.', name);
+	    }
+
+	    // Disallow defining methods more than once unless explicitly allowed.
+	    if (isAlreadyDefined) {
+	      _invariant(specPolicy === 'DEFINE_MANY' || specPolicy === 'DEFINE_MANY_MERGED', 'ReactClassInterface: You are attempting to define ' + '`%s` on your component more than once. This conflict may be due ' + 'to a mixin.', name);
+	    }
+	  }
+
+	  /**
+	   * Mixin helper which handles policy validation and reserved
+	   * specification keys when building React classes.
+	   */
+	  function mixSpecIntoComponent(Constructor, spec) {
+	    if (!spec) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        var typeofSpec = typeof spec;
+	        var isMixinValid = typeofSpec === 'object' && spec !== null;
+
+	        process.env.NODE_ENV !== 'production' ? warning(isMixinValid, '%s: You\'re attempting to include a mixin that is either null ' + 'or not an object. Check the mixins included by the component, ' + 'as well as any mixins they include themselves. ' + 'Expected object but got %s.', Constructor.displayName || 'ReactClass', spec === null ? null : typeofSpec) : void 0;
+	      }
+
+	      return;
+	    }
+
+	    _invariant(typeof spec !== 'function', 'ReactClass: You\'re attempting to ' + 'use a component class or function as a mixin. Instead, just use a ' + 'regular object.');
+	    _invariant(!isValidElement(spec), 'ReactClass: You\'re attempting to ' + 'use a component as a mixin. Instead, just use a regular object.');
+
+	    var proto = Constructor.prototype;
+	    var autoBindPairs = proto.__reactAutoBindPairs;
+
+	    // By handling mixins before any other properties, we ensure the same
+	    // chaining order is applied to methods with DEFINE_MANY policy, whether
+	    // mixins are listed before or after these methods in the spec.
+	    if (spec.hasOwnProperty(MIXINS_KEY)) {
+	      RESERVED_SPEC_KEYS.mixins(Constructor, spec.mixins);
+	    }
+
+	    for (var name in spec) {
+	      if (!spec.hasOwnProperty(name)) {
+	        continue;
+	      }
+
+	      if (name === MIXINS_KEY) {
+	        // We have already handled mixins in a special case above.
+	        continue;
+	      }
+
+	      var property = spec[name];
+	      var isAlreadyDefined = proto.hasOwnProperty(name);
+	      validateMethodOverride(isAlreadyDefined, name);
+
+	      if (RESERVED_SPEC_KEYS.hasOwnProperty(name)) {
+	        RESERVED_SPEC_KEYS[name](Constructor, property);
+	      } else {
+	        // Setup methods on prototype:
+	        // The following member methods should not be automatically bound:
+	        // 1. Expected ReactClass methods (in the "interface").
+	        // 2. Overridden methods (that were mixed in).
+	        var isReactClassMethod = ReactClassInterface.hasOwnProperty(name);
+	        var isFunction = typeof property === 'function';
+	        var shouldAutoBind = isFunction && !isReactClassMethod && !isAlreadyDefined && spec.autobind !== false;
+
+	        if (shouldAutoBind) {
+	          autoBindPairs.push(name, property);
+	          proto[name] = property;
+	        } else {
+	          if (isAlreadyDefined) {
+	            var specPolicy = ReactClassInterface[name];
+
+	            // These cases should already be caught by validateMethodOverride.
+	            _invariant(isReactClassMethod && (specPolicy === 'DEFINE_MANY_MERGED' || specPolicy === 'DEFINE_MANY'), 'ReactClass: Unexpected spec policy %s for key %s ' + 'when mixing in component specs.', specPolicy, name);
+
+	            // For methods which are defined more than once, call the existing
+	            // methods before calling the new property, merging if appropriate.
+	            if (specPolicy === 'DEFINE_MANY_MERGED') {
+	              proto[name] = createMergedResultFunction(proto[name], property);
+	            } else if (specPolicy === 'DEFINE_MANY') {
+	              proto[name] = createChainedFunction(proto[name], property);
+	            }
+	          } else {
+	            proto[name] = property;
+	            if (process.env.NODE_ENV !== 'production') {
+	              // Add verbose displayName to the function, which helps when looking
+	              // at profiling tools.
+	              if (typeof property === 'function' && spec.displayName) {
+	                proto[name].displayName = spec.displayName + '_' + name;
+	              }
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  function mixStaticSpecIntoComponent(Constructor, statics) {
+	    if (!statics) {
+	      return;
+	    }
+	    for (var name in statics) {
+	      var property = statics[name];
+	      if (!statics.hasOwnProperty(name)) {
+	        continue;
+	      }
+
+	      var isReserved = name in RESERVED_SPEC_KEYS;
+	      _invariant(!isReserved, 'ReactClass: You are attempting to define a reserved ' + 'property, `%s`, that shouldn\'t be on the "statics" key. Define it ' + 'as an instance property instead; it will still be accessible on the ' + 'constructor.', name);
+
+	      var isInherited = name in Constructor;
+	      _invariant(!isInherited, 'ReactClass: You are attempting to define ' + '`%s` on your component more than once. This conflict may be ' + 'due to a mixin.', name);
+	      Constructor[name] = property;
+	    }
+	  }
+
+	  /**
+	   * Merge two objects, but throw if both contain the same key.
+	   *
+	   * @param {object} one The first object, which is mutated.
+	   * @param {object} two The second object
+	   * @return {object} one after it has been mutated to contain everything in two.
+	   */
+	  function mergeIntoWithNoDuplicateKeys(one, two) {
+	    _invariant(one && two && typeof one === 'object' && typeof two === 'object', 'mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects.');
+
+	    for (var key in two) {
+	      if (two.hasOwnProperty(key)) {
+	        _invariant(one[key] === undefined, 'mergeIntoWithNoDuplicateKeys(): ' + 'Tried to merge two objects with the same key: `%s`. This conflict ' + 'may be due to a mixin; in particular, this may be caused by two ' + 'getInitialState() or getDefaultProps() methods returning objects ' + 'with clashing keys.', key);
+	        one[key] = two[key];
+	      }
+	    }
+	    return one;
+	  }
+
+	  /**
+	   * Creates a function that invokes two functions and merges their return values.
+	   *
+	   * @param {function} one Function to invoke first.
+	   * @param {function} two Function to invoke second.
+	   * @return {function} Function that invokes the two argument functions.
+	   * @private
+	   */
+	  function createMergedResultFunction(one, two) {
+	    return function mergedResult() {
+	      var a = one.apply(this, arguments);
+	      var b = two.apply(this, arguments);
+	      if (a == null) {
+	        return b;
+	      } else if (b == null) {
+	        return a;
+	      }
+	      var c = {};
+	      mergeIntoWithNoDuplicateKeys(c, a);
+	      mergeIntoWithNoDuplicateKeys(c, b);
+	      return c;
+	    };
+	  }
+
+	  /**
+	   * Creates a function that invokes two functions and ignores their return vales.
+	   *
+	   * @param {function} one Function to invoke first.
+	   * @param {function} two Function to invoke second.
+	   * @return {function} Function that invokes the two argument functions.
+	   * @private
+	   */
+	  function createChainedFunction(one, two) {
+	    return function chainedFunction() {
+	      one.apply(this, arguments);
+	      two.apply(this, arguments);
+	    };
+	  }
+
+	  /**
+	   * Binds a method to the component.
+	   *
+	   * @param {object} component Component whose method is going to be bound.
+	   * @param {function} method Method to be bound.
+	   * @return {function} The bound method.
+	   */
+	  function bindAutoBindMethod(component, method) {
+	    var boundMethod = method.bind(component);
+	    if (process.env.NODE_ENV !== 'production') {
+	      boundMethod.__reactBoundContext = component;
+	      boundMethod.__reactBoundMethod = method;
+	      boundMethod.__reactBoundArguments = null;
+	      var componentName = component.constructor.displayName;
+	      var _bind = boundMethod.bind;
+	      boundMethod.bind = function (newThis) {
+	        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	          args[_key - 1] = arguments[_key];
+	        }
+
+	        // User is trying to bind() an autobound method; we effectively will
+	        // ignore the value of "this" that the user is trying to use, so
+	        // let's warn.
+	        if (newThis !== component && newThis !== null) {
+	          process.env.NODE_ENV !== 'production' ? warning(false, 'bind(): React component methods may only be bound to the ' + 'component instance. See %s', componentName) : void 0;
+	        } else if (!args.length) {
+	          process.env.NODE_ENV !== 'production' ? warning(false, 'bind(): You are binding a component method to the component. ' + 'React does this for you automatically in a high-performance ' + 'way, so you can safely remove this call. See %s', componentName) : void 0;
+	          return boundMethod;
+	        }
+	        var reboundMethod = _bind.apply(boundMethod, arguments);
+	        reboundMethod.__reactBoundContext = component;
+	        reboundMethod.__reactBoundMethod = method;
+	        reboundMethod.__reactBoundArguments = args;
+	        return reboundMethod;
+	      };
+	    }
+	    return boundMethod;
+	  }
+
+	  /**
+	   * Binds all auto-bound methods in a component.
+	   *
+	   * @param {object} component Component whose method is going to be bound.
+	   */
+	  function bindAutoBindMethods(component) {
+	    var pairs = component.__reactAutoBindPairs;
+	    for (var i = 0; i < pairs.length; i += 2) {
+	      var autoBindKey = pairs[i];
+	      var method = pairs[i + 1];
+	      component[autoBindKey] = bindAutoBindMethod(component, method);
+	    }
+	  }
+
+	  var IsMountedMixin = {
+	    componentDidMount: function () {
+	      this.__isMounted = true;
+	    },
+	    componentWillUnmount: function () {
+	      this.__isMounted = false;
+	    }
+	  };
+
+	  /**
+	   * Add more to the ReactClass base class. These are all legacy features and
+	   * therefore not already part of the modern ReactComponent.
+	   */
+	  var ReactClassMixin = {
+
+	    /**
+	     * TODO: This will be deprecated because state should always keep a consistent
+	     * type signature and the only use case for this, is to avoid that.
+	     */
+	    replaceState: function (newState, callback) {
+	      this.updater.enqueueReplaceState(this, newState, callback);
+	    },
+
+	    /**
+	     * Checks whether or not this composite component is mounted.
+	     * @return {boolean} True if mounted, false otherwise.
+	     * @protected
+	     * @final
+	     */
+	    isMounted: function () {
+	      if (process.env.NODE_ENV !== 'production') {
+	        process.env.NODE_ENV !== 'production' ? warning(this.__didWarnIsMounted, '%s: isMounted is deprecated. Instead, make sure to clean up ' + 'subscriptions and pending requests in componentWillUnmount to ' + 'prevent memory leaks.', this.constructor && this.constructor.displayName || this.name || 'Component') : void 0;
+	        this.__didWarnIsMounted = true;
+	      }
+	      return !!this.__isMounted;
+	    }
+	  };
+
+	  var ReactClassComponent = function () {};
+	  _assign(ReactClassComponent.prototype, ReactComponent.prototype, ReactClassMixin);
+
+	  /**
+	   * Creates a composite component class given a class specification.
+	   * See https://facebook.github.io/react/docs/top-level-api.html#react.createclass
+	   *
+	   * @param {object} spec Class specification (which must define `render`).
+	   * @return {function} Component constructor function.
+	   * @public
+	   */
+	  function createClass(spec) {
+	    // To keep our warnings more understandable, we'll use a little hack here to
+	    // ensure that Constructor.name !== 'Constructor'. This makes sure we don't
+	    // unnecessarily identify a class without displayName as 'Constructor'.
+	    var Constructor = identity(function (props, context, updater) {
+	      // This constructor gets overridden by mocks. The argument is used
+	      // by mocks to assert on what gets mounted.
+
+	      if (process.env.NODE_ENV !== 'production') {
+	        process.env.NODE_ENV !== 'production' ? warning(this instanceof Constructor, 'Something is calling a React component directly. Use a factory or ' + 'JSX instead. See: https://fb.me/react-legacyfactory') : void 0;
+	      }
+
+	      // Wire up auto-binding
+	      if (this.__reactAutoBindPairs.length) {
+	        bindAutoBindMethods(this);
+	      }
+
+	      this.props = props;
+	      this.context = context;
+	      this.refs = emptyObject;
+	      this.updater = updater || ReactNoopUpdateQueue;
+
+	      this.state = null;
+
+	      // ReactClasses doesn't have constructors. Instead, they use the
+	      // getInitialState and componentWillMount methods for initialization.
+
+	      var initialState = this.getInitialState ? this.getInitialState() : null;
+	      if (process.env.NODE_ENV !== 'production') {
+	        // We allow auto-mocks to proceed as if they're returning null.
+	        if (initialState === undefined && this.getInitialState._isMockFunction) {
+	          // This is probably bad practice. Consider warning here and
+	          // deprecating this convenience.
+	          initialState = null;
+	        }
+	      }
+	      _invariant(typeof initialState === 'object' && !Array.isArray(initialState), '%s.getInitialState(): must return an object or null', Constructor.displayName || 'ReactCompositeComponent');
+
+	      this.state = initialState;
+	    });
+	    Constructor.prototype = new ReactClassComponent();
+	    Constructor.prototype.constructor = Constructor;
+	    Constructor.prototype.__reactAutoBindPairs = [];
+
+	    injectedMixins.forEach(mixSpecIntoComponent.bind(null, Constructor));
+
+	    mixSpecIntoComponent(Constructor, IsMountedMixin);
+	    mixSpecIntoComponent(Constructor, spec);
+
+	    // Initialize the defaultProps property after all mixins have been merged.
+	    if (Constructor.getDefaultProps) {
+	      Constructor.defaultProps = Constructor.getDefaultProps();
+	    }
+
+	    if (process.env.NODE_ENV !== 'production') {
+	      // This is a tag to indicate that the use of these method names is ok,
+	      // since it's used with createClass. If it's not, then it's likely a
+	      // mistake so we'll warn you to use the static property, property
+	      // initializer or constructor respectively.
+	      if (Constructor.getDefaultProps) {
+	        Constructor.getDefaultProps.isReactClassApproved = {};
+	      }
+	      if (Constructor.prototype.getInitialState) {
+	        Constructor.prototype.getInitialState.isReactClassApproved = {};
+	      }
+	    }
+
+	    _invariant(Constructor.prototype.render, 'createClass(...): Class specification must implement a `render` method.');
+
+	    if (process.env.NODE_ENV !== 'production') {
+	      process.env.NODE_ENV !== 'production' ? warning(!Constructor.prototype.componentShouldUpdate, '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', spec.displayName || 'A component') : void 0;
+	      process.env.NODE_ENV !== 'production' ? warning(!Constructor.prototype.componentWillRecieveProps, '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', spec.displayName || 'A component') : void 0;
+	    }
+
+	    // Reduce time spent doing lookups by setting these on the prototype.
+	    for (var methodName in ReactClassInterface) {
+	      if (!Constructor.prototype[methodName]) {
+	        Constructor.prototype[methodName] = null;
+	      }
+	    }
+
+	    return Constructor;
+	  }
+
+	  return createClass;
+	}
+
+	module.exports = factory;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 626 */
+/***/ function(module, exports) {
+
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+
+	'use strict';
+	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
+
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !==
+					'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (err) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
+		}
+	}
+
+	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 627 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	var emptyObject = {};
+
+	if (process.env.NODE_ENV !== 'production') {
+	  Object.freeze(emptyObject);
+	}
+
+	module.exports = emptyObject;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 628 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63309,24 +65292,33 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(1);
+	var PropTypes = __webpack_require__(593);
+	var createClass = __webpack_require__(624);
 
-	var sizerStyle = { position: 'absolute', top: 0, left: 0, visibility: 'hidden', height: 0, overflow: 'scroll', whiteSpace: 'pre' };
+	var sizerStyle = {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		visibility: 'hidden',
+		height: 0,
+		overflow: 'scroll',
+		whiteSpace: 'pre'
+	};
 
-	var AutosizeInput = React.createClass({
-		displayName: 'AutosizeInput',
-
+	var AutosizeInput = createClass({
 		propTypes: {
-			className: React.PropTypes.string, // className for the outer element
-			defaultValue: React.PropTypes.any, // default field value
-			inputClassName: React.PropTypes.string, // className for the input element
-			inputStyle: React.PropTypes.object, // css styles for the input element
-			minWidth: React.PropTypes.oneOfType([// minimum width for input element
-			React.PropTypes.number, React.PropTypes.string]),
-			onChange: React.PropTypes.func, // onChange handler: function(newValue) {}
-			placeholder: React.PropTypes.string, // placeholder text
-			placeholderIsMinWidth: React.PropTypes.bool, // don't collapse size to less than the placeholder
-			style: React.PropTypes.object, // css styles for the outer element
-			value: React.PropTypes.any },
+			className: PropTypes.string, // className for the outer element
+			defaultValue: PropTypes.any, // default field value
+			inputClassName: PropTypes.string, // className for the input element
+			inputStyle: PropTypes.object, // css styles for the input element
+			minWidth: PropTypes.oneOfType([// minimum width for input element
+			PropTypes.number, PropTypes.string]),
+			onAutosize: PropTypes.func, // onAutosize handler: function(newWidth) {}
+			onChange: PropTypes.func, // onChange handler: function(newValue) {}
+			placeholder: PropTypes.string, // placeholder text
+			placeholderIsMinWidth: PropTypes.bool, // don't collapse size to less than the placeholder
+			style: PropTypes.object, // css styles for the outer element
+			value: PropTypes.any },
 		// field value
 		getDefaultProps: function getDefaultProps() {
 			return {
@@ -63339,44 +65331,64 @@
 			};
 		},
 		componentDidMount: function componentDidMount() {
+			this.mounted = true;
 			this.copyInputStyles();
 			this.updateInputWidth();
 		},
-		componentDidUpdate: function componentDidUpdate() {
+		componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+			if (prevState.inputWidth !== this.state.inputWidth) {
+				if (typeof this.props.onAutosize === 'function') {
+					this.props.onAutosize(this.state.inputWidth);
+				}
+			}
 			this.updateInputWidth();
 		},
+		componentWillUnmount: function componentWillUnmount() {
+			this.mounted = false;
+		},
+		inputRef: function inputRef(el) {
+			this.input = el;
+		},
+		placeHolderSizerRef: function placeHolderSizerRef(el) {
+			this.placeHolderSizer = el;
+		},
+		sizerRef: function sizerRef(el) {
+			this.sizer = el;
+		},
 		copyInputStyles: function copyInputStyles() {
-			if (!this.isMounted() || !window.getComputedStyle) {
+			if (this.mounted || !window.getComputedStyle) {
 				return;
 			}
-			var inputStyle = window.getComputedStyle(this.refs.input);
+			var inputStyle = this.input && window.getComputedStyle(this.input);
 			if (!inputStyle) {
 				return;
 			}
-			var widthNode = this.refs.sizer;
+			var widthNode = this.sizer;
 			widthNode.style.fontSize = inputStyle.fontSize;
 			widthNode.style.fontFamily = inputStyle.fontFamily;
 			widthNode.style.fontWeight = inputStyle.fontWeight;
 			widthNode.style.fontStyle = inputStyle.fontStyle;
 			widthNode.style.letterSpacing = inputStyle.letterSpacing;
+			widthNode.style.textTransform = inputStyle.textTransform;
 			if (this.props.placeholder) {
-				var placeholderNode = this.refs.placeholderSizer;
+				var placeholderNode = this.placeHolderSizer;
 				placeholderNode.style.fontSize = inputStyle.fontSize;
 				placeholderNode.style.fontFamily = inputStyle.fontFamily;
 				placeholderNode.style.fontWeight = inputStyle.fontWeight;
 				placeholderNode.style.fontStyle = inputStyle.fontStyle;
 				placeholderNode.style.letterSpacing = inputStyle.letterSpacing;
+				placeholderNode.style.textTransform = inputStyle.textTransform;
 			}
 		},
 		updateInputWidth: function updateInputWidth() {
-			if (!this.isMounted() || typeof this.refs.sizer.scrollWidth === 'undefined') {
+			if (!this.mounted || !this.sizer || typeof this.sizer.scrollWidth === 'undefined') {
 				return;
 			}
 			var newInputWidth = undefined;
 			if (this.props.placeholder && (!this.props.value || this.props.value && this.props.placeholderIsMinWidth)) {
-				newInputWidth = Math.max(this.refs.sizer.scrollWidth, this.refs.placeholderSizer.scrollWidth) + 2;
+				newInputWidth = Math.max(this.sizer.scrollWidth, this.placeHolderSizer.scrollWidth) + 2;
 			} else {
-				newInputWidth = this.refs.sizer.scrollWidth + 2;
+				newInputWidth = this.sizer.scrollWidth + 2;
 			}
 			if (newInputWidth < this.props.minWidth) {
 				newInputWidth = this.props.minWidth;
@@ -63388,19 +65400,25 @@
 			}
 		},
 		getInput: function getInput() {
-			return this.refs.input;
+			return this.input;
 		},
 		focus: function focus() {
-			this.refs.input.focus();
+			this.input.focus();
 		},
 		blur: function blur() {
-			this.refs.input.blur();
+			this.input.blur();
 		},
 		select: function select() {
-			this.refs.input.select();
+			this.input.select();
 		},
 		render: function render() {
-			var sizerValue = this.props.defaultValue || this.props.value || '';
+			var sizerValue = [this.props.defaultValue, this.props.value, ''].reduce(function (previousValue, currentValue) {
+				if (previousValue !== null && previousValue !== undefined) {
+					return previousValue;
+				}
+				return currentValue;
+			});
+
 			var wrapperStyle = this.props.style || {};
 			if (!wrapperStyle.display) wrapperStyle.display = 'inline-block';
 			var inputStyle = _extends({}, this.props.inputStyle);
@@ -63413,19 +65431,20 @@
 			delete inputProps.inputClassName;
 			delete inputProps.inputStyle;
 			delete inputProps.minWidth;
+			delete inputProps.onAutosize;
 			delete inputProps.placeholderIsMinWidth;
 			return React.createElement(
 				'div',
 				{ className: this.props.className, style: wrapperStyle },
-				React.createElement('input', _extends({}, inputProps, { ref: 'input' })),
+				React.createElement('input', _extends({}, inputProps, { ref: this.inputRef })),
 				React.createElement(
 					'div',
-					{ ref: 'sizer', style: sizerStyle },
+					{ ref: this.sizerRef, style: sizerStyle },
 					sizerValue
 				),
 				this.props.placeholder ? React.createElement(
 					'div',
-					{ ref: 'placeholderSizer', style: sizerStyle },
+					{ ref: this.placeHolderSizerRef, style: sizerStyle },
 					this.props.placeholder
 				) : null
 			);
@@ -63435,7 +65454,7 @@
 	module.exports = AutosizeInput;
 
 /***/ },
-/* 614 */
+/* 629 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -63489,7 +65508,7 @@
 
 
 /***/ },
-/* 615 */
+/* 630 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -63518,14 +65537,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 616 */
+/* 631 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _stripDiacritics = __webpack_require__(617);
+	var _stripDiacritics = __webpack_require__(632);
 
 	var _stripDiacritics2 = _interopRequireDefault(_stripDiacritics);
 
@@ -63565,7 +65584,7 @@
 	module.exports = filterOptions;
 
 /***/ },
-/* 617 */
+/* 632 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -63580,14 +65599,14 @@
 	};
 
 /***/ },
-/* 618 */
+/* 633 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _classnames = __webpack_require__(614);
+	var _classnames = __webpack_require__(629);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -63646,7 +65665,34 @@
 	module.exports = menuRenderer;
 
 /***/ },
-/* 619 */
+/* 634 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+		value: true
+	});
+	exports['default'] = clearRenderer;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function clearRenderer() {
+		return _react2['default'].createElement('span', {
+			className: 'Select-clear',
+			dangerouslySetInnerHTML: { __html: '&times;' }
+		});
+	}
+
+	;
+	module.exports = exports['default'];
+
+/***/ },
+/* 635 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63673,32 +65719,45 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Select = __webpack_require__(612);
+	var _propTypes = __webpack_require__(593);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _Select = __webpack_require__(623);
 
 	var _Select2 = _interopRequireDefault(_Select);
 
-	var _utilsStripDiacritics = __webpack_require__(617);
+	var _utilsStripDiacritics = __webpack_require__(632);
 
 	var _utilsStripDiacritics2 = _interopRequireDefault(_utilsStripDiacritics);
 
 	var propTypes = {
-		autoload: _react2['default'].PropTypes.bool.isRequired, // automatically call the `loadOptions` prop on-mount; defaults to true
-		cache: _react2['default'].PropTypes.any, // object to use to cache results; set to null/false to disable caching
-		children: _react2['default'].PropTypes.func.isRequired, // Child function responsible for creating the inner Select component; (props: Object): PropTypes.element
-		ignoreAccents: _react2['default'].PropTypes.bool, // strip diacritics when filtering; defaults to true
-		ignoreCase: _react2['default'].PropTypes.bool, // perform case-insensitive filtering; defaults to true
-		loadingPlaceholder: _react.PropTypes.string.isRequired, // replaces the placeholder while options are loading
-		loadOptions: _react2['default'].PropTypes.func.isRequired, // callback to load options asynchronously; (inputValue: string, callback: Function): ?Promise
-		options: _react.PropTypes.array.isRequired, // array of options
-		placeholder: _react2['default'].PropTypes.oneOfType([// field placeholder, displayed when there's no value (shared with Select)
-		_react2['default'].PropTypes.string, _react2['default'].PropTypes.node]),
-		searchPromptText: _react2['default'].PropTypes.oneOfType([// label to prompt for search input
-		_react2['default'].PropTypes.string, _react2['default'].PropTypes.node])
-	};
+		autoload: _propTypes2['default'].bool.isRequired, // automatically call the `loadOptions` prop on-mount; defaults to true
+		cache: _propTypes2['default'].any, // object to use to cache results; set to null/false to disable caching
+		children: _propTypes2['default'].func.isRequired, // Child function responsible for creating the inner Select component; (props: Object): PropTypes.element
+		ignoreAccents: _propTypes2['default'].bool, // strip diacritics when filtering; defaults to true
+		ignoreCase: _propTypes2['default'].bool, // perform case-insensitive filtering; defaults to true
+		loadingPlaceholder: _propTypes2['default'].oneOfType([// replaces the placeholder while options are loading
+		_propTypes2['default'].string, _propTypes2['default'].node]),
+		loadOptions: _propTypes2['default'].func.isRequired, // callback to load options asynchronously; (inputValue: string, callback: Function): ?Promise
+		multi: _propTypes2['default'].bool, // multi-value input
+		options: _propTypes2['default'].array.isRequired, // array of options
+		placeholder: _propTypes2['default'].oneOfType([// field placeholder, displayed when there's no value (shared with Select)
+		_propTypes2['default'].string, _propTypes2['default'].node]),
+		noResultsText: _propTypes2['default'].oneOfType([// field noResultsText, displayed when no options come back from the server
+		_propTypes2['default'].string, _propTypes2['default'].node]),
+		onChange: _propTypes2['default'].func, // onChange handler: function (newValue) {}
+		searchPromptText: _propTypes2['default'].oneOfType([// label to prompt for search input
+		_propTypes2['default'].string, _propTypes2['default'].node]),
+		onInputChange: _propTypes2['default'].func, // optional for keeping track of what is being typed
+		value: _propTypes2['default'].any };
+
+	// initial field value
+	var defaultCache = {};
 
 	var defaultProps = {
 		autoload: true,
-		cache: {},
+		cache: defaultCache,
 		children: defaultChildren,
 		ignoreAccents: true,
 		ignoreCase: true,
@@ -63714,6 +65773,8 @@
 			_classCallCheck(this, Async);
 
 			_get(Object.getPrototypeOf(Async.prototype), 'constructor', this).call(this, props, context);
+
+			this._cache = props.cache === defaultCache ? {} : props.cache;
 
 			this.state = {
 				isLoading: false,
@@ -63745,13 +65806,18 @@
 				});
 			}
 		}, {
+			key: 'clearOptions',
+			value: function clearOptions() {
+				this.setState({ options: [] });
+			}
+		}, {
 			key: 'loadOptions',
 			value: function loadOptions(inputValue) {
 				var _this2 = this;
 
-				var _props = this.props;
-				var cache = _props.cache;
-				var loadOptions = _props.loadOptions;
+				var loadOptions = this.props.loadOptions;
+
+				var cache = this._cache;
 
 				if (cache && cache.hasOwnProperty(inputValue)) {
 					this.setState({
@@ -63801,9 +65867,10 @@
 		}, {
 			key: '_onInputChange',
 			value: function _onInputChange(inputValue) {
-				var _props2 = this.props;
-				var ignoreAccents = _props2.ignoreAccents;
-				var ignoreCase = _props2.ignoreCase;
+				var _props = this.props;
+				var ignoreAccents = _props.ignoreAccents;
+				var ignoreCase = _props.ignoreCase;
+				var onInputChange = _props.onInputChange;
 
 				if (ignoreAccents) {
 					inputValue = (0, _utilsStripDiacritics2['default'])(inputValue);
@@ -63813,24 +65880,70 @@
 					inputValue = inputValue.toLowerCase();
 				}
 
+				if (onInputChange) {
+					onInputChange(inputValue);
+				}
+
 				return this.loadOptions(inputValue);
+			}
+		}, {
+			key: 'inputValue',
+			value: function inputValue() {
+				if (this.select) {
+					return this.select.state.inputValue;
+				}
+				return '';
+			}
+		}, {
+			key: 'noResultsText',
+			value: function noResultsText() {
+				var _props2 = this.props;
+				var loadingPlaceholder = _props2.loadingPlaceholder;
+				var noResultsText = _props2.noResultsText;
+				var searchPromptText = _props2.searchPromptText;
+				var isLoading = this.state.isLoading;
+
+				var inputValue = this.inputValue();
+
+				if (isLoading) {
+					return loadingPlaceholder;
+				}
+				if (inputValue && noResultsText) {
+					return noResultsText;
+				}
+				return searchPromptText;
+			}
+		}, {
+			key: 'focus',
+			value: function focus() {
+				this.select.focus();
 			}
 		}, {
 			key: 'render',
 			value: function render() {
+				var _this3 = this;
+
 				var _props3 = this.props;
 				var children = _props3.children;
 				var loadingPlaceholder = _props3.loadingPlaceholder;
 				var placeholder = _props3.placeholder;
-				var searchPromptText = _props3.searchPromptText;
 				var _state = this.state;
 				var isLoading = _state.isLoading;
 				var options = _state.options;
 
 				var props = {
-					noResultsText: isLoading ? loadingPlaceholder : searchPromptText,
+					noResultsText: this.noResultsText(),
 					placeholder: isLoading ? loadingPlaceholder : placeholder,
-					options: isLoading ? [] : options
+					options: isLoading && loadingPlaceholder ? [] : options,
+					ref: function ref(_ref) {
+						return _this3.select = _ref;
+					},
+					onChange: function onChange(newValues) {
+						if (_this3.props.multi && _this3.props.value && newValues.length > _this3.props.value.length) {
+							_this3.clearOptions();
+						}
+						_this3.props.onChange(newValues);
+					}
 				};
 
 				return children(_extends({}, this.props, props, {
@@ -63850,11 +65963,11 @@
 
 	function defaultChildren(props) {
 		return _react2['default'].createElement(_Select2['default'], props);
-	};
+	}
 	module.exports = exports['default'];
 
 /***/ },
-/* 620 */
+/* 636 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63867,12 +65980,30 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Select = __webpack_require__(612);
+	var _createReactClass = __webpack_require__(624);
+
+	var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+	var _Select = __webpack_require__(623);
 
 	var _Select2 = _interopRequireDefault(_Select);
 
-	var AsyncCreatable = _react2['default'].createClass({
+	function reduce(obj) {
+		var props = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+		return Object.keys(obj).reduce(function (props, key) {
+			var value = obj[key];
+			if (value !== undefined) props[key] = value;
+			return props;
+		}, props);
+	}
+
+	var AsyncCreatable = (0, _createReactClass2['default'])({
 		displayName: 'AsyncCreatableSelect',
+
+		focus: function focus() {
+			this.select.focus();
+		},
 
 		render: function render() {
 			var _this = this;
@@ -63885,10 +66016,15 @@
 						_Select2['default'].Creatable,
 						_this.props,
 						function (creatableProps) {
-							return _react2['default'].createElement(_Select2['default'], _extends({}, asyncProps, creatableProps, {
+							return _react2['default'].createElement(_Select2['default'], _extends({}, reduce(asyncProps, reduce(creatableProps, {})), {
 								onInputChange: function (input) {
 									creatableProps.onInputChange(input);
 									return asyncProps.onInputChange(input);
+								},
+								ref: function (ref) {
+									_this.select = ref;
+									creatableProps.ref(ref);
+									asyncProps.ref(ref);
 								}
 							}));
 						}
@@ -63901,7 +66037,7 @@
 	module.exports = AsyncCreatable;
 
 /***/ },
-/* 621 */
+/* 637 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63916,55 +66052,72 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Select = __webpack_require__(612);
+	var _createReactClass = __webpack_require__(624);
+
+	var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+	var _propTypes = __webpack_require__(593);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _Select = __webpack_require__(623);
 
 	var _Select2 = _interopRequireDefault(_Select);
 
-	var _utilsDefaultFilterOptions = __webpack_require__(616);
+	var _utilsDefaultFilterOptions = __webpack_require__(631);
 
 	var _utilsDefaultFilterOptions2 = _interopRequireDefault(_utilsDefaultFilterOptions);
 
-	var _utilsDefaultMenuRenderer = __webpack_require__(618);
+	var _utilsDefaultMenuRenderer = __webpack_require__(633);
 
 	var _utilsDefaultMenuRenderer2 = _interopRequireDefault(_utilsDefaultMenuRenderer);
 
-	var Creatable = _react2['default'].createClass({
+	var Creatable = (0, _createReactClass2['default'])({
 		displayName: 'CreatableSelect',
 
 		propTypes: {
 			// Child function responsible for creating the inner Select component
 			// This component can be used to compose HOCs (eg Creatable and Async)
 			// (props: Object): PropTypes.element
-			children: _react2['default'].PropTypes.func,
+			children: _propTypes2['default'].func,
 
 			// See Select.propTypes.filterOptions
-			filterOptions: _react2['default'].PropTypes.any,
+			filterOptions: _propTypes2['default'].any,
 
 			// Searches for any matching option within the set of options.
 			// This function prevents duplicate options from being created.
 			// ({ option: Object, options: Array, labelKey: string, valueKey: string }): boolean
-			isOptionUnique: _react2['default'].PropTypes.func,
+			isOptionUnique: _propTypes2['default'].func,
 
 			// Determines if the current input text represents a valid option.
 			// ({ label: string }): boolean
-			isValidNewOption: _react2['default'].PropTypes.func,
+			isValidNewOption: _propTypes2['default'].func,
 
 			// See Select.propTypes.menuRenderer
-			menuRenderer: _react2['default'].PropTypes.any,
+			menuRenderer: _propTypes2['default'].any,
 
 			// Factory to create new option.
 			// ({ label: string, labelKey: string, valueKey: string }): Object
-			newOptionCreator: _react2['default'].PropTypes.func,
+			newOptionCreator: _propTypes2['default'].func,
+
+			// input change handler: function (inputValue) {}
+			onInputChange: _propTypes2['default'].func,
+
+			// input keyDown handler: function (event) {}
+			onInputKeyDown: _propTypes2['default'].func,
+
+			// new option click handler: function (option) {}
+			onNewOptionClick: _propTypes2['default'].func,
 
 			// See Select.propTypes.options
-			options: _react2['default'].PropTypes.array,
+			options: _propTypes2['default'].array,
 
 			// Creates prompt/placeholder option text.
 			// (filterText: string): string
-			promptTextCreator: _react2['default'].PropTypes.func,
+			promptTextCreator: _propTypes2['default'].func,
 
 			// Decides if a keyDown event (eg its `keyCode`) should result in the creation of a new option.
-			shouldKeyDownEventCreateNewOption: _react2['default'].PropTypes.func
+			shouldKeyDownEventCreateNewOption: _propTypes2['default'].func
 		},
 
 		// Default prop methods
@@ -63992,6 +66145,7 @@
 			var _props = this.props;
 			var isValidNewOption = _props.isValidNewOption;
 			var newOptionCreator = _props.newOptionCreator;
+			var onNewOptionClick = _props.onNewOptionClick;
 			var _props$options = _props.options;
 			var options = _props$options === undefined ? [] : _props$options;
 			var shouldKeyDownEventCreateNewOption = _props.shouldKeyDownEventCreateNewOption;
@@ -64002,9 +66156,13 @@
 
 				// Don't add the same option twice.
 				if (_isOptionUnique) {
-					options.unshift(option);
+					if (onNewOptionClick) {
+						onNewOptionClick(option);
+					} else {
+						options.unshift(option);
 
-					this.select.selectValue(option);
+						this.select.selectValue(option);
+					}
 				}
 			}
 		},
@@ -64074,17 +66232,26 @@
 			var menuRenderer = this.props.menuRenderer;
 
 			return menuRenderer(_extends({}, params, {
-				onSelect: this.onOptionSelect
+				onSelect: this.onOptionSelect,
+				selectValue: this.onOptionSelect
 			}));
 		},
 
 		onInputChange: function onInputChange(input) {
+			var onInputChange = this.props.onInputChange;
+
+			if (onInputChange) {
+				onInputChange(input);
+			}
+
 			// This value may be needed in between Select mounts (when this.select is null)
 			this.inputValue = input;
 		},
 
 		onInputKeyDown: function onInputKeyDown(event) {
-			var shouldKeyDownEventCreateNewOption = this.props.shouldKeyDownEventCreateNewOption;
+			var _props3 = this.props;
+			var shouldKeyDownEventCreateNewOption = _props3.shouldKeyDownEventCreateNewOption;
+			var onInputKeyDown = _props3.onInputKeyDown;
 
 			var focusedOption = this.select.getFocusedOption();
 
@@ -64093,6 +66260,8 @@
 
 				// Prevent decorated Select from doing anything additional with this keyDown event
 				event.preventDefault();
+			} else if (onInputKeyDown) {
+				onInputKeyDown(event);
 			}
 		},
 
@@ -64104,16 +66273,27 @@
 			}
 		},
 
+		focus: function focus() {
+			this.select.focus();
+		},
+
 		render: function render() {
 			var _this = this;
 
-			var _props3 = this.props;
-			var _props3$children = _props3.children;
-			var children = _props3$children === undefined ? defaultChildren : _props3$children;
-			var newOptionCreator = _props3.newOptionCreator;
-			var shouldKeyDownEventCreateNewOption = _props3.shouldKeyDownEventCreateNewOption;
+			var _props4 = this.props;
+			var newOptionCreator = _props4.newOptionCreator;
+			var shouldKeyDownEventCreateNewOption = _props4.shouldKeyDownEventCreateNewOption;
 
-			var restProps = _objectWithoutProperties(_props3, ['children', 'newOptionCreator', 'shouldKeyDownEventCreateNewOption']);
+			var restProps = _objectWithoutProperties(_props4, ['newOptionCreator', 'shouldKeyDownEventCreateNewOption']);
+
+			var children = this.props.children;
+
+			// We can't use destructuring default values to set the children,
+			// because it won't apply work if `children` is null. A falsy check is
+			// more reliable in real world use-cases.
+			if (!children) {
+				children = defaultChildren;
+			}
 
 			var props = _extends({}, restProps, {
 				allowCreate: true,
@@ -64190,7 +66370,7 @@
 	module.exports = Creatable;
 
 /***/ },
-/* 622 */
+/* 638 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -64201,25 +66381,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(614);
+	var _createReactClass = __webpack_require__(624);
+
+	var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+	var _propTypes = __webpack_require__(593);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _classnames = __webpack_require__(629);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var Option = _react2['default'].createClass({
-		displayName: 'Option',
-
+	var Option = (0, _createReactClass2['default'])({
 		propTypes: {
-			children: _react2['default'].PropTypes.node,
-			className: _react2['default'].PropTypes.string, // className (based on mouse position)
-			instancePrefix: _react2['default'].PropTypes.string.isRequired, // unique prefix for the ids (used for aria)
-			isDisabled: _react2['default'].PropTypes.bool, // the option is disabled
-			isFocused: _react2['default'].PropTypes.bool, // the option is focused
-			isSelected: _react2['default'].PropTypes.bool, // the option is selected
-			onFocus: _react2['default'].PropTypes.func, // method to handle mouseEnter on option element
-			onSelect: _react2['default'].PropTypes.func, // method to handle click on option element
-			onUnfocus: _react2['default'].PropTypes.func, // method to handle mouseLeave on option element
-			option: _react2['default'].PropTypes.object.isRequired, // object that is base for that option
-			optionIndex: _react2['default'].PropTypes.number },
+			children: _propTypes2['default'].node,
+			className: _propTypes2['default'].string, // className (based on mouse position)
+			instancePrefix: _propTypes2['default'].string.isRequired, // unique prefix for the ids (used for aria)
+			isDisabled: _propTypes2['default'].bool, // the option is disabled
+			isFocused: _propTypes2['default'].bool, // the option is focused
+			isSelected: _propTypes2['default'].bool, // the option is selected
+			onFocus: _propTypes2['default'].func, // method to handle mouseEnter on option element
+			onSelect: _propTypes2['default'].func, // method to handle click on option element
+			onUnfocus: _propTypes2['default'].func, // method to handle mouseLeave on option element
+			option: _propTypes2['default'].object.isRequired, // object that is base for that option
+			optionIndex: _propTypes2['default'].number },
 		// index of the option, used to generate unique ids for aria
 		blockEvent: function blockEvent(event) {
 			event.preventDefault();
@@ -64306,7 +66492,7 @@
 	module.exports = Option;
 
 /***/ },
-/* 623 */
+/* 639 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -64317,21 +66503,29 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(614);
+	var _createReactClass = __webpack_require__(624);
+
+	var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+	var _propTypes = __webpack_require__(593);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _classnames = __webpack_require__(629);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var Value = _react2['default'].createClass({
+	var Value = (0, _createReactClass2['default'])({
 
 		displayName: 'Value',
 
 		propTypes: {
-			children: _react2['default'].PropTypes.node,
-			disabled: _react2['default'].PropTypes.bool, // disabled prop passed to ReactSelect
-			id: _react2['default'].PropTypes.string, // Unique id for the value - used for aria
-			onClick: _react2['default'].PropTypes.func, // method to handle click on value label
-			onRemove: _react2['default'].PropTypes.func, // method to handle removal of the value
-			value: _react2['default'].PropTypes.object.isRequired },
+			children: _propTypes2['default'].node,
+			disabled: _propTypes2['default'].bool, // disabled prop passed to ReactSelect
+			id: _propTypes2['default'].string, // Unique id for the value - used for aria
+			onClick: _propTypes2['default'].func, // method to handle click on value label
+			onRemove: _propTypes2['default'].func, // method to handle removal of the value
+			value: _propTypes2['default'].object.isRequired },
 
 		// the option object for this value
 		handleMouseDown: function handleMouseDown(event) {
@@ -64417,11 +66611,11 @@
 	module.exports = Value;
 
 /***/ },
-/* 624 */
+/* 640 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
-	//! version : 2.17.1
+	//! version : 2.18.1
 	//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 	//! license : MIT
 	//! momentjs.com
@@ -64461,6 +66655,10 @@
 	        return false;
 	    }
 	    return true;
+	}
+
+	function isUndefined(input) {
+	    return input === void 0;
 	}
 
 	function isNumber(input) {
@@ -64519,7 +66717,9 @@
 	        userInvalidated : false,
 	        iso             : false,
 	        parsedDateParts : [],
-	        meridiem        : null
+	        meridiem        : null,
+	        rfc2822         : false,
+	        weekdayMismatch : false
 	    };
 	}
 
@@ -64595,10 +66795,6 @@
 	    return m;
 	}
 
-	function isUndefined(input) {
-	    return input === void 0;
-	}
-
 	// Plugins that add properties should also add the key here (null value),
 	// so we can properly clone ourselves.
 	var momentProperties = hooks.momentProperties = [];
@@ -64638,7 +66834,7 @@
 	    }
 
 	    if (momentProperties.length > 0) {
-	        for (i in momentProperties) {
+	        for (i = 0; i < momentProperties.length; i++) {
 	            prop = momentProperties[i];
 	            val = from[prop];
 	            if (!isUndefined(val)) {
@@ -64775,8 +66971,11 @@
 	    }
 	    this._config = config;
 	    // Lenient ordinal parsing accepts just a number in addition to
-	    // number + (possibly) stuff coming from _ordinalParseLenient.
-	    this._ordinalParseLenient = new RegExp(this._ordinalParse.source + '|' + (/\d{1,2}/).source);
+	    // number + (possibly) stuff coming from _dayOfMonthOrdinalParse.
+	    // TODO: Remove "ordinalParse" fallback in next major release.
+	    this._dayOfMonthOrdinalParseLenient = new RegExp(
+	        (this._dayOfMonthOrdinalParse.source || this._ordinalParse.source) +
+	            '|' + (/\d{1,2}/).source);
 	}
 
 	function mergeConfigs(parentConfig, childConfig) {
@@ -64874,7 +67073,7 @@
 	}
 
 	var defaultOrdinal = '%d';
-	var defaultOrdinalParse = /\d{1,2}/;
+	var defaultDayOfMonthOrdinalParse = /\d{1,2}/;
 
 	function ordinal (number) {
 	    return this._ordinal.replace('%d', number);
@@ -64884,6 +67083,7 @@
 	    future : 'in %s',
 	    past   : '%s ago',
 	    s  : 'a few seconds',
+	    ss : '%d seconds',
 	    m  : 'a minute',
 	    mm : '%d minutes',
 	    h  : 'an hour',
@@ -65066,7 +67266,7 @@
 	    return function (mom) {
 	        var output = '', i;
 	        for (i = 0; i < length; i++) {
-	            output += array[i] instanceof Function ? array[i].call(mom, format) : array[i];
+	            output += isFunction(array[i]) ? array[i].call(mom, format) : array[i];
 	        }
 	        return output;
 	    };
@@ -65269,7 +67469,8 @@
 	var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
 	function localeMonths (m, format) {
 	    if (!m) {
-	        return this._months;
+	        return isArray(this._months) ? this._months :
+	            this._months['standalone'];
 	    }
 	    return isArray(this._months) ? this._months[m.month()] :
 	        this._months[(this._months.isFormat || MONTHS_IN_FORMAT).test(format) ? 'format' : 'standalone'][m.month()];
@@ -65278,7 +67479,8 @@
 	var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
 	function localeMonthsShort (m, format) {
 	    if (!m) {
-	        return this._monthsShort;
+	        return isArray(this._monthsShort) ? this._monthsShort :
+	            this._monthsShort['standalone'];
 	    }
 	    return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
 	        this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
@@ -65545,11 +67747,11 @@
 	}
 
 	function createDate (y, m, d, h, M, s, ms) {
-	    //can't just apply() to create a date:
-	    //http://stackoverflow.com/questions/181348/instantiating-a-javascript-object-by-calling-prototype-constructor-apply
+	    // can't just apply() to create a date:
+	    // https://stackoverflow.com/q/181348
 	    var date = new Date(y, m, d, h, M, s, ms);
 
-	    //the date constructor remaps years 0-99 to 1900-1999
+	    // the date constructor remaps years 0-99 to 1900-1999
 	    if (y < 100 && y >= 0 && isFinite(date.getFullYear())) {
 	        date.setFullYear(y);
 	    }
@@ -65559,7 +67761,7 @@
 	function createUTCDate (y) {
 	    var date = new Date(Date.UTC.apply(null, arguments));
 
-	    //the Date.UTC function remaps years 0-99 to 1900-1999
+	    // the Date.UTC function remaps years 0-99 to 1900-1999
 	    if (y < 100 && y >= 0 && isFinite(date.getUTCFullYear())) {
 	        date.setUTCFullYear(y);
 	    }
@@ -65576,7 +67778,7 @@
 	    return -fwdlw + fwd - 1;
 	}
 
-	//http://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
+	// https://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
 	function dayOfYearFromWeeks(year, week, weekday, dow, doy) {
 	    var localWeekday = (7 + weekday - dow) % 7,
 	        weekOffset = firstWeekOffset(year, dow, doy),
@@ -65777,7 +67979,8 @@
 	var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
 	function localeWeekdays (m, format) {
 	    if (!m) {
-	        return this._weekdays;
+	        return isArray(this._weekdays) ? this._weekdays :
+	            this._weekdays['standalone'];
 	    }
 	    return isArray(this._weekdays) ? this._weekdays[m.day()] :
 	        this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
@@ -66097,8 +68300,10 @@
 	addRegexToken('A',  matchMeridiem);
 	addRegexToken('H',  match1to2);
 	addRegexToken('h',  match1to2);
+	addRegexToken('k',  match1to2);
 	addRegexToken('HH', match1to2, match2);
 	addRegexToken('hh', match1to2, match2);
+	addRegexToken('kk', match1to2, match2);
 
 	addRegexToken('hmm', match3to4);
 	addRegexToken('hmmss', match5to6);
@@ -66106,6 +68311,10 @@
 	addRegexToken('Hmmss', match5to6);
 
 	addParseToken(['H', 'HH'], HOUR);
+	addParseToken(['k', 'kk'], function (input, array, config) {
+	    var kInput = toInt(input);
+	    array[HOUR] = kInput === 24 ? 0 : kInput;
+	});
 	addParseToken(['a', 'A'], function (input, array, config) {
 	    config._isPm = config._locale.isPM(input);
 	    config._meridiem = input;
@@ -66176,7 +68385,7 @@
 	    longDateFormat: defaultLongDateFormat,
 	    invalidDate: defaultInvalidDate,
 	    ordinal: defaultOrdinal,
-	    ordinalParse: defaultOrdinalParse,
+	    dayOfMonthOrdinalParse: defaultDayOfMonthOrdinalParse,
 	    relativeTime: defaultRelativeTime,
 
 	    months: defaultLocaleMonths,
@@ -66234,7 +68443,7 @@
 	            module && module.exports) {
 	        try {
 	            oldLocale = globalLocale._abbr;
-	            __webpack_require__(626)("./" + name);
+	            __webpack_require__(642)("./" + name);
 	            // because defineLocale currently also sets the global locale, we
 	            // want to undo that for lazy loaded locales
 	            getSetGlobalLocale(oldLocale);
@@ -66487,6 +68696,77 @@
 	    }
 	}
 
+	// RFC 2822 regex: For details see https://tools.ietf.org/html/rfc2822#section-3.3
+	var basicRfcRegex = /^((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d?\d\s(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(?:\d\d)?\d\d\s)(\d\d:\d\d)(\:\d\d)?(\s(?:UT|GMT|[ECMP][SD]T|[A-IK-Za-ik-z]|[+-]\d{4}))$/;
+
+	// date and time from ref 2822 format
+	function configFromRFC2822(config) {
+	    var string, match, dayFormat,
+	        dateFormat, timeFormat, tzFormat;
+	    var timezones = {
+	        ' GMT': ' +0000',
+	        ' EDT': ' -0400',
+	        ' EST': ' -0500',
+	        ' CDT': ' -0500',
+	        ' CST': ' -0600',
+	        ' MDT': ' -0600',
+	        ' MST': ' -0700',
+	        ' PDT': ' -0700',
+	        ' PST': ' -0800'
+	    };
+	    var military = 'YXWVUTSRQPONZABCDEFGHIKLM';
+	    var timezone, timezoneIndex;
+
+	    string = config._i
+	        .replace(/\([^\)]*\)|[\n\t]/g, ' ') // Remove comments and folding whitespace
+	        .replace(/(\s\s+)/g, ' ') // Replace multiple-spaces with a single space
+	        .replace(/^\s|\s$/g, ''); // Remove leading and trailing spaces
+	    match = basicRfcRegex.exec(string);
+
+	    if (match) {
+	        dayFormat = match[1] ? 'ddd' + ((match[1].length === 5) ? ', ' : ' ') : '';
+	        dateFormat = 'D MMM ' + ((match[2].length > 10) ? 'YYYY ' : 'YY ');
+	        timeFormat = 'HH:mm' + (match[4] ? ':ss' : '');
+
+	        // TODO: Replace the vanilla JS Date object with an indepentent day-of-week check.
+	        if (match[1]) { // day of week given
+	            var momentDate = new Date(match[2]);
+	            var momentDay = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][momentDate.getDay()];
+
+	            if (match[1].substr(0,3) !== momentDay) {
+	                getParsingFlags(config).weekdayMismatch = true;
+	                config._isValid = false;
+	                return;
+	            }
+	        }
+
+	        switch (match[5].length) {
+	            case 2: // military
+	                if (timezoneIndex === 0) {
+	                    timezone = ' +0000';
+	                } else {
+	                    timezoneIndex = military.indexOf(match[5][1].toUpperCase()) - 12;
+	                    timezone = ((timezoneIndex < 0) ? ' -' : ' +') +
+	                        (('' + timezoneIndex).replace(/^-?/, '0')).match(/..$/)[0] + '00';
+	                }
+	                break;
+	            case 4: // Zone
+	                timezone = timezones[match[5]];
+	                break;
+	            default: // UT or +/-9999
+	                timezone = timezones[' GMT'];
+	        }
+	        match[5] = timezone;
+	        config._i = match.splice(1).join('');
+	        tzFormat = ' ZZ';
+	        config._f = dayFormat + dateFormat + timeFormat + tzFormat;
+	        configFromStringAndFormat(config);
+	        getParsingFlags(config).rfc2822 = true;
+	    } else {
+	        config._isValid = false;
+	    }
+	}
+
 	// date from iso format or fallback
 	function configFromString(config) {
 	    var matched = aspNetJsonRegex.exec(config._i);
@@ -66499,13 +68779,24 @@
 	    configFromISO(config);
 	    if (config._isValid === false) {
 	        delete config._isValid;
-	        hooks.createFromInputFallback(config);
+	    } else {
+	        return;
 	    }
+
+	    configFromRFC2822(config);
+	    if (config._isValid === false) {
+	        delete config._isValid;
+	    } else {
+	        return;
+	    }
+
+	    // Final attempt, use Input Fallback
+	    hooks.createFromInputFallback(config);
 	}
 
 	hooks.createFromInputFallback = deprecate(
-	    'value provided is not in a recognized ISO format. moment construction falls back to js Date(), ' +
-	    'which is not reliable across all browsers and versions. Non ISO date formats are ' +
+	    'value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), ' +
+	    'which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are ' +
 	    'discouraged and will be removed in an upcoming major release. Please refer to ' +
 	    'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
 	    function (config) {
@@ -66552,10 +68843,10 @@
 	    }
 
 	    //if the day of the year is set, figure out what it is
-	    if (config._dayOfYear) {
+	    if (config._dayOfYear != null) {
 	        yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
 
-	        if (config._dayOfYear > daysInYear(yearToUse)) {
+	        if (config._dayOfYear > daysInYear(yearToUse) || config._dayOfYear === 0) {
 	            getParsingFlags(config)._overflowDayOfYear = true;
 	        }
 
@@ -66659,6 +68950,9 @@
 	// constant that refers to the ISO standard
 	hooks.ISO_8601 = function () {};
 
+	// constant that refers to the RFC 2822 form
+	hooks.RFC_2822 = function () {};
+
 	// date from string and format string
 	function configFromStringAndFormat(config) {
 	    // TODO: Move this to another part of the creation flow to prevent circular deps
@@ -66666,7 +68960,10 @@
 	        configFromISO(config);
 	        return;
 	    }
-
+	    if (config._f === hooks.RFC_2822) {
+	        configFromRFC2822(config);
+	        return;
+	    }
 	    config._a = [];
 	    getParsingFlags(config).empty = true;
 
@@ -66858,7 +69155,7 @@
 
 	function configFromInput(config) {
 	    var input = config._i;
-	    if (input === undefined) {
+	    if (isUndefined(input)) {
 	        config._d = new Date(hooks.now());
 	    } else if (isDate(input)) {
 	        config._d = new Date(input.valueOf());
@@ -66869,7 +69166,7 @@
 	            return parseInt(obj, 10);
 	        });
 	        configFromArray(config);
-	    } else if (typeof(input) === 'object') {
+	    } else if (isObject(input)) {
 	        configFromObject(config);
 	    } else if (isNumber(input)) {
 	        // from milliseconds
@@ -66970,6 +69267,38 @@
 	    return Date.now ? Date.now() : +(new Date());
 	};
 
+	var ordering = ['year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond'];
+
+	function isDurationValid(m) {
+	    for (var key in m) {
+	        if (!(ordering.indexOf(key) !== -1 && (m[key] == null || !isNaN(m[key])))) {
+	            return false;
+	        }
+	    }
+
+	    var unitHasDecimal = false;
+	    for (var i = 0; i < ordering.length; ++i) {
+	        if (m[ordering[i]]) {
+	            if (unitHasDecimal) {
+	                return false; // only allow non-integers for smallest unit
+	            }
+	            if (parseFloat(m[ordering[i]]) !== toInt(m[ordering[i]])) {
+	                unitHasDecimal = true;
+	            }
+	        }
+	    }
+
+	    return true;
+	}
+
+	function isValid$1() {
+	    return this._isValid;
+	}
+
+	function createInvalid$1() {
+	    return createDuration(NaN);
+	}
+
 	function Duration (duration) {
 	    var normalizedInput = normalizeObjectUnits(duration),
 	        years = normalizedInput.year || 0,
@@ -66981,6 +69310,8 @@
 	        minutes = normalizedInput.minute || 0,
 	        seconds = normalizedInput.second || 0,
 	        milliseconds = normalizedInput.millisecond || 0;
+
+	    this._isValid = isDurationValid(normalizedInput);
 
 	    // representation for dateAddRemove
 	    this._milliseconds = +milliseconds +
@@ -67105,7 +69436,7 @@
 	// a second time. In case it wants us to change the offset again
 	// _changeInProgress == true case, then we have to adjust, because
 	// there is no such time in the given timezone.
-	function getSetOffset (input, keepLocalTime) {
+	function getSetOffset (input, keepLocalTime, keepMinutes) {
 	    var offset = this._offset || 0,
 	        localAdjust;
 	    if (!this.isValid()) {
@@ -67117,7 +69448,7 @@
 	            if (input === null) {
 	                return this;
 	            }
-	        } else if (Math.abs(input) < 16) {
+	        } else if (Math.abs(input) < 16 && !keepMinutes) {
 	            input = input * 60;
 	        }
 	        if (!this._isUTC && keepLocalTime) {
@@ -67175,7 +69506,7 @@
 
 	function setOffsetToParsedOffset () {
 	    if (this._tzm != null) {
-	        this.utcOffset(this._tzm);
+	        this.utcOffset(this._tzm, false, true);
 	    } else if (typeof this._i === 'string') {
 	        var tZone = offsetFromString(matchOffset, this._i);
 	        if (tZone != null) {
@@ -67307,6 +69638,7 @@
 	}
 
 	createDuration.fn = Duration.prototype;
+	createDuration.invalid = createInvalid$1;
 
 	function parseIso (inp, sign) {
 	    // We'd normally use ~~inp for this, but unfortunately it also
@@ -67543,18 +69875,19 @@
 	    return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
 	}
 
-	function toISOString () {
+	function toISOString() {
+	    if (!this.isValid()) {
+	        return null;
+	    }
 	    var m = this.clone().utc();
-	    if (0 < m.year() && m.year() <= 9999) {
-	        if (isFunction(Date.prototype.toISOString)) {
-	            // native implementation is ~50x faster, use it when we can
-	            return this.toDate().toISOString();
-	        } else {
-	            return formatMoment(m, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
-	        }
-	    } else {
+	    if (m.year() < 0 || m.year() > 9999) {
 	        return formatMoment(m, 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
 	    }
+	    if (isFunction(Date.prototype.toISOString)) {
+	        // native implementation is ~50x faster, use it when we can
+	        return this.toDate().toISOString();
+	    }
+	    return formatMoment(m, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
 	}
 
 	/**
@@ -67574,7 +69907,7 @@
 	        zone = 'Z';
 	    }
 	    var prefix = '[' + func + '("]';
-	    var year = (0 < this.year() && this.year() <= 9999) ? 'YYYY' : 'YYYYYY';
+	    var year = (0 <= this.year() && this.year() <= 9999) ? 'YYYY' : 'YYYYYY';
 	    var datetime = '-MM-DD[T]HH:mm:ss.SSS';
 	    var suffix = zone + '[")]';
 
@@ -67742,7 +70075,7 @@
 	    return this.isValid() ? this.toISOString() : null;
 	}
 
-	function isValid$1 () {
+	function isValid$2 () {
 	    return isValid(this);
 	}
 
@@ -67902,7 +70235,10 @@
 	addRegexToken('D',  match1to2);
 	addRegexToken('DD', match1to2, match2);
 	addRegexToken('Do', function (isStrict, locale) {
-	    return isStrict ? locale._ordinalParse : locale._ordinalParseLenient;
+	    // TODO: Remove "ordinalParse" fallback in next major release.
+	    return isStrict ?
+	      (locale._dayOfMonthOrdinalParse || locale._ordinalParse) :
+	      locale._dayOfMonthOrdinalParseLenient;
 	});
 
 	addParseToken(['D', 'DD'], DATE);
@@ -68082,7 +70418,7 @@
 	proto.isSame            = isSame;
 	proto.isSameOrAfter     = isSameOrAfter;
 	proto.isSameOrBefore    = isSameOrBefore;
-	proto.isValid           = isValid$1;
+	proto.isValid           = isValid$2;
 	proto.lang              = lang;
 	proto.locale            = locale;
 	proto.localeData        = localeData;
@@ -68307,7 +70643,7 @@
 	}
 
 	getSetGlobalLocale('en', {
-	    ordinalParse: /\d{1,2}(th|st|nd|rd)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(th|st|nd|rd)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (toInt(number % 100 / 10) === 1) ? 'th' :
@@ -68428,6 +70764,9 @@
 	}
 
 	function as (units) {
+	    if (!this.isValid()) {
+	        return NaN;
+	    }
 	    var days;
 	    var months;
 	    var milliseconds = this._milliseconds;
@@ -68456,6 +70795,9 @@
 
 	// TODO: Use this.as('ms')?
 	function valueOf$1 () {
+	    if (!this.isValid()) {
+	        return NaN;
+	    }
 	    return (
 	        this._milliseconds +
 	        this._days * 864e5 +
@@ -68481,12 +70823,12 @@
 
 	function get$2 (units) {
 	    units = normalizeUnits(units);
-	    return this[units + 's']();
+	    return this.isValid() ? this[units + 's']() : NaN;
 	}
 
 	function makeGetter(name) {
 	    return function () {
-	        return this._data[name];
+	        return this.isValid() ? this._data[name] : NaN;
 	    };
 	}
 
@@ -68504,11 +70846,12 @@
 
 	var round = Math.round;
 	var thresholds = {
-	    s: 45,  // seconds to minute
-	    m: 45,  // minutes to hour
-	    h: 22,  // hours to day
-	    d: 26,  // days to month
-	    M: 11   // months to year
+	    ss: 44,         // a few seconds to seconds
+	    s : 45,         // seconds to minute
+	    m : 45,         // minutes to hour
+	    h : 22,         // hours to day
+	    d : 26,         // days to month
+	    M : 11          // months to year
 	};
 
 	// helper function for moment.fn.from, moment.fn.fromNow, and moment.duration.fn.humanize
@@ -68525,16 +70868,17 @@
 	    var months   = round(duration.as('M'));
 	    var years    = round(duration.as('y'));
 
-	    var a = seconds < thresholds.s && ['s', seconds]  ||
-	            minutes <= 1           && ['m']           ||
-	            minutes < thresholds.m && ['mm', minutes] ||
-	            hours   <= 1           && ['h']           ||
-	            hours   < thresholds.h && ['hh', hours]   ||
-	            days    <= 1           && ['d']           ||
-	            days    < thresholds.d && ['dd', days]    ||
-	            months  <= 1           && ['M']           ||
-	            months  < thresholds.M && ['MM', months]  ||
-	            years   <= 1           && ['y']           || ['yy', years];
+	    var a = seconds <= thresholds.ss && ['s', seconds]  ||
+	            seconds < thresholds.s   && ['ss', seconds] ||
+	            minutes <= 1             && ['m']           ||
+	            minutes < thresholds.m   && ['mm', minutes] ||
+	            hours   <= 1             && ['h']           ||
+	            hours   < thresholds.h   && ['hh', hours]   ||
+	            days    <= 1             && ['d']           ||
+	            days    < thresholds.d   && ['dd', days]    ||
+	            months  <= 1             && ['M']           ||
+	            months  < thresholds.M   && ['MM', months]  ||
+	            years   <= 1             && ['y']           || ['yy', years];
 
 	    a[2] = withoutSuffix;
 	    a[3] = +posNegDuration > 0;
@@ -68563,10 +70907,17 @@
 	        return thresholds[threshold];
 	    }
 	    thresholds[threshold] = limit;
+	    if (threshold === 's') {
+	        thresholds.ss = limit - 1;
+	    }
 	    return true;
 	}
 
 	function humanize (withSuffix) {
+	    if (!this.isValid()) {
+	        return this.localeData().invalidDate();
+	    }
+
 	    var locale = this.localeData();
 	    var output = relativeTime$1(this, !withSuffix, locale);
 
@@ -68587,6 +70938,10 @@
 	    // This is because there is no context-free conversion between hours and days
 	    // (think of clock changes)
 	    // and also not between days and months (28-31 days per month)
+	    if (!this.isValid()) {
+	        return this.localeData().invalidDate();
+	    }
+
 	    var seconds = abs$1(this._milliseconds) / 1000;
 	    var days         = abs$1(this._days);
 	    var months       = abs$1(this._months);
@@ -68631,6 +70986,7 @@
 
 	var proto$2 = Duration.prototype;
 
+	proto$2.isValid        = isValid$1;
 	proto$2.abs            = abs;
 	proto$2.add            = add$1;
 	proto$2.subtract       = subtract$1;
@@ -68686,7 +71042,7 @@
 	// Side effect imports
 
 
-	hooks.version = '2.17.1';
+	hooks.version = '2.18.1';
 
 	setHookCallback(createLocal);
 
@@ -68722,10 +71078,10 @@
 
 	})));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(625)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(641)(module)))
 
 /***/ },
-/* 625 */
+/* 641 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -68741,226 +71097,240 @@
 
 
 /***/ },
-/* 626 */
+/* 642 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./af": 627,
-		"./af.js": 627,
-		"./ar": 628,
-		"./ar-dz": 629,
-		"./ar-dz.js": 629,
-		"./ar-ly": 630,
-		"./ar-ly.js": 630,
-		"./ar-ma": 631,
-		"./ar-ma.js": 631,
-		"./ar-sa": 632,
-		"./ar-sa.js": 632,
-		"./ar-tn": 633,
-		"./ar-tn.js": 633,
-		"./ar.js": 628,
-		"./az": 634,
-		"./az.js": 634,
-		"./be": 635,
-		"./be.js": 635,
-		"./bg": 636,
-		"./bg.js": 636,
-		"./bn": 637,
-		"./bn.js": 637,
-		"./bo": 638,
-		"./bo.js": 638,
-		"./br": 639,
-		"./br.js": 639,
-		"./bs": 640,
-		"./bs.js": 640,
-		"./ca": 641,
-		"./ca.js": 641,
-		"./cs": 642,
-		"./cs.js": 642,
-		"./cv": 643,
-		"./cv.js": 643,
-		"./cy": 644,
-		"./cy.js": 644,
-		"./da": 645,
-		"./da.js": 645,
-		"./de": 646,
-		"./de-at": 647,
-		"./de-at.js": 647,
-		"./de.js": 646,
-		"./dv": 648,
-		"./dv.js": 648,
-		"./el": 649,
-		"./el.js": 649,
-		"./en-au": 650,
-		"./en-au.js": 650,
-		"./en-ca": 651,
-		"./en-ca.js": 651,
-		"./en-gb": 652,
-		"./en-gb.js": 652,
-		"./en-ie": 653,
-		"./en-ie.js": 653,
-		"./en-nz": 654,
-		"./en-nz.js": 654,
-		"./eo": 655,
-		"./eo.js": 655,
-		"./es": 656,
-		"./es-do": 657,
-		"./es-do.js": 657,
-		"./es.js": 656,
-		"./et": 658,
-		"./et.js": 658,
-		"./eu": 659,
-		"./eu.js": 659,
-		"./fa": 660,
-		"./fa.js": 660,
-		"./fi": 661,
-		"./fi.js": 661,
-		"./fo": 662,
-		"./fo.js": 662,
-		"./fr": 663,
-		"./fr-ca": 664,
-		"./fr-ca.js": 664,
-		"./fr-ch": 665,
-		"./fr-ch.js": 665,
-		"./fr.js": 663,
-		"./fy": 666,
-		"./fy.js": 666,
-		"./gd": 667,
-		"./gd.js": 667,
-		"./gl": 668,
-		"./gl.js": 668,
-		"./he": 669,
-		"./he.js": 669,
-		"./hi": 670,
-		"./hi.js": 670,
-		"./hr": 671,
-		"./hr.js": 671,
-		"./hu": 672,
-		"./hu.js": 672,
-		"./hy-am": 673,
-		"./hy-am.js": 673,
-		"./id": 674,
-		"./id.js": 674,
-		"./is": 675,
-		"./is.js": 675,
-		"./it": 676,
-		"./it.js": 676,
-		"./ja": 677,
-		"./ja.js": 677,
-		"./jv": 678,
-		"./jv.js": 678,
-		"./ka": 679,
-		"./ka.js": 679,
-		"./kk": 680,
-		"./kk.js": 680,
-		"./km": 681,
-		"./km.js": 681,
-		"./ko": 682,
-		"./ko.js": 682,
-		"./ky": 683,
-		"./ky.js": 683,
-		"./lb": 684,
-		"./lb.js": 684,
-		"./lo": 685,
-		"./lo.js": 685,
-		"./lt": 686,
-		"./lt.js": 686,
-		"./lv": 687,
-		"./lv.js": 687,
-		"./me": 688,
-		"./me.js": 688,
-		"./mi": 689,
-		"./mi.js": 689,
-		"./mk": 690,
-		"./mk.js": 690,
-		"./ml": 691,
-		"./ml.js": 691,
-		"./mr": 692,
-		"./mr.js": 692,
-		"./ms": 693,
-		"./ms-my": 694,
-		"./ms-my.js": 694,
-		"./ms.js": 693,
-		"./my": 695,
-		"./my.js": 695,
-		"./nb": 696,
-		"./nb.js": 696,
-		"./ne": 697,
-		"./ne.js": 697,
-		"./nl": 698,
-		"./nl-be": 699,
-		"./nl-be.js": 699,
-		"./nl.js": 698,
-		"./nn": 700,
-		"./nn.js": 700,
-		"./pa-in": 701,
-		"./pa-in.js": 701,
-		"./pl": 702,
-		"./pl.js": 702,
-		"./pt": 703,
-		"./pt-br": 704,
-		"./pt-br.js": 704,
-		"./pt.js": 703,
-		"./ro": 705,
-		"./ro.js": 705,
-		"./ru": 706,
-		"./ru.js": 706,
-		"./se": 707,
-		"./se.js": 707,
-		"./si": 708,
-		"./si.js": 708,
-		"./sk": 709,
-		"./sk.js": 709,
-		"./sl": 710,
-		"./sl.js": 710,
-		"./sq": 711,
-		"./sq.js": 711,
-		"./sr": 712,
-		"./sr-cyrl": 713,
-		"./sr-cyrl.js": 713,
-		"./sr.js": 712,
-		"./ss": 714,
-		"./ss.js": 714,
-		"./sv": 715,
-		"./sv.js": 715,
-		"./sw": 716,
-		"./sw.js": 716,
-		"./ta": 717,
-		"./ta.js": 717,
-		"./te": 718,
-		"./te.js": 718,
-		"./tet": 719,
-		"./tet.js": 719,
-		"./th": 720,
-		"./th.js": 720,
-		"./tl-ph": 721,
-		"./tl-ph.js": 721,
-		"./tlh": 722,
-		"./tlh.js": 722,
-		"./tr": 723,
-		"./tr.js": 723,
-		"./tzl": 724,
-		"./tzl.js": 724,
-		"./tzm": 725,
-		"./tzm-latn": 726,
-		"./tzm-latn.js": 726,
-		"./tzm.js": 725,
-		"./uk": 727,
-		"./uk.js": 727,
-		"./uz": 728,
-		"./uz.js": 728,
-		"./vi": 729,
-		"./vi.js": 729,
-		"./x-pseudo": 730,
-		"./x-pseudo.js": 730,
-		"./yo": 731,
-		"./yo.js": 731,
-		"./zh-cn": 732,
-		"./zh-cn.js": 732,
-		"./zh-hk": 733,
-		"./zh-hk.js": 733,
-		"./zh-tw": 734,
-		"./zh-tw.js": 734
+		"./af": 643,
+		"./af.js": 643,
+		"./ar": 644,
+		"./ar-dz": 645,
+		"./ar-dz.js": 645,
+		"./ar-kw": 646,
+		"./ar-kw.js": 646,
+		"./ar-ly": 647,
+		"./ar-ly.js": 647,
+		"./ar-ma": 648,
+		"./ar-ma.js": 648,
+		"./ar-sa": 649,
+		"./ar-sa.js": 649,
+		"./ar-tn": 650,
+		"./ar-tn.js": 650,
+		"./ar.js": 644,
+		"./az": 651,
+		"./az.js": 651,
+		"./be": 652,
+		"./be.js": 652,
+		"./bg": 653,
+		"./bg.js": 653,
+		"./bn": 654,
+		"./bn.js": 654,
+		"./bo": 655,
+		"./bo.js": 655,
+		"./br": 656,
+		"./br.js": 656,
+		"./bs": 657,
+		"./bs.js": 657,
+		"./ca": 658,
+		"./ca.js": 658,
+		"./cs": 659,
+		"./cs.js": 659,
+		"./cv": 660,
+		"./cv.js": 660,
+		"./cy": 661,
+		"./cy.js": 661,
+		"./da": 662,
+		"./da.js": 662,
+		"./de": 663,
+		"./de-at": 664,
+		"./de-at.js": 664,
+		"./de-ch": 665,
+		"./de-ch.js": 665,
+		"./de.js": 663,
+		"./dv": 666,
+		"./dv.js": 666,
+		"./el": 667,
+		"./el.js": 667,
+		"./en-au": 668,
+		"./en-au.js": 668,
+		"./en-ca": 669,
+		"./en-ca.js": 669,
+		"./en-gb": 670,
+		"./en-gb.js": 670,
+		"./en-ie": 671,
+		"./en-ie.js": 671,
+		"./en-nz": 672,
+		"./en-nz.js": 672,
+		"./eo": 673,
+		"./eo.js": 673,
+		"./es": 674,
+		"./es-do": 675,
+		"./es-do.js": 675,
+		"./es.js": 674,
+		"./et": 676,
+		"./et.js": 676,
+		"./eu": 677,
+		"./eu.js": 677,
+		"./fa": 678,
+		"./fa.js": 678,
+		"./fi": 679,
+		"./fi.js": 679,
+		"./fo": 680,
+		"./fo.js": 680,
+		"./fr": 681,
+		"./fr-ca": 682,
+		"./fr-ca.js": 682,
+		"./fr-ch": 683,
+		"./fr-ch.js": 683,
+		"./fr.js": 681,
+		"./fy": 684,
+		"./fy.js": 684,
+		"./gd": 685,
+		"./gd.js": 685,
+		"./gl": 686,
+		"./gl.js": 686,
+		"./gom-latn": 687,
+		"./gom-latn.js": 687,
+		"./he": 688,
+		"./he.js": 688,
+		"./hi": 689,
+		"./hi.js": 689,
+		"./hr": 690,
+		"./hr.js": 690,
+		"./hu": 691,
+		"./hu.js": 691,
+		"./hy-am": 692,
+		"./hy-am.js": 692,
+		"./id": 693,
+		"./id.js": 693,
+		"./is": 694,
+		"./is.js": 694,
+		"./it": 695,
+		"./it.js": 695,
+		"./ja": 696,
+		"./ja.js": 696,
+		"./jv": 697,
+		"./jv.js": 697,
+		"./ka": 698,
+		"./ka.js": 698,
+		"./kk": 699,
+		"./kk.js": 699,
+		"./km": 700,
+		"./km.js": 700,
+		"./kn": 701,
+		"./kn.js": 701,
+		"./ko": 702,
+		"./ko.js": 702,
+		"./ky": 703,
+		"./ky.js": 703,
+		"./lb": 704,
+		"./lb.js": 704,
+		"./lo": 705,
+		"./lo.js": 705,
+		"./lt": 706,
+		"./lt.js": 706,
+		"./lv": 707,
+		"./lv.js": 707,
+		"./me": 708,
+		"./me.js": 708,
+		"./mi": 709,
+		"./mi.js": 709,
+		"./mk": 710,
+		"./mk.js": 710,
+		"./ml": 711,
+		"./ml.js": 711,
+		"./mr": 712,
+		"./mr.js": 712,
+		"./ms": 713,
+		"./ms-my": 714,
+		"./ms-my.js": 714,
+		"./ms.js": 713,
+		"./my": 715,
+		"./my.js": 715,
+		"./nb": 716,
+		"./nb.js": 716,
+		"./ne": 717,
+		"./ne.js": 717,
+		"./nl": 718,
+		"./nl-be": 719,
+		"./nl-be.js": 719,
+		"./nl.js": 718,
+		"./nn": 720,
+		"./nn.js": 720,
+		"./pa-in": 721,
+		"./pa-in.js": 721,
+		"./pl": 722,
+		"./pl.js": 722,
+		"./pt": 723,
+		"./pt-br": 724,
+		"./pt-br.js": 724,
+		"./pt.js": 723,
+		"./ro": 725,
+		"./ro.js": 725,
+		"./ru": 726,
+		"./ru.js": 726,
+		"./sd": 727,
+		"./sd.js": 727,
+		"./se": 728,
+		"./se.js": 728,
+		"./si": 729,
+		"./si.js": 729,
+		"./sk": 730,
+		"./sk.js": 730,
+		"./sl": 731,
+		"./sl.js": 731,
+		"./sq": 732,
+		"./sq.js": 732,
+		"./sr": 733,
+		"./sr-cyrl": 734,
+		"./sr-cyrl.js": 734,
+		"./sr.js": 733,
+		"./ss": 735,
+		"./ss.js": 735,
+		"./sv": 736,
+		"./sv.js": 736,
+		"./sw": 737,
+		"./sw.js": 737,
+		"./ta": 738,
+		"./ta.js": 738,
+		"./te": 739,
+		"./te.js": 739,
+		"./tet": 740,
+		"./tet.js": 740,
+		"./th": 741,
+		"./th.js": 741,
+		"./tl-ph": 742,
+		"./tl-ph.js": 742,
+		"./tlh": 743,
+		"./tlh.js": 743,
+		"./tr": 744,
+		"./tr.js": 744,
+		"./tzl": 745,
+		"./tzl.js": 745,
+		"./tzm": 746,
+		"./tzm-latn": 747,
+		"./tzm-latn.js": 747,
+		"./tzm.js": 746,
+		"./uk": 748,
+		"./uk.js": 748,
+		"./ur": 749,
+		"./ur.js": 749,
+		"./uz": 750,
+		"./uz-latn": 751,
+		"./uz-latn.js": 751,
+		"./uz.js": 750,
+		"./vi": 752,
+		"./vi.js": 752,
+		"./x-pseudo": 753,
+		"./x-pseudo.js": 753,
+		"./yo": 754,
+		"./yo.js": 754,
+		"./zh-cn": 755,
+		"./zh-cn.js": 755,
+		"./zh-hk": 756,
+		"./zh-hk.js": 756,
+		"./zh-tw": 757,
+		"./zh-tw.js": 757
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -68973,11 +71343,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 626;
+	webpackContext.id = 642;
 
 
 /***/ },
-/* 627 */
+/* 643 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -68985,7 +71355,7 @@
 	//! author : Werner Mollentze : https://github.com/wernerm
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69039,7 +71409,7 @@
 	        y : '\'n jaar',
 	        yy : '%d jaar'
 	    },
-	    ordinalParse: /\d{1,2}(ste|de)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(ste|de)/,
 	    ordinal : function (number) {
 	        return number + ((number === 1 || number === 8 || number >= 20) ? 'ste' : 'de'); // Thanks to Joris Röling : https://github.com/jjupiter
 	    },
@@ -69055,7 +71425,7 @@
 
 
 /***/ },
-/* 628 */
+/* 644 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69065,7 +71435,7 @@
 	//! author : forabi https://github.com/forabi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69202,7 +71572,7 @@
 
 
 /***/ },
-/* 629 */
+/* 645 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69210,7 +71580,7 @@
 	//! author : Noureddine LOUAHEDJ : https://github.com/noureddineme
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69266,7 +71636,71 @@
 
 
 /***/ },
-/* 630 */
+/* 646 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//! moment.js locale configuration
+	//! locale : Arabic (Kuwait) [ar-kw]
+	//! author : Nusret Parlak: https://github.com/nusretparlak
+
+	;(function (global, factory) {
+	    true ? factory(__webpack_require__(640)) :
+	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+	   factory(global.moment)
+	}(this, (function (moment) { 'use strict';
+
+
+	var arKw = moment.defineLocale('ar-kw', {
+	    months : 'يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر'.split('_'),
+	    monthsShort : 'يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر'.split('_'),
+	    weekdays : 'الأحد_الإتنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
+	    weekdaysShort : 'احد_اتنين_ثلاثاء_اربعاء_خميس_جمعة_سبت'.split('_'),
+	    weekdaysMin : 'ح_ن_ث_ر_خ_ج_س'.split('_'),
+	    weekdaysParseExact : true,
+	    longDateFormat : {
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
+	        L : 'DD/MM/YYYY',
+	        LL : 'D MMMM YYYY',
+	        LLL : 'D MMMM YYYY HH:mm',
+	        LLLL : 'dddd D MMMM YYYY HH:mm'
+	    },
+	    calendar : {
+	        sameDay: '[اليوم على الساعة] LT',
+	        nextDay: '[غدا على الساعة] LT',
+	        nextWeek: 'dddd [على الساعة] LT',
+	        lastDay: '[أمس على الساعة] LT',
+	        lastWeek: 'dddd [على الساعة] LT',
+	        sameElse: 'L'
+	    },
+	    relativeTime : {
+	        future : 'في %s',
+	        past : 'منذ %s',
+	        s : 'ثوان',
+	        m : 'دقيقة',
+	        mm : '%d دقائق',
+	        h : 'ساعة',
+	        hh : '%d ساعات',
+	        d : 'يوم',
+	        dd : '%d أيام',
+	        M : 'شهر',
+	        MM : '%d أشهر',
+	        y : 'سنة',
+	        yy : '%d سنوات'
+	    },
+	    week : {
+	        dow : 0, // Sunday is the first day of the week.
+	        doy : 12  // The week that contains Jan 1st is the first week of the year.
+	    }
+	});
+
+	return arKw;
+
+	})));
+
+
+/***/ },
+/* 647 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69274,7 +71708,7 @@
 	//! author : Ali Hmer: https://github.com/kikoanis
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69397,7 +71831,7 @@
 
 
 /***/ },
-/* 631 */
+/* 648 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69406,7 +71840,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69462,7 +71896,7 @@
 
 
 /***/ },
-/* 632 */
+/* 649 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69470,7 +71904,7 @@
 	//! author : Suhail Alkowaileet : https://github.com/xsoh
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69572,7 +72006,7 @@
 
 
 /***/ },
-/* 633 */
+/* 650 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69580,7 +72014,7 @@
 	//! author : Nader Toukabri : https://github.com/naderio
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69636,7 +72070,7 @@
 
 
 /***/ },
-/* 634 */
+/* 651 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69644,7 +72078,7 @@
 	//! author : topchiyev : https://github.com/topchiyev
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69724,7 +72158,7 @@
 	            return 'axşam';
 	        }
 	    },
-	    ordinalParse: /\d{1,2}-(ıncı|inci|nci|üncü|ncı|uncu)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(ıncı|inci|nci|üncü|ncı|uncu)/,
 	    ordinal : function (number) {
 	        if (number === 0) {  // special case for zero
 	            return number + '-ıncı';
@@ -69746,7 +72180,7 @@
 
 
 /***/ },
-/* 635 */
+/* 652 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69756,7 +72190,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69858,7 +72292,7 @@
 	            return 'вечара';
 	        }
 	    },
-	    ordinalParse: /\d{1,2}-(і|ы|га)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(і|ы|га)/,
 	    ordinal: function (number, period) {
 	        switch (period) {
 	            case 'M':
@@ -69885,7 +72319,7 @@
 
 
 /***/ },
-/* 636 */
+/* 653 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69893,7 +72327,7 @@
 	//! author : Krasen Borisov : https://github.com/kraz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -69948,7 +72382,7 @@
 	        y : 'година',
 	        yy : '%d години'
 	    },
-	    ordinalParse: /\d{1,2}-(ев|ен|ти|ви|ри|ми)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(ев|ен|ти|ви|ри|ми)/,
 	    ordinal : function (number) {
 	        var lastDigit = number % 10,
 	            last2Digits = number % 100;
@@ -69980,7 +72414,7 @@
 
 
 /***/ },
-/* 637 */
+/* 654 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -69988,7 +72422,7 @@
 	//! author : Kaushik Gandhi : https://github.com/kaushikgandhi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70104,7 +72538,7 @@
 
 
 /***/ },
-/* 638 */
+/* 655 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70112,7 +72546,7 @@
 	//! author : Thupten N. Chakrishar : https://github.com/vajradog
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70228,7 +72662,7 @@
 
 
 /***/ },
-/* 639 */
+/* 656 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70236,7 +72670,7 @@
 	//! author : Jean-Baptiste Le Duigou : https://github.com/jbleduigou
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70324,7 +72758,7 @@
 	        y : 'ur bloaz',
 	        yy : specialMutationForYears
 	    },
-	    ordinalParse: /\d{1,2}(añ|vet)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(añ|vet)/,
 	    ordinal : function (number) {
 	        var output = (number === 1) ? 'añ' : 'vet';
 	        return number + output;
@@ -70341,7 +72775,7 @@
 
 
 /***/ },
-/* 640 */
+/* 657 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70350,7 +72784,7 @@
 	//! based on (hr) translation by Bojan Marković
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70475,7 +72909,7 @@
 	        y      : 'godinu',
 	        yy     : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -70489,7 +72923,7 @@
 
 
 /***/ },
-/* 641 */
+/* 658 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70497,15 +72931,19 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
 
 
 	var ca = moment.defineLocale('ca', {
-	    months : 'gener_febrer_març_abril_maig_juny_juliol_agost_setembre_octubre_novembre_desembre'.split('_'),
-	    monthsShort : 'gen._febr._mar._abr._mai._jun._jul._ag._set._oct._nov._des.'.split('_'),
+	    months : {
+	        standalone: 'gener_febrer_març_abril_maig_juny_juliol_agost_setembre_octubre_novembre_desembre'.split('_'),
+	        format: 'de gener_de febrer_de març_d\'abril_de maig_de juny_de juliol_d\'agost_de setembre_d\'octubre_de novembre_de desembre'.split('_'),
+	        isFormat: /D[oD]?(\s)+MMMM/
+	    },
+	    monthsShort : 'gen._febr._març_abr._maig_juny_jul._ag._set._oct._nov._des.'.split('_'),
 	    monthsParseExact : true,
 	    weekdays : 'diumenge_dilluns_dimarts_dimecres_dijous_divendres_dissabte'.split('_'),
 	    weekdaysShort : 'dg._dl._dt._dc._dj._dv._ds.'.split('_'),
@@ -70515,9 +72953,12 @@
 	        LT : 'H:mm',
 	        LTS : 'H:mm:ss',
 	        L : 'DD/MM/YYYY',
-	        LL : 'D MMMM YYYY',
-	        LLL : 'D MMMM YYYY H:mm',
-	        LLLL : 'dddd D MMMM YYYY H:mm'
+	        LL : '[el] D MMMM [de] YYYY',
+	        ll : 'D MMM YYYY',
+	        LLL : '[el] D MMMM [de] YYYY [a les] H:mm',
+	        lll : 'D MMM YYYY, H:mm',
+	        LLLL : '[el] dddd D MMMM [de] YYYY [a les] H:mm',
+	        llll : 'ddd D MMM YYYY, H:mm'
 	    },
 	    calendar : {
 	        sameDay : function () {
@@ -70552,7 +72993,7 @@
 	        y : 'un any',
 	        yy : '%d anys'
 	    },
-	    ordinalParse: /\d{1,2}(r|n|t|è|a)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(r|n|t|è|a)/,
 	    ordinal : function (number, period) {
 	        var output = (number === 1) ? 'r' :
 	            (number === 2) ? 'n' :
@@ -70575,7 +73016,7 @@
 
 
 /***/ },
-/* 642 */
+/* 659 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70583,7 +73024,7 @@
 	//! author : petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70738,7 +73179,7 @@
 	        y : translate,
 	        yy : translate
 	    },
-	    ordinalParse : /\d{1,2}\./,
+	    dayOfMonthOrdinalParse : /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -70752,7 +73193,7 @@
 
 
 /***/ },
-/* 643 */
+/* 660 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70760,7 +73201,7 @@
 	//! author : Anatoly Mironov : https://github.com/mirontoli
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70806,7 +73247,7 @@
 	        y : 'пӗр ҫул',
 	        yy : '%d ҫул'
 	    },
-	    ordinalParse: /\d{1,2}-мӗш/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-мӗш/,
 	    ordinal : '%d-мӗш',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -70820,7 +73261,7 @@
 
 
 /***/ },
-/* 644 */
+/* 661 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70829,7 +73270,7 @@
 	//! author : https://github.com/ryangreaves
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70874,7 +73315,7 @@
 	        y: 'blwyddyn',
 	        yy: '%d flynedd'
 	    },
-	    ordinalParse: /\d{1,2}(fed|ain|af|il|ydd|ed|eg)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(fed|ain|af|il|ydd|ed|eg)/,
 	    // traditional ordinal numbers above 31 are not commonly used in colloquial Welsh
 	    ordinal: function (number) {
 	        var b = number,
@@ -70906,7 +73347,7 @@
 
 
 /***/ },
-/* 645 */
+/* 662 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70914,7 +73355,7 @@
 	//! author : Ulrik Nielsen : https://github.com/mrbase
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -70932,14 +73373,14 @@
 	        L : 'DD/MM/YYYY',
 	        LL : 'D. MMMM YYYY',
 	        LLL : 'D. MMMM YYYY HH:mm',
-	        LLLL : 'dddd [d.] D. MMMM YYYY HH:mm'
+	        LLLL : 'dddd [d.] D. MMMM YYYY [kl.] HH:mm'
 	    },
 	    calendar : {
-	        sameDay : '[I dag kl.] LT',
-	        nextDay : '[I morgen kl.] LT',
-	        nextWeek : 'dddd [kl.] LT',
-	        lastDay : '[I går kl.] LT',
-	        lastWeek : '[sidste] dddd [kl] LT',
+	        sameDay : '[i dag kl.] LT',
+	        nextDay : '[i morgen kl.] LT',
+	        nextWeek : 'på dddd [kl.] LT',
+	        lastDay : '[i går kl.] LT',
+	        lastWeek : '[i] dddd[s kl.] LT',
 	        sameElse : 'L'
 	    },
 	    relativeTime : {
@@ -70957,7 +73398,7 @@
 	        y : 'et år',
 	        yy : '%d år'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -70971,7 +73412,7 @@
 
 
 /***/ },
-/* 646 */
+/* 663 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -70981,7 +73422,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71040,7 +73481,7 @@
 	        y : processRelativeTime,
 	        yy : processRelativeTime
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -71054,7 +73495,7 @@
 
 
 /***/ },
-/* 647 */
+/* 664 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71065,7 +73506,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71124,7 +73565,7 @@
 	        y : processRelativeTime,
 	        yy : processRelativeTime
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -71138,7 +73579,90 @@
 
 
 /***/ },
-/* 648 */
+/* 665 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//! moment.js locale configuration
+	//! locale : German (Switzerland) [de-ch]
+	//! author : sschueller : https://github.com/sschueller
+
+	;(function (global, factory) {
+	    true ? factory(__webpack_require__(640)) :
+	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+	   factory(global.moment)
+	}(this, (function (moment) { 'use strict';
+
+
+	// based on: https://www.bk.admin.ch/dokumentation/sprachen/04915/05016/index.html?lang=de#
+
+	function processRelativeTime(number, withoutSuffix, key, isFuture) {
+	    var format = {
+	        'm': ['eine Minute', 'einer Minute'],
+	        'h': ['eine Stunde', 'einer Stunde'],
+	        'd': ['ein Tag', 'einem Tag'],
+	        'dd': [number + ' Tage', number + ' Tagen'],
+	        'M': ['ein Monat', 'einem Monat'],
+	        'MM': [number + ' Monate', number + ' Monaten'],
+	        'y': ['ein Jahr', 'einem Jahr'],
+	        'yy': [number + ' Jahre', number + ' Jahren']
+	    };
+	    return withoutSuffix ? format[key][0] : format[key][1];
+	}
+
+	var deCh = moment.defineLocale('de-ch', {
+	    months : 'Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember'.split('_'),
+	    monthsShort : 'Jan._Febr._März_April_Mai_Juni_Juli_Aug._Sept._Okt._Nov._Dez.'.split('_'),
+	    monthsParseExact : true,
+	    weekdays : 'Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag'.split('_'),
+	    weekdaysShort : 'So_Mo_Di_Mi_Do_Fr_Sa'.split('_'),
+	    weekdaysMin : 'So_Mo_Di_Mi_Do_Fr_Sa'.split('_'),
+	    weekdaysParseExact : true,
+	    longDateFormat : {
+	        LT: 'HH.mm',
+	        LTS: 'HH.mm.ss',
+	        L : 'DD.MM.YYYY',
+	        LL : 'D. MMMM YYYY',
+	        LLL : 'D. MMMM YYYY HH.mm',
+	        LLLL : 'dddd, D. MMMM YYYY HH.mm'
+	    },
+	    calendar : {
+	        sameDay: '[heute um] LT [Uhr]',
+	        sameElse: 'L',
+	        nextDay: '[morgen um] LT [Uhr]',
+	        nextWeek: 'dddd [um] LT [Uhr]',
+	        lastDay: '[gestern um] LT [Uhr]',
+	        lastWeek: '[letzten] dddd [um] LT [Uhr]'
+	    },
+	    relativeTime : {
+	        future : 'in %s',
+	        past : 'vor %s',
+	        s : 'ein paar Sekunden',
+	        m : processRelativeTime,
+	        mm : '%d Minuten',
+	        h : processRelativeTime,
+	        hh : '%d Stunden',
+	        d : processRelativeTime,
+	        dd : processRelativeTime,
+	        M : processRelativeTime,
+	        MM : processRelativeTime,
+	        y : processRelativeTime,
+	        yy : processRelativeTime
+	    },
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
+	    ordinal : '%d.',
+	    week : {
+	        dow : 1, // Monday is the first day of the week.
+	        doy : 4  // The week that contains Jan 4th is the first week of the year.
+	    }
+	});
+
+	return deCh;
+
+	})));
+
+
+/***/ },
+/* 666 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71146,7 +73670,7 @@
 	//! author : Jawish Hameed : https://github.com/jawish
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71243,7 +73767,7 @@
 
 
 /***/ },
-/* 649 */
+/* 667 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71251,7 +73775,7 @@
 	//! author : Aggelos Karalias : https://github.com/mehiel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71265,7 +73789,9 @@
 	    monthsNominativeEl : 'Ιανουάριος_Φεβρουάριος_Μάρτιος_Απρίλιος_Μάιος_Ιούνιος_Ιούλιος_Αύγουστος_Σεπτέμβριος_Οκτώβριος_Νοέμβριος_Δεκέμβριος'.split('_'),
 	    monthsGenitiveEl : 'Ιανουαρίου_Φεβρουαρίου_Μαρτίου_Απριλίου_Μαΐου_Ιουνίου_Ιουλίου_Αυγούστου_Σεπτεμβρίου_Οκτωβρίου_Νοεμβρίου_Δεκεμβρίου'.split('_'),
 	    months : function (momentToFormat, format) {
-	        if (/D/.test(format.substring(0, format.indexOf('MMMM')))) { // if there is a day number before 'MMMM'
+	        if (!momentToFormat) {
+	            return this._monthsNominativeEl;
+	        } else if (/D/.test(format.substring(0, format.indexOf('MMMM')))) { // if there is a day number before 'MMMM'
 	            return this._monthsGenitiveEl[momentToFormat.month()];
 	        } else {
 	            return this._monthsNominativeEl[momentToFormat.month()];
@@ -71332,7 +73858,7 @@
 	        y : 'ένας χρόνος',
 	        yy : '%d χρόνια'
 	    },
-	    ordinalParse: /\d{1,2}η/,
+	    dayOfMonthOrdinalParse: /\d{1,2}η/,
 	    ordinal: '%dη',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -71346,7 +73872,7 @@
 
 
 /***/ },
-/* 650 */
+/* 668 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71354,7 +73880,7 @@
 	//! author : Jared Morse : https://github.com/jarcoal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71397,7 +73923,7 @@
 	        y : 'a year',
 	        yy : '%d years'
 	    },
-	    ordinalParse: /\d{1,2}(st|nd|rd|th)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'th' :
@@ -71418,7 +73944,7 @@
 
 
 /***/ },
-/* 651 */
+/* 669 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71426,7 +73952,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71469,7 +73995,7 @@
 	        y : 'a year',
 	        yy : '%d years'
 	    },
-	    ordinalParse: /\d{1,2}(st|nd|rd|th)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'th' :
@@ -71486,7 +74012,7 @@
 
 
 /***/ },
-/* 652 */
+/* 670 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71494,7 +74020,7 @@
 	//! author : Chris Gedrim : https://github.com/chrisgedrim
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71537,7 +74063,7 @@
 	        y : 'a year',
 	        yy : '%d years'
 	    },
-	    ordinalParse: /\d{1,2}(st|nd|rd|th)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'th' :
@@ -71558,7 +74084,7 @@
 
 
 /***/ },
-/* 653 */
+/* 671 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71566,7 +74092,7 @@
 	//! author : Chris Cartlidge : https://github.com/chriscartlidge
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71609,7 +74135,7 @@
 	        y : 'a year',
 	        yy : '%d years'
 	    },
-	    ordinalParse: /\d{1,2}(st|nd|rd|th)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'th' :
@@ -71630,7 +74156,7 @@
 
 
 /***/ },
-/* 654 */
+/* 672 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71638,7 +74164,7 @@
 	//! author : Luke McGregor : https://github.com/lukemcgregor
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71681,7 +74207,7 @@
 	        y : 'a year',
 	        yy : '%d years'
 	    },
-	    ordinalParse: /\d{1,2}(st|nd|rd|th)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'th' :
@@ -71702,17 +74228,17 @@
 
 
 /***/ },
-/* 655 */
+/* 673 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale : Esperanto [eo]
 	//! author : Colin Dean : https://github.com/colindean
-	//! komento: Mi estas malcerta se mi korekte traktis akuzativojn en tiu traduko.
-	//!          Se ne, bonvolu korekti kaj avizi min por ke mi povas lerni!
+	//! author : Mia Nordentoft Imperatori : https://github.com/miestasmia
+	//! comment : miestasmia corrected the translation by colindean
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71721,16 +74247,16 @@
 	var eo = moment.defineLocale('eo', {
 	    months : 'januaro_februaro_marto_aprilo_majo_junio_julio_aŭgusto_septembro_oktobro_novembro_decembro'.split('_'),
 	    monthsShort : 'jan_feb_mar_apr_maj_jun_jul_aŭg_sep_okt_nov_dec'.split('_'),
-	    weekdays : 'Dimanĉo_Lundo_Mardo_Merkredo_Ĵaŭdo_Vendredo_Sabato'.split('_'),
-	    weekdaysShort : 'Dim_Lun_Mard_Merk_Ĵaŭ_Ven_Sab'.split('_'),
-	    weekdaysMin : 'Di_Lu_Ma_Me_Ĵa_Ve_Sa'.split('_'),
+	    weekdays : 'dimanĉo_lundo_mardo_merkredo_ĵaŭdo_vendredo_sabato'.split('_'),
+	    weekdaysShort : 'dim_lun_mard_merk_ĵaŭ_ven_sab'.split('_'),
+	    weekdaysMin : 'di_lu_ma_me_ĵa_ve_sa'.split('_'),
 	    longDateFormat : {
 	        LT : 'HH:mm',
 	        LTS : 'HH:mm:ss',
 	        L : 'YYYY-MM-DD',
-	        LL : 'D[-an de] MMMM, YYYY',
-	        LLL : 'D[-an de] MMMM, YYYY HH:mm',
-	        LLLL : 'dddd, [la] D[-an de] MMMM, YYYY HH:mm'
+	        LL : 'D[-a de] MMMM, YYYY',
+	        LLL : 'D[-a de] MMMM, YYYY HH:mm',
+	        LLLL : 'dddd, [la] D[-a de] MMMM, YYYY HH:mm'
 	    },
 	    meridiemParse: /[ap]\.t\.m/i,
 	    isPM: function (input) {
@@ -71752,7 +74278,7 @@
 	        sameElse : 'L'
 	    },
 	    relativeTime : {
-	        future : 'je %s',
+	        future : 'post %s',
 	        past : 'antaŭ %s',
 	        s : 'sekundoj',
 	        m : 'minuto',
@@ -71766,7 +74292,7 @@
 	        y : 'jaro',
 	        yy : '%d jaroj'
 	    },
-	    ordinalParse: /\d{1,2}a/,
+	    dayOfMonthOrdinalParse: /\d{1,2}a/,
 	    ordinal : '%da',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -71780,7 +74306,7 @@
 
 
 /***/ },
-/* 656 */
+/* 674 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71788,7 +74314,7 @@
 	//! author : Julio Napurí : https://github.com/julionc
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71800,7 +74326,9 @@
 	var es = moment.defineLocale('es', {
 	    months : 'enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre'.split('_'),
 	    monthsShort : function (m, format) {
-	        if (/-MMM-/.test(format)) {
+	        if (!m) {
+	            return monthsShortDot;
+	        } else if (/-MMM-/.test(format)) {
 	            return monthsShort[m.month()];
 	        } else {
 	            return monthsShortDot[m.month()];
@@ -71852,7 +74380,7 @@
 	        y : 'un año',
 	        yy : '%d años'
 	    },
-	    ordinalParse : /\d{1,2}º/,
+	    dayOfMonthOrdinalParse : /\d{1,2}º/,
 	    ordinal : '%dº',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -71866,14 +74394,14 @@
 
 
 /***/ },
-/* 657 */
+/* 675 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale : Spanish (Dominican Republic) [es-do]
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -71885,7 +74413,9 @@
 	var esDo = moment.defineLocale('es-do', {
 	    months : 'enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre'.split('_'),
 	    monthsShort : function (m, format) {
-	        if (/-MMM-/.test(format)) {
+	        if (!m) {
+	            return monthsShortDot;
+	        } else if (/-MMM-/.test(format)) {
 	            return monthsShort[m.month()];
 	        } else {
 	            return monthsShortDot[m.month()];
@@ -71937,7 +74467,7 @@
 	        y : 'un año',
 	        yy : '%d años'
 	    },
-	    ordinalParse : /\d{1,2}º/,
+	    dayOfMonthOrdinalParse : /\d{1,2}º/,
 	    ordinal : '%dº',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -71951,7 +74481,7 @@
 
 
 /***/ },
-/* 658 */
+/* 676 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -71960,7 +74490,7 @@
 	//! improvements : Illimar Tambek : https://github.com/ragulka
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72022,7 +74552,7 @@
 	        y      : processRelativeTime,
 	        yy     : processRelativeTime
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -72036,7 +74566,7 @@
 
 
 /***/ },
-/* 659 */
+/* 677 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72044,7 +74574,7 @@
 	//! author : Eneko Illarramendi : https://github.com/eillarra
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72093,7 +74623,7 @@
 	        y : 'urte bat',
 	        yy : '%d urte'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -72107,7 +74637,7 @@
 
 
 /***/ },
-/* 660 */
+/* 678 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72115,7 +74645,7 @@
 	//! author : Ebrahim Byagowi : https://github.com/ebraminio
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72183,7 +74713,7 @@
 	    relativeTime : {
 	        future : 'در %s',
 	        past : '%s پیش',
-	        s : 'چندین ثانیه',
+	        s : 'چند ثانیه',
 	        m : 'یک دقیقه',
 	        mm : '%d دقیقه',
 	        h : 'یک ساعت',
@@ -72205,7 +74735,7 @@
 	            return symbolMap[match];
 	        }).replace(/,/g, '،');
 	    },
-	    ordinalParse: /\d{1,2}م/,
+	    dayOfMonthOrdinalParse: /\d{1,2}م/,
 	    ordinal : '%dم',
 	    week : {
 	        dow : 6, // Saturday is the first day of the week.
@@ -72219,7 +74749,7 @@
 
 
 /***/ },
-/* 661 */
+/* 679 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72227,7 +74757,7 @@
 	//! author : Tarmo Aidantausta : https://github.com/bleadof
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72317,7 +74847,7 @@
 	        y : translate,
 	        yy : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -72331,7 +74861,7 @@
 
 
 /***/ },
-/* 662 */
+/* 680 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72339,7 +74869,7 @@
 	//! author : Ragnar Johannesen : https://github.com/ragnar123
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72382,7 +74912,7 @@
 	        y : 'eitt ár',
 	        yy : '%d ár'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -72396,7 +74926,7 @@
 
 
 /***/ },
-/* 663 */
+/* 681 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72404,7 +74934,7 @@
 	//! author : John Fischer : https://github.com/jfroffice
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72427,12 +74957,12 @@
 	        LLLL : 'dddd D MMMM YYYY HH:mm'
 	    },
 	    calendar : {
-	        sameDay: '[Aujourd\'hui à] LT',
-	        nextDay: '[Demain à] LT',
-	        nextWeek: 'dddd [à] LT',
-	        lastDay: '[Hier à] LT',
-	        lastWeek: 'dddd [dernier à] LT',
-	        sameElse: 'L'
+	        sameDay : '[Aujourd’hui à] LT',
+	        nextDay : '[Demain à] LT',
+	        nextWeek : 'dddd [à] LT',
+	        lastDay : '[Hier à] LT',
+	        lastWeek : 'dddd [dernier à] LT',
+	        sameElse : 'L'
 	    },
 	    relativeTime : {
 	        future : 'dans %s',
@@ -72449,9 +74979,28 @@
 	        y : 'un an',
 	        yy : '%d ans'
 	    },
-	    ordinalParse: /\d{1,2}(er|)/,
-	    ordinal : function (number) {
-	        return number + (number === 1 ? 'er' : '');
+	    dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
+	    ordinal : function (number, period) {
+	        switch (period) {
+	            // TODO: Return 'e' when day of month > 1. Move this case inside
+	            // block for masculine words below.
+	            // See https://github.com/moment/moment/issues/3375
+	            case 'D':
+	                return number + (number === 1 ? 'er' : '');
+
+	            // Words with masculine grammatical gender: mois, trimestre, jour
+	            default:
+	            case 'M':
+	            case 'Q':
+	            case 'DDD':
+	            case 'd':
+	                return number + (number === 1 ? 'er' : 'e');
+
+	            // Words with feminine grammatical gender: semaine
+	            case 'w':
+	            case 'W':
+	                return number + (number === 1 ? 're' : 'e');
+	        }
 	    },
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -72465,7 +75014,7 @@
 
 
 /***/ },
-/* 664 */
+/* 682 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72473,7 +75022,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72496,12 +75045,12 @@
 	        LLLL : 'dddd D MMMM YYYY HH:mm'
 	    },
 	    calendar : {
-	        sameDay: '[Aujourd\'hui à] LT',
-	        nextDay: '[Demain à] LT',
-	        nextWeek: 'dddd [à] LT',
-	        lastDay: '[Hier à] LT',
-	        lastWeek: 'dddd [dernier à] LT',
-	        sameElse: 'L'
+	        sameDay : '[Aujourd’hui à] LT',
+	        nextDay : '[Demain à] LT',
+	        nextWeek : 'dddd [à] LT',
+	        lastDay : '[Hier à] LT',
+	        lastWeek : 'dddd [dernier à] LT',
+	        sameElse : 'L'
 	    },
 	    relativeTime : {
 	        future : 'dans %s',
@@ -72518,9 +75067,23 @@
 	        y : 'un an',
 	        yy : '%d ans'
 	    },
-	    ordinalParse: /\d{1,2}(er|e)/,
-	    ordinal : function (number) {
-	        return number + (number === 1 ? 'er' : 'e');
+	    dayOfMonthOrdinalParse: /\d{1,2}(er|e)/,
+	    ordinal : function (number, period) {
+	        switch (period) {
+	            // Words with masculine grammatical gender: mois, trimestre, jour
+	            default:
+	            case 'M':
+	            case 'Q':
+	            case 'D':
+	            case 'DDD':
+	            case 'd':
+	                return number + (number === 1 ? 'er' : 'e');
+
+	            // Words with feminine grammatical gender: semaine
+	            case 'w':
+	            case 'W':
+	                return number + (number === 1 ? 're' : 'e');
+	        }
 	    }
 	});
 
@@ -72530,7 +75093,7 @@
 
 
 /***/ },
-/* 665 */
+/* 683 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72538,7 +75101,7 @@
 	//! author : Gaspard Bucher : https://github.com/gaspard
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72561,12 +75124,12 @@
 	        LLLL : 'dddd D MMMM YYYY HH:mm'
 	    },
 	    calendar : {
-	        sameDay: '[Aujourd\'hui à] LT',
-	        nextDay: '[Demain à] LT',
-	        nextWeek: 'dddd [à] LT',
-	        lastDay: '[Hier à] LT',
-	        lastWeek: 'dddd [dernier à] LT',
-	        sameElse: 'L'
+	        sameDay : '[Aujourd’hui à] LT',
+	        nextDay : '[Demain à] LT',
+	        nextWeek : 'dddd [à] LT',
+	        lastDay : '[Hier à] LT',
+	        lastWeek : 'dddd [dernier à] LT',
+	        sameElse : 'L'
 	    },
 	    relativeTime : {
 	        future : 'dans %s',
@@ -72583,9 +75146,23 @@
 	        y : 'un an',
 	        yy : '%d ans'
 	    },
-	    ordinalParse: /\d{1,2}(er|e)/,
-	    ordinal : function (number) {
-	        return number + (number === 1 ? 'er' : 'e');
+	    dayOfMonthOrdinalParse: /\d{1,2}(er|e)/,
+	    ordinal : function (number, period) {
+	        switch (period) {
+	            // Words with masculine grammatical gender: mois, trimestre, jour
+	            default:
+	            case 'M':
+	            case 'Q':
+	            case 'D':
+	            case 'DDD':
+	            case 'd':
+	                return number + (number === 1 ? 'er' : 'e');
+
+	            // Words with feminine grammatical gender: semaine
+	            case 'w':
+	            case 'W':
+	                return number + (number === 1 ? 're' : 'e');
+	        }
 	    },
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -72599,7 +75176,7 @@
 
 
 /***/ },
-/* 666 */
+/* 684 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72607,7 +75184,7 @@
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72619,7 +75196,9 @@
 	var fy = moment.defineLocale('fy', {
 	    months : 'jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber'.split('_'),
 	    monthsShort : function (m, format) {
-	        if (/-MMM-/.test(format)) {
+	        if (!m) {
+	            return monthsShortWithDots;
+	        } else if (/-MMM-/.test(format)) {
 	            return monthsShortWithoutDots[m.month()];
 	        } else {
 	            return monthsShortWithDots[m.month()];
@@ -72661,7 +75240,7 @@
 	        y : 'ien jier',
 	        yy : '%d jierren'
 	    },
-	    ordinalParse: /\d{1,2}(ste|de)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(ste|de)/,
 	    ordinal : function (number) {
 	        return number + ((number === 1 || number === 8 || number >= 20) ? 'ste' : 'de');
 	    },
@@ -72677,7 +75256,7 @@
 
 
 /***/ },
-/* 667 */
+/* 685 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72685,7 +75264,7 @@
 	//! author : Jon Ashdown : https://github.com/jonashdown
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72741,7 +75320,7 @@
 	        y : 'bliadhna',
 	        yy : '%d bliadhna'
 	    },
-	    ordinalParse : /\d{1,2}(d|na|mh)/,
+	    dayOfMonthOrdinalParse : /\d{1,2}(d|na|mh)/,
 	    ordinal : function (number) {
 	        var output = number === 1 ? 'd' : number % 10 === 2 ? 'na' : 'mh';
 	        return number + output;
@@ -72758,7 +75337,7 @@
 
 
 /***/ },
-/* 668 */
+/* 686 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72766,7 +75345,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72826,7 +75405,7 @@
 	        y : 'un ano',
 	        yy : '%d anos'
 	    },
-	    ordinalParse : /\d{1,2}º/,
+	    dayOfMonthOrdinalParse : /\d{1,2}º/,
 	    ordinal : '%dº',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -72840,7 +75419,134 @@
 
 
 /***/ },
-/* 669 */
+/* 687 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//! moment.js locale configuration
+	//! locale : Konkani Latin script [gom-latn]
+	//! author : The Discoverer : https://github.com/WikiDiscoverer
+
+	;(function (global, factory) {
+	    true ? factory(__webpack_require__(640)) :
+	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+	   factory(global.moment)
+	}(this, (function (moment) { 'use strict';
+
+
+	function processRelativeTime(number, withoutSuffix, key, isFuture) {
+	    var format = {
+	        's': ['thodde secondanim', 'thodde second'],
+	        'm': ['eka mintan', 'ek minute'],
+	        'mm': [number + ' mintanim', number + ' mintam'],
+	        'h': ['eka horan', 'ek hor'],
+	        'hh': [number + ' horanim', number + ' hor'],
+	        'd': ['eka disan', 'ek dis'],
+	        'dd': [number + ' disanim', number + ' dis'],
+	        'M': ['eka mhoinean', 'ek mhoino'],
+	        'MM': [number + ' mhoineanim', number + ' mhoine'],
+	        'y': ['eka vorsan', 'ek voros'],
+	        'yy': [number + ' vorsanim', number + ' vorsam']
+	    };
+	    return withoutSuffix ? format[key][0] : format[key][1];
+	}
+
+	var gomLatn = moment.defineLocale('gom-latn', {
+	    months : 'Janer_Febrer_Mars_Abril_Mai_Jun_Julai_Agost_Setembr_Otubr_Novembr_Dezembr'.split('_'),
+	    monthsShort : 'Jan._Feb._Mars_Abr._Mai_Jun_Jul._Ago._Set._Otu._Nov._Dez.'.split('_'),
+	    monthsParseExact : true,
+	    weekdays : 'Aitar_Somar_Mongllar_Budvar_Brestar_Sukrar_Son\'var'.split('_'),
+	    weekdaysShort : 'Ait._Som._Mon._Bud._Bre._Suk._Son.'.split('_'),
+	    weekdaysMin : 'Ai_Sm_Mo_Bu_Br_Su_Sn'.split('_'),
+	    weekdaysParseExact : true,
+	    longDateFormat : {
+	        LT : 'A h:mm [vazta]',
+	        LTS : 'A h:mm:ss [vazta]',
+	        L : 'DD-MM-YYYY',
+	        LL : 'D MMMM YYYY',
+	        LLL : 'D MMMM YYYY A h:mm [vazta]',
+	        LLLL : 'dddd, MMMM[achea] Do, YYYY, A h:mm [vazta]',
+	        llll: 'ddd, D MMM YYYY, A h:mm [vazta]'
+	    },
+	    calendar : {
+	        sameDay: '[Aiz] LT',
+	        nextDay: '[Faleam] LT',
+	        nextWeek: '[Ieta to] dddd[,] LT',
+	        lastDay: '[Kal] LT',
+	        lastWeek: '[Fatlo] dddd[,] LT',
+	        sameElse: 'L'
+	    },
+	    relativeTime : {
+	        future : '%s',
+	        past : '%s adim',
+	        s : processRelativeTime,
+	        m : processRelativeTime,
+	        mm : processRelativeTime,
+	        h : processRelativeTime,
+	        hh : processRelativeTime,
+	        d : processRelativeTime,
+	        dd : processRelativeTime,
+	        M : processRelativeTime,
+	        MM : processRelativeTime,
+	        y : processRelativeTime,
+	        yy : processRelativeTime
+	    },
+	    dayOfMonthOrdinalParse : /\d{1,2}(er)/,
+	    ordinal : function (number, period) {
+	        switch (period) {
+	            // the ordinal 'er' only applies to day of the month
+	            case 'D':
+	                return number + 'er';
+	            default:
+	            case 'M':
+	            case 'Q':
+	            case 'DDD':
+	            case 'd':
+	            case 'w':
+	            case 'W':
+	                return number;
+	        }
+	    },
+	    week : {
+	        dow : 1, // Monday is the first day of the week.
+	        doy : 4  // The week that contains Jan 4th is the first week of the year.
+	    },
+	    meridiemParse: /rati|sokalli|donparam|sanje/,
+	    meridiemHour : function (hour, meridiem) {
+	        if (hour === 12) {
+	            hour = 0;
+	        }
+	        if (meridiem === 'rati') {
+	            return hour < 4 ? hour : hour + 12;
+	        } else if (meridiem === 'sokalli') {
+	            return hour;
+	        } else if (meridiem === 'donparam') {
+	            return hour > 12 ? hour : hour + 12;
+	        } else if (meridiem === 'sanje') {
+	            return hour + 12;
+	        }
+	    },
+	    meridiem : function (hour, minute, isLower) {
+	        if (hour < 4) {
+	            return 'rati';
+	        } else if (hour < 12) {
+	            return 'sokalli';
+	        } else if (hour < 16) {
+	            return 'donparam';
+	        } else if (hour < 20) {
+	            return 'sanje';
+	        } else {
+	            return 'rati';
+	        }
+	    }
+	});
+
+	return gomLatn;
+
+	})));
+
+
+/***/ },
+/* 688 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72850,7 +75556,7 @@
 	//! author : Tal Ater : https://github.com/TalAter
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -72944,7 +75650,7 @@
 
 
 /***/ },
-/* 670 */
+/* 689 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -72952,7 +75658,7 @@
 	//! author : Mayank Singhal : https://github.com/mayanksinghal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73073,7 +75779,7 @@
 
 
 /***/ },
-/* 671 */
+/* 690 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73081,7 +75787,7 @@
 	//! author : Bojan Marković : https://github.com/bmarkovic
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73209,7 +75915,7 @@
 	        y      : 'godinu',
 	        yy     : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -73223,7 +75929,7 @@
 
 
 /***/ },
-/* 672 */
+/* 691 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73231,7 +75937,7 @@
 	//! author : Adam Brunner : https://github.com/adambrunner
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73323,7 +76029,7 @@
 	        y : translate,
 	        yy : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -73337,7 +76043,7 @@
 
 
 /***/ },
-/* 673 */
+/* 692 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73345,7 +76051,7 @@
 	//! author : Armendarabyan : https://github.com/armendarabyan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73410,7 +76116,7 @@
 	            return 'երեկոյան';
 	        }
 	    },
-	    ordinalParse: /\d{1,2}|\d{1,2}-(ին|րդ)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}|\d{1,2}-(ին|րդ)/,
 	    ordinal: function (number, period) {
 	        switch (period) {
 	            case 'DDD':
@@ -73437,7 +76143,7 @@
 
 
 /***/ },
-/* 674 */
+/* 693 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73446,7 +76152,7 @@
 	//! reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73525,7 +76231,7 @@
 
 
 /***/ },
-/* 675 */
+/* 694 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73533,7 +76239,7 @@
 	//! author : Hinrik Örn Sigurðsson : https://github.com/hinrik
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73643,7 +76349,7 @@
 	        y : translate,
 	        yy : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -73657,7 +76363,7 @@
 
 
 /***/ },
-/* 676 */
+/* 695 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73666,7 +76372,7 @@
 	//! author: Mattia Larentis: https://github.com/nostalgiaz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73675,9 +76381,9 @@
 	var it = moment.defineLocale('it', {
 	    months : 'gennaio_febbraio_marzo_aprile_maggio_giugno_luglio_agosto_settembre_ottobre_novembre_dicembre'.split('_'),
 	    monthsShort : 'gen_feb_mar_apr_mag_giu_lug_ago_set_ott_nov_dic'.split('_'),
-	    weekdays : 'Domenica_Lunedì_Martedì_Mercoledì_Giovedì_Venerdì_Sabato'.split('_'),
-	    weekdaysShort : 'Dom_Lun_Mar_Mer_Gio_Ven_Sab'.split('_'),
-	    weekdaysMin : 'Do_Lu_Ma_Me_Gi_Ve_Sa'.split('_'),
+	    weekdays : 'domenica_lunedì_martedì_mercoledì_giovedì_venerdì_sabato'.split('_'),
+	    weekdaysShort : 'dom_lun_mar_mer_gio_ven_sab'.split('_'),
+	    weekdaysMin : 'do_lu_ma_me_gi_ve_sa'.split('_'),
 	    longDateFormat : {
 	        LT : 'HH:mm',
 	        LTS : 'HH:mm:ss',
@@ -73718,7 +76424,7 @@
 	        y : 'un anno',
 	        yy : '%d anni'
 	    },
-	    ordinalParse : /\d{1,2}º/,
+	    dayOfMonthOrdinalParse : /\d{1,2}º/,
 	    ordinal: '%dº',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -73732,7 +76438,7 @@
 
 
 /***/ },
-/* 677 */
+/* 696 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73740,7 +76446,7 @@
 	//! author : LI Long : https://github.com/baryon
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73753,12 +76459,16 @@
 	    weekdaysShort : '日_月_火_水_木_金_土'.split('_'),
 	    weekdaysMin : '日_月_火_水_木_金_土'.split('_'),
 	    longDateFormat : {
-	        LT : 'Ah時m分',
-	        LTS : 'Ah時m分s秒',
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
 	        L : 'YYYY/MM/DD',
 	        LL : 'YYYY年M月D日',
-	        LLL : 'YYYY年M月D日Ah時m分',
-	        LLLL : 'YYYY年M月D日Ah時m分 dddd'
+	        LLL : 'YYYY年M月D日 HH:mm',
+	        LLLL : 'YYYY年M月D日 HH:mm dddd',
+	        l : 'YYYY/MM/DD',
+	        ll : 'YYYY年M月D日',
+	        lll : 'YYYY年M月D日 HH:mm',
+	        llll : 'YYYY年M月D日 HH:mm dddd'
 	    },
 	    meridiemParse: /午前|午後/i,
 	    isPM : function (input) {
@@ -73779,7 +76489,7 @@
 	        lastWeek : '[前週]dddd LT',
 	        sameElse : 'L'
 	    },
-	    ordinalParse : /\d{1,2}日/,
+	    dayOfMonthOrdinalParse : /\d{1,2}日/,
 	    ordinal : function (number, period) {
 	        switch (period) {
 	            case 'd':
@@ -73813,7 +76523,7 @@
 
 
 /***/ },
-/* 678 */
+/* 697 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73822,7 +76532,7 @@
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73901,7 +76611,7 @@
 
 
 /***/ },
-/* 679 */
+/* 698 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -73909,7 +76619,7 @@
 	//! author : Irakli Janiashvili : https://github.com/irakli-janiashvili
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -73952,10 +76662,10 @@
 	        },
 	        past : function (s) {
 	            if ((/(წამი|წუთი|საათი|დღე|თვე)/).test(s)) {
-	                return s.replace(/(ი|ე)$/, 'ის წინ');
+	                return s.replace(/(ი|ე)$/, 'ის უკან');
 	            }
 	            if ((/წელი/).test(s)) {
-	                return s.replace(/წელი$/, 'წლის წინ');
+	                return s.replace(/წელი$/, 'წლის უკან');
 	            }
 	        },
 	        s : 'რამდენიმე წამი',
@@ -73970,7 +76680,7 @@
 	        y : 'წელი',
 	        yy : '%d წელი'
 	    },
-	    ordinalParse: /0|1-ლი|მე-\d{1,2}|\d{1,2}-ე/,
+	    dayOfMonthOrdinalParse: /0|1-ლი|მე-\d{1,2}|\d{1,2}-ე/,
 	    ordinal : function (number) {
 	        if (number === 0) {
 	            return number;
@@ -73995,7 +76705,7 @@
 
 
 /***/ },
-/* 680 */
+/* 699 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74003,7 +76713,7 @@
 	//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74069,7 +76779,7 @@
 	        y : 'бір жыл',
 	        yy : '%d жыл'
 	    },
-	    ordinalParse: /\d{1,2}-(ші|шы)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(ші|шы)/,
 	    ordinal : function (number) {
 	        var a = number % 10,
 	            b = number >= 100 ? 100 : null;
@@ -74087,7 +76797,7 @@
 
 
 /***/ },
-/* 681 */
+/* 700 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74095,7 +76805,7 @@
 	//! author : Kruy Vanna : https://github.com/kruyvanna
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74150,7 +76860,138 @@
 
 
 /***/ },
-/* 682 */
+/* 701 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//! moment.js locale configuration
+	//! locale : Kannada [kn]
+	//! author : Rajeev Naik : https://github.com/rajeevnaikte
+
+	;(function (global, factory) {
+	    true ? factory(__webpack_require__(640)) :
+	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+	   factory(global.moment)
+	}(this, (function (moment) { 'use strict';
+
+
+	var symbolMap = {
+	    '1': '೧',
+	    '2': '೨',
+	    '3': '೩',
+	    '4': '೪',
+	    '5': '೫',
+	    '6': '೬',
+	    '7': '೭',
+	    '8': '೮',
+	    '9': '೯',
+	    '0': '೦'
+	};
+	var numberMap = {
+	    '೧': '1',
+	    '೨': '2',
+	    '೩': '3',
+	    '೪': '4',
+	    '೫': '5',
+	    '೬': '6',
+	    '೭': '7',
+	    '೮': '8',
+	    '೯': '9',
+	    '೦': '0'
+	};
+
+	var kn = moment.defineLocale('kn', {
+	    months : 'ಜನವರಿ_ಫೆಬ್ರವರಿ_ಮಾರ್ಚ್_ಏಪ್ರಿಲ್_ಮೇ_ಜೂನ್_ಜುಲೈ_ಆಗಸ್ಟ್_ಸೆಪ್ಟೆಂಬರ್_ಅಕ್ಟೋಬರ್_ನವೆಂಬರ್_ಡಿಸೆಂಬರ್'.split('_'),
+	    monthsShort : 'ಜನ_ಫೆಬ್ರ_ಮಾರ್ಚ್_ಏಪ್ರಿಲ್_ಮೇ_ಜೂನ್_ಜುಲೈ_ಆಗಸ್ಟ್_ಸೆಪ್ಟೆಂಬ_ಅಕ್ಟೋಬ_ನವೆಂಬ_ಡಿಸೆಂಬ'.split('_'),
+	    monthsParseExact: true,
+	    weekdays : 'ಭಾನುವಾರ_ಸೋಮವಾರ_ಮಂಗಳವಾರ_ಬುಧವಾರ_ಗುರುವಾರ_ಶುಕ್ರವಾರ_ಶನಿವಾರ'.split('_'),
+	    weekdaysShort : 'ಭಾನು_ಸೋಮ_ಮಂಗಳ_ಬುಧ_ಗುರು_ಶುಕ್ರ_ಶನಿ'.split('_'),
+	    weekdaysMin : 'ಭಾ_ಸೋ_ಮಂ_ಬು_ಗು_ಶು_ಶ'.split('_'),
+	    longDateFormat : {
+	        LT : 'A h:mm',
+	        LTS : 'A h:mm:ss',
+	        L : 'DD/MM/YYYY',
+	        LL : 'D MMMM YYYY',
+	        LLL : 'D MMMM YYYY, A h:mm',
+	        LLLL : 'dddd, D MMMM YYYY, A h:mm'
+	    },
+	    calendar : {
+	        sameDay : '[ಇಂದು] LT',
+	        nextDay : '[ನಾಳೆ] LT',
+	        nextWeek : 'dddd, LT',
+	        lastDay : '[ನಿನ್ನೆ] LT',
+	        lastWeek : '[ಕೊನೆಯ] dddd, LT',
+	        sameElse : 'L'
+	    },
+	    relativeTime : {
+	        future : '%s ನಂತರ',
+	        past : '%s ಹಿಂದೆ',
+	        s : 'ಕೆಲವು ಕ್ಷಣಗಳು',
+	        m : 'ಒಂದು ನಿಮಿಷ',
+	        mm : '%d ನಿಮಿಷ',
+	        h : 'ಒಂದು ಗಂಟೆ',
+	        hh : '%d ಗಂಟೆ',
+	        d : 'ಒಂದು ದಿನ',
+	        dd : '%d ದಿನ',
+	        M : 'ಒಂದು ತಿಂಗಳು',
+	        MM : '%d ತಿಂಗಳು',
+	        y : 'ಒಂದು ವರ್ಷ',
+	        yy : '%d ವರ್ಷ'
+	    },
+	    preparse: function (string) {
+	        return string.replace(/[೧೨೩೪೫೬೭೮೯೦]/g, function (match) {
+	            return numberMap[match];
+	        });
+	    },
+	    postformat: function (string) {
+	        return string.replace(/\d/g, function (match) {
+	            return symbolMap[match];
+	        });
+	    },
+	    meridiemParse: /ರಾತ್ರಿ|ಬೆಳಿಗ್ಗೆ|ಮಧ್ಯಾಹ್ನ|ಸಂಜೆ/,
+	    meridiemHour : function (hour, meridiem) {
+	        if (hour === 12) {
+	            hour = 0;
+	        }
+	        if (meridiem === 'ರಾತ್ರಿ') {
+	            return hour < 4 ? hour : hour + 12;
+	        } else if (meridiem === 'ಬೆಳಿಗ್ಗೆ') {
+	            return hour;
+	        } else if (meridiem === 'ಮಧ್ಯಾಹ್ನ') {
+	            return hour >= 10 ? hour : hour + 12;
+	        } else if (meridiem === 'ಸಂಜೆ') {
+	            return hour + 12;
+	        }
+	    },
+	    meridiem : function (hour, minute, isLower) {
+	        if (hour < 4) {
+	            return 'ರಾತ್ರಿ';
+	        } else if (hour < 10) {
+	            return 'ಬೆಳಿಗ್ಗೆ';
+	        } else if (hour < 17) {
+	            return 'ಮಧ್ಯಾಹ್ನ';
+	        } else if (hour < 20) {
+	            return 'ಸಂಜೆ';
+	        } else {
+	            return 'ರಾತ್ರಿ';
+	        }
+	    },
+	    dayOfMonthOrdinalParse: /\d{1,2}(ನೇ)/,
+	    ordinal : function (number) {
+	        return number + 'ನೇ';
+	    },
+	    week : {
+	        dow : 0, // Sunday is the first day of the week.
+	        doy : 6  // The week that contains Jan 1st is the first week of the year.
+	    }
+	});
+
+	return kn;
+
+	})));
+
+
+/***/ },
+/* 702 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74159,7 +77000,7 @@
 	//! author : Jeeeyul Lee <jeeeyul@gmail.com>
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74172,12 +77013,16 @@
 	    weekdaysShort : '일_월_화_수_목_금_토'.split('_'),
 	    weekdaysMin : '일_월_화_수_목_금_토'.split('_'),
 	    longDateFormat : {
-	        LT : 'A h시 m분',
-	        LTS : 'A h시 m분 s초',
+	        LT : 'A h:mm',
+	        LTS : 'A h:mm:ss',
 	        L : 'YYYY.MM.DD',
 	        LL : 'YYYY년 MMMM D일',
-	        LLL : 'YYYY년 MMMM D일 A h시 m분',
-	        LLLL : 'YYYY년 MMMM D일 dddd A h시 m분'
+	        LLL : 'YYYY년 MMMM D일 A h:mm',
+	        LLLL : 'YYYY년 MMMM D일 dddd A h:mm',
+	        l : 'YYYY.MM.DD',
+	        ll : 'YYYY년 MMMM D일',
+	        lll : 'YYYY년 MMMM D일 A h:mm',
+	        llll : 'YYYY년 MMMM D일 dddd A h:mm'
 	    },
 	    calendar : {
 	        sameDay : '오늘 LT',
@@ -74192,7 +77037,7 @@
 	        past : '%s 전',
 	        s : '몇 초',
 	        ss : '%d초',
-	        m : '일분',
+	        m : '1분',
 	        mm : '%d분',
 	        h : '한 시간',
 	        hh : '%d시간',
@@ -74203,7 +77048,7 @@
 	        y : '일 년',
 	        yy : '%d년'
 	    },
-	    ordinalParse : /\d{1,2}일/,
+	    dayOfMonthOrdinalParse : /\d{1,2}일/,
 	    ordinal : '%d일',
 	    meridiemParse : /오전|오후/,
 	    isPM : function (token) {
@@ -74220,7 +77065,7 @@
 
 
 /***/ },
-/* 683 */
+/* 703 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74228,7 +77073,7 @@
 	//! author : Chyngyz Arystan uulu : https://github.com/chyngyz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74295,7 +77140,7 @@
 	        y : 'бир жыл',
 	        yy : '%d жыл'
 	    },
-	    ordinalParse: /\d{1,2}-(чи|чы|чү|чу)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(чи|чы|чү|чу)/,
 	    ordinal : function (number) {
 	        var a = number % 10,
 	            b = number >= 100 ? 100 : null;
@@ -74313,7 +77158,7 @@
 
 
 /***/ },
-/* 684 */
+/* 704 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74322,7 +77167,7 @@
 	//! author : David Raison : https://github.com/kwisatz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74441,7 +77286,7 @@
 	        y : processRelativeTime,
 	        yy : '%d Joer'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal: '%d.',
 	    week: {
 	        dow: 1, // Monday is the first day of the week.
@@ -74455,7 +77300,7 @@
 
 
 /***/ },
-/* 685 */
+/* 705 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74463,7 +77308,7 @@
 	//! author : Ryan Hart : https://github.com/ryanhart2
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74518,7 +77363,7 @@
 	        y : '1 ປີ',
 	        yy : '%d ປີ'
 	    },
-	    ordinalParse: /(ທີ່)\d{1,2}/,
+	    dayOfMonthOrdinalParse: /(ທີ່)\d{1,2}/,
 	    ordinal : function (number) {
 	        return 'ທີ່' + number;
 	    }
@@ -74530,7 +77375,7 @@
 
 
 /***/ },
-/* 686 */
+/* 706 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74538,7 +77383,7 @@
 	//! author : Mindaugas Mozūras : https://github.com/mmozuras
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74636,7 +77481,7 @@
 	        y : translateSingular,
 	        yy : translate
 	    },
-	    ordinalParse: /\d{1,2}-oji/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-oji/,
 	    ordinal : function (number) {
 	        return number + '-oji';
 	    },
@@ -74652,7 +77497,7 @@
 
 
 /***/ },
-/* 687 */
+/* 707 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74661,7 +77506,7 @@
 	//! author : Jānis Elmeris : https://github.com/JanisE
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74740,7 +77585,7 @@
 	        y : relativeTimeWithSingular,
 	        yy : relativeTimeWithPlural
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -74754,7 +77599,7 @@
 
 
 /***/ },
-/* 688 */
+/* 708 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74762,7 +77607,7 @@
 	//! author : Miodrag Nikač <miodrag@restartit.me> : https://github.com/miodragnikac
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74856,7 +77701,7 @@
 	        y      : 'godinu',
 	        yy     : translator.translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -74870,7 +77715,7 @@
 
 
 /***/ },
-/* 689 */
+/* 709 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74878,7 +77723,7 @@
 	//! author : John Corrigan <robbiecloset@gmail.com> : https://github.com/johnideal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -74925,7 +77770,7 @@
 	        y: 'he tau',
 	        yy: '%d tau'
 	    },
-	    ordinalParse: /\d{1,2}º/,
+	    dayOfMonthOrdinalParse: /\d{1,2}º/,
 	    ordinal: '%dº',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -74939,7 +77784,7 @@
 
 
 /***/ },
-/* 690 */
+/* 710 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -74947,7 +77792,7 @@
 	//! author : Borislav Mickov : https://github.com/B0k0
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75002,7 +77847,7 @@
 	        y : 'година',
 	        yy : '%d години'
 	    },
-	    ordinalParse: /\d{1,2}-(ев|ен|ти|ви|ри|ми)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(ев|ен|ти|ви|ри|ми)/,
 	    ordinal : function (number) {
 	        var lastDigit = number % 10,
 	            last2Digits = number % 100;
@@ -75034,7 +77879,7 @@
 
 
 /***/ },
-/* 691 */
+/* 711 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75042,7 +77887,7 @@
 	//! author : Floyd Pink : https://github.com/floydpink
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75120,7 +77965,7 @@
 
 
 /***/ },
-/* 692 */
+/* 712 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75129,7 +77974,7 @@
 	//! author : Vivek Athalye : https://github.com/vnathalye
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75284,7 +78129,7 @@
 
 
 /***/ },
-/* 693 */
+/* 713 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75292,7 +78137,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75371,7 +78216,7 @@
 
 
 /***/ },
-/* 694 */
+/* 714 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75380,7 +78225,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75459,7 +78304,7 @@
 
 
 /***/ },
-/* 695 */
+/* 715 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75469,7 +78314,7 @@
 	//! author : Tin Aung Lin : https://github.com/thanyawzinmin
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75560,7 +78405,7 @@
 
 
 /***/ },
-/* 696 */
+/* 716 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75569,7 +78414,7 @@
 	//!           Sigurd Gartmann : https://github.com/sigurdga
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75614,7 +78459,7 @@
 	        y : 'ett år',
 	        yy : '%d år'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -75628,7 +78473,7 @@
 
 
 /***/ },
-/* 697 */
+/* 717 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75636,7 +78481,7 @@
 	//! author : suvash : https://github.com/suvash
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75756,7 +78601,7 @@
 
 
 /***/ },
-/* 698 */
+/* 718 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75765,7 +78610,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75780,7 +78625,9 @@
 	var nl = moment.defineLocale('nl', {
 	    months : 'januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december'.split('_'),
 	    monthsShort : function (m, format) {
-	        if (/-MMM-/.test(format)) {
+	        if (!m) {
+	            return monthsShortWithDots;
+	        } else if (/-MMM-/.test(format)) {
 	            return monthsShortWithoutDots[m.month()];
 	        } else {
 	            return monthsShortWithDots[m.month()];
@@ -75831,7 +78678,7 @@
 	        y : 'één jaar',
 	        yy : '%d jaar'
 	    },
-	    ordinalParse: /\d{1,2}(ste|de)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(ste|de)/,
 	    ordinal : function (number) {
 	        return number + ((number === 1 || number === 8 || number >= 20) ? 'ste' : 'de');
 	    },
@@ -75847,7 +78694,7 @@
 
 
 /***/ },
-/* 699 */
+/* 719 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75856,7 +78703,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75871,7 +78718,9 @@
 	var nlBe = moment.defineLocale('nl-be', {
 	    months : 'januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december'.split('_'),
 	    monthsShort : function (m, format) {
-	        if (/-MMM-/.test(format)) {
+	        if (!m) {
+	            return monthsShortWithDots;
+	        } else if (/-MMM-/.test(format)) {
 	            return monthsShortWithoutDots[m.month()];
 	        } else {
 	            return monthsShortWithDots[m.month()];
@@ -75922,7 +78771,7 @@
 	        y : 'één jaar',
 	        yy : '%d jaar'
 	    },
-	    ordinalParse: /\d{1,2}(ste|de)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(ste|de)/,
 	    ordinal : function (number) {
 	        return number + ((number === 1 || number === 8 || number >= 20) ? 'ste' : 'de');
 	    },
@@ -75938,7 +78787,7 @@
 
 
 /***/ },
-/* 700 */
+/* 720 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -75946,7 +78795,7 @@
 	//! author : https://github.com/mechuwind
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -75989,7 +78838,7 @@
 	        y : 'eit år',
 	        yy : '%d år'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -76003,7 +78852,7 @@
 
 
 /***/ },
-/* 701 */
+/* 721 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76011,7 +78860,7 @@
 	//! author : Harpreet Singh : https://github.com/harpreetkhalsagtbit
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76132,7 +78981,7 @@
 
 
 /***/ },
-/* 702 */
+/* 722 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76140,7 +78989,7 @@
 	//! author : Rafal Hirsz : https://github.com/evoL
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76171,7 +79020,9 @@
 
 	var pl = moment.defineLocale('pl', {
 	    months : function (momentToFormat, format) {
-	        if (format === '') {
+	        if (!momentToFormat) {
+	            return monthsNominative;
+	        } else if (format === '') {
 	            // Hack: if format empty we know this is used to generate
 	            // RegExp by moment. Give then back both valid forms of months
 	            // in RegExp ready format.
@@ -76228,7 +79079,7 @@
 	        y : 'rok',
 	        yy : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -76242,7 +79093,7 @@
 
 
 /***/ },
-/* 703 */
+/* 723 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76250,7 +79101,7 @@
 	//! author : Jefferson : https://github.com/jalex79
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76261,7 +79112,7 @@
 	    monthsShort : 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
 	    weekdays : 'Domingo_Segunda-Feira_Terça-Feira_Quarta-Feira_Quinta-Feira_Sexta-Feira_Sábado'.split('_'),
 	    weekdaysShort : 'Dom_Seg_Ter_Qua_Qui_Sex_Sáb'.split('_'),
-	    weekdaysMin : 'Dom_2ª_3ª_4ª_5ª_6ª_Sáb'.split('_'),
+	    weekdaysMin : 'Do_2ª_3ª_4ª_5ª_6ª_Sá'.split('_'),
 	    weekdaysParseExact : true,
 	    longDateFormat : {
 	        LT : 'HH:mm',
@@ -76298,7 +79149,7 @@
 	        y : 'um ano',
 	        yy : '%d anos'
 	    },
-	    ordinalParse: /\d{1,2}º/,
+	    dayOfMonthOrdinalParse: /\d{1,2}º/,
 	    ordinal : '%dº',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -76312,7 +79163,7 @@
 
 
 /***/ },
-/* 704 */
+/* 724 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76320,7 +79171,7 @@
 	//! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76331,7 +79182,7 @@
 	    monthsShort : 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
 	    weekdays : 'Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado'.split('_'),
 	    weekdaysShort : 'Dom_Seg_Ter_Qua_Qui_Sex_Sáb'.split('_'),
-	    weekdaysMin : 'Dom_2ª_3ª_4ª_5ª_6ª_Sáb'.split('_'),
+	    weekdaysMin : 'Do_2ª_3ª_4ª_5ª_6ª_Sá'.split('_'),
 	    weekdaysParseExact : true,
 	    longDateFormat : {
 	        LT : 'HH:mm',
@@ -76368,7 +79219,7 @@
 	        y : 'um ano',
 	        yy : '%d anos'
 	    },
-	    ordinalParse: /\d{1,2}º/,
+	    dayOfMonthOrdinalParse: /\d{1,2}º/,
 	    ordinal : '%dº'
 	});
 
@@ -76378,7 +79229,7 @@
 
 
 /***/ },
-/* 705 */
+/* 725 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76387,7 +79238,7 @@
 	//! author : Valentin Agachi : https://github.com/avaly
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76458,7 +79309,7 @@
 
 
 /***/ },
-/* 706 */
+/* 726 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76468,7 +79319,7 @@
 	//! author : Коренберг Марк : https://github.com/socketpair
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76618,7 +79469,7 @@
 	            return 'вечера';
 	        }
 	    },
-	    ordinalParse: /\d{1,2}-(й|го|я)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(й|го|я)/,
 	    ordinal: function (number, period) {
 	        switch (period) {
 	            case 'M':
@@ -76646,7 +79497,110 @@
 
 
 /***/ },
-/* 707 */
+/* 727 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//! moment.js locale configuration
+	//! locale : Sindhi [sd]
+	//! author : Narain Sagar : https://github.com/narainsagar
+
+	;(function (global, factory) {
+	    true ? factory(__webpack_require__(640)) :
+	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+	   factory(global.moment)
+	}(this, (function (moment) { 'use strict';
+
+
+	var months = [
+	    'جنوري',
+	    'فيبروري',
+	    'مارچ',
+	    'اپريل',
+	    'مئي',
+	    'جون',
+	    'جولاءِ',
+	    'آگسٽ',
+	    'سيپٽمبر',
+	    'آڪٽوبر',
+	    'نومبر',
+	    'ڊسمبر'
+	];
+	var days = [
+	    'آچر',
+	    'سومر',
+	    'اڱارو',
+	    'اربع',
+	    'خميس',
+	    'جمع',
+	    'ڇنڇر'
+	];
+
+	var sd = moment.defineLocale('sd', {
+	    months : months,
+	    monthsShort : months,
+	    weekdays : days,
+	    weekdaysShort : days,
+	    weekdaysMin : days,
+	    longDateFormat : {
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
+	        L : 'DD/MM/YYYY',
+	        LL : 'D MMMM YYYY',
+	        LLL : 'D MMMM YYYY HH:mm',
+	        LLLL : 'dddd، D MMMM YYYY HH:mm'
+	    },
+	    meridiemParse: /صبح|شام/,
+	    isPM : function (input) {
+	        return 'شام' === input;
+	    },
+	    meridiem : function (hour, minute, isLower) {
+	        if (hour < 12) {
+	            return 'صبح';
+	        }
+	        return 'شام';
+	    },
+	    calendar : {
+	        sameDay : '[اڄ] LT',
+	        nextDay : '[سڀاڻي] LT',
+	        nextWeek : 'dddd [اڳين هفتي تي] LT',
+	        lastDay : '[ڪالهه] LT',
+	        lastWeek : '[گزريل هفتي] dddd [تي] LT',
+	        sameElse : 'L'
+	    },
+	    relativeTime : {
+	        future : '%s پوء',
+	        past : '%s اڳ',
+	        s : 'چند سيڪنڊ',
+	        m : 'هڪ منٽ',
+	        mm : '%d منٽ',
+	        h : 'هڪ ڪلاڪ',
+	        hh : '%d ڪلاڪ',
+	        d : 'هڪ ڏينهن',
+	        dd : '%d ڏينهن',
+	        M : 'هڪ مهينو',
+	        MM : '%d مهينا',
+	        y : 'هڪ سال',
+	        yy : '%d سال'
+	    },
+	    preparse: function (string) {
+	        return string.replace(/،/g, ',');
+	    },
+	    postformat: function (string) {
+	        return string.replace(/,/g, '،');
+	    },
+	    week : {
+	        dow : 1, // Monday is the first day of the week.
+	        doy : 4  // The week that contains Jan 4th is the first week of the year.
+	    }
+	});
+
+	return sd;
+
+	})));
+
+
+/***/ },
+/* 728 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76654,7 +79608,7 @@
 	//! authors : Bård Rolstad Henriksen : https://github.com/karamell
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76698,7 +79652,7 @@
 	        y : 'okta jahki',
 	        yy : '%d jagit'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -76712,7 +79666,7 @@
 
 
 /***/ },
-/* 708 */
+/* 729 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76720,7 +79674,7 @@
 	//! author : Sampath Sitinamaluwa : https://github.com/sampathsris
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76765,7 +79719,7 @@
 	        y : 'වසර',
 	        yy : 'වසර %d'
 	    },
-	    ordinalParse: /\d{1,2} වැනි/,
+	    dayOfMonthOrdinalParse: /\d{1,2} වැනි/,
 	    ordinal : function (number) {
 	        return number + ' වැනි';
 	    },
@@ -76788,7 +79742,7 @@
 
 
 /***/ },
-/* 709 */
+/* 730 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76797,7 +79751,7 @@
 	//! based on work of petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -76929,7 +79883,7 @@
 	        y : translate,
 	        yy : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -76943,7 +79897,7 @@
 
 
 /***/ },
-/* 710 */
+/* 731 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -76951,7 +79905,7 @@
 	//! author : Robert Sedovšek : https://github.com/sedovsek
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77096,7 +80050,7 @@
 	        y      : processRelativeTime,
 	        yy     : processRelativeTime
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -77110,7 +80064,7 @@
 
 
 /***/ },
-/* 711 */
+/* 732 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77120,7 +80074,7 @@
 	//! author : Oerd Cukalla : https://github.com/oerd
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77171,7 +80125,7 @@
 	        y : 'një vit',
 	        yy : '%d vite'
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -77185,7 +80139,7 @@
 
 
 /***/ },
-/* 712 */
+/* 733 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77193,7 +80147,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77286,7 +80240,7 @@
 	        y      : 'godinu',
 	        yy     : translator.translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -77300,7 +80254,7 @@
 
 
 /***/ },
-/* 713 */
+/* 734 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77308,7 +80262,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77401,7 +80355,7 @@
 	        y      : 'годину',
 	        yy     : translator.translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -77415,7 +80369,7 @@
 
 
 /***/ },
-/* 714 */
+/* 735 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77423,7 +80377,7 @@
 	//! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77495,7 +80449,7 @@
 	            return hour + 12;
 	        }
 	    },
-	    ordinalParse: /\d{1,2}/,
+	    dayOfMonthOrdinalParse: /\d{1,2}/,
 	    ordinal : '%d',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -77509,7 +80463,7 @@
 
 
 /***/ },
-/* 715 */
+/* 736 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77517,7 +80471,7 @@
 	//! author : Jens Alm : https://github.com/ulmus
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77562,7 +80516,7 @@
 	        y : 'ett år',
 	        yy : '%d år'
 	    },
-	    ordinalParse: /\d{1,2}(e|a)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(e|a)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'e' :
@@ -77583,7 +80537,7 @@
 
 
 /***/ },
-/* 716 */
+/* 737 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77591,7 +80545,7 @@
 	//! author : Fahad Kassim : https://github.com/fadsel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77647,7 +80601,7 @@
 
 
 /***/ },
-/* 717 */
+/* 738 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77655,7 +80609,7 @@
 	//! author : Arjunkumar Krishnamoorthy : https://github.com/tk120404
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77723,7 +80677,7 @@
 	        y : 'ஒரு வருடம்',
 	        yy : '%d ஆண்டுகள்'
 	    },
-	    ordinalParse: /\d{1,2}வது/,
+	    dayOfMonthOrdinalParse: /\d{1,2}வது/,
 	    ordinal : function (number) {
 	        return number + 'வது';
 	    },
@@ -77782,7 +80736,7 @@
 
 
 /***/ },
-/* 718 */
+/* 739 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77790,7 +80744,7 @@
 	//! author : Krishna Chaitanya Thota : https://github.com/kcthota
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77834,7 +80788,7 @@
 	        y : 'ఒక సంవత్సరం',
 	        yy : '%d సంవత్సరాలు'
 	    },
-	    ordinalParse : /\d{1,2}వ/,
+	    dayOfMonthOrdinalParse : /\d{1,2}వ/,
 	    ordinal : '%dవ',
 	    meridiemParse: /రాత్రి|ఉదయం|మధ్యాహ్నం|సాయంత్రం/,
 	    meridiemHour : function (hour, meridiem) {
@@ -77876,7 +80830,7 @@
 
 
 /***/ },
-/* 719 */
+/* 740 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77885,7 +80839,7 @@
 	//! author : Onorio De J. Afonso : https://github.com/marobo
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77928,7 +80882,7 @@
 	        y : 'tinan ida',
 	        yy : 'tinan %d'
 	    },
-	    ordinalParse: /\d{1,2}(st|nd|rd|th)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'th' :
@@ -77949,7 +80903,7 @@
 
 
 /***/ },
-/* 720 */
+/* 741 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -77957,7 +80911,7 @@
 	//! author : Kridsada Thanabulpong : https://github.com/sirn
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -77974,7 +80928,7 @@
 	    longDateFormat : {
 	        LT : 'H:mm',
 	        LTS : 'H:mm:ss',
-	        L : 'YYYY/MM/DD',
+	        L : 'DD/MM/YYYY',
 	        LL : 'D MMMM YYYY',
 	        LLL : 'D MMMM YYYY เวลา H:mm',
 	        LLLL : 'วันddddที่ D MMMM YYYY เวลา H:mm'
@@ -78021,7 +80975,7 @@
 
 
 /***/ },
-/* 721 */
+/* 742 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78029,7 +80983,7 @@
 	//! author : Dan Hagman : https://github.com/hagmandan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78072,7 +81026,7 @@
 	        y : 'isang taon',
 	        yy : '%d taon'
 	    },
-	    ordinalParse: /\d{1,2}/,
+	    dayOfMonthOrdinalParse: /\d{1,2}/,
 	    ordinal : function (number) {
 	        return number;
 	    },
@@ -78088,7 +81042,7 @@
 
 
 /***/ },
-/* 722 */
+/* 743 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78096,7 +81050,7 @@
 	//! author : Dominika Kruk : https://github.com/amaranthrose
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78199,7 +81153,7 @@
 	        y : 'wa’ DIS',
 	        yy : translate
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -78213,7 +81167,7 @@
 
 
 /***/ },
-/* 723 */
+/* 744 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78222,7 +81176,7 @@
 	//!           Burak Yiğit Kaya: https://github.com/BYK
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78286,7 +81240,7 @@
 	        y : 'bir yıl',
 	        yy : '%d yıl'
 	    },
-	    ordinalParse: /\d{1,2}'(inci|nci|üncü|ncı|uncu|ıncı)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}'(inci|nci|üncü|ncı|uncu|ıncı)/,
 	    ordinal : function (number) {
 	        if (number === 0) {  // special case for zero
 	            return number + '\'ıncı';
@@ -78308,7 +81262,7 @@
 
 
 /***/ },
-/* 724 */
+/* 745 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78317,7 +81271,7 @@
 	//! author : Iustì Canun
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78373,7 +81327,7 @@
 	        y : processRelativeTime,
 	        yy : processRelativeTime
 	    },
-	    ordinalParse: /\d{1,2}\./,
+	    dayOfMonthOrdinalParse: /\d{1,2}\./,
 	    ordinal : '%d.',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -78404,7 +81358,7 @@
 
 
 /***/ },
-/* 725 */
+/* 746 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78412,7 +81366,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78467,7 +81421,7 @@
 
 
 /***/ },
-/* 726 */
+/* 747 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78475,7 +81429,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78530,7 +81484,7 @@
 
 
 /***/ },
-/* 727 */
+/* 748 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78539,7 +81493,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78572,8 +81526,13 @@
 	        'nominative': 'неділя_понеділок_вівторок_середа_четвер_п’ятниця_субота'.split('_'),
 	        'accusative': 'неділю_понеділок_вівторок_середу_четвер_п’ятницю_суботу'.split('_'),
 	        'genitive': 'неділі_понеділка_вівторка_середи_четверга_п’ятниці_суботи'.split('_')
-	    },
-	    nounCase = (/(\[[ВвУу]\]) ?dddd/).test(format) ?
+	    };
+
+	    if (!m) {
+	        return weekdays['nominative'];
+	    }
+
+	    var nounCase = (/(\[[ВвУу]\]) ?dddd/).test(format) ?
 	        'accusative' :
 	        ((/\[?(?:минулої|наступної)? ?\] ?dddd/).test(format) ?
 	            'genitive' :
@@ -78654,7 +81613,7 @@
 	            return 'вечора';
 	        }
 	    },
-	    ordinalParse: /\d{1,2}-(й|го)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}-(й|го)/,
 	    ordinal: function (number, period) {
 	        switch (period) {
 	            case 'M':
@@ -78681,7 +81640,111 @@
 
 
 /***/ },
-/* 728 */
+/* 749 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//! moment.js locale configuration
+	//! locale : Urdu [ur]
+	//! author : Sawood Alam : https://github.com/ibnesayeed
+	//! author : Zack : https://github.com/ZackVision
+
+	;(function (global, factory) {
+	    true ? factory(__webpack_require__(640)) :
+	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+	   factory(global.moment)
+	}(this, (function (moment) { 'use strict';
+
+
+	var months = [
+	    'جنوری',
+	    'فروری',
+	    'مارچ',
+	    'اپریل',
+	    'مئی',
+	    'جون',
+	    'جولائی',
+	    'اگست',
+	    'ستمبر',
+	    'اکتوبر',
+	    'نومبر',
+	    'دسمبر'
+	];
+	var days = [
+	    'اتوار',
+	    'پیر',
+	    'منگل',
+	    'بدھ',
+	    'جمعرات',
+	    'جمعہ',
+	    'ہفتہ'
+	];
+
+	var ur = moment.defineLocale('ur', {
+	    months : months,
+	    monthsShort : months,
+	    weekdays : days,
+	    weekdaysShort : days,
+	    weekdaysMin : days,
+	    longDateFormat : {
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
+	        L : 'DD/MM/YYYY',
+	        LL : 'D MMMM YYYY',
+	        LLL : 'D MMMM YYYY HH:mm',
+	        LLLL : 'dddd، D MMMM YYYY HH:mm'
+	    },
+	    meridiemParse: /صبح|شام/,
+	    isPM : function (input) {
+	        return 'شام' === input;
+	    },
+	    meridiem : function (hour, minute, isLower) {
+	        if (hour < 12) {
+	            return 'صبح';
+	        }
+	        return 'شام';
+	    },
+	    calendar : {
+	        sameDay : '[آج بوقت] LT',
+	        nextDay : '[کل بوقت] LT',
+	        nextWeek : 'dddd [بوقت] LT',
+	        lastDay : '[گذشتہ روز بوقت] LT',
+	        lastWeek : '[گذشتہ] dddd [بوقت] LT',
+	        sameElse : 'L'
+	    },
+	    relativeTime : {
+	        future : '%s بعد',
+	        past : '%s قبل',
+	        s : 'چند سیکنڈ',
+	        m : 'ایک منٹ',
+	        mm : '%d منٹ',
+	        h : 'ایک گھنٹہ',
+	        hh : '%d گھنٹے',
+	        d : 'ایک دن',
+	        dd : '%d دن',
+	        M : 'ایک ماہ',
+	        MM : '%d ماہ',
+	        y : 'ایک سال',
+	        yy : '%d سال'
+	    },
+	    preparse: function (string) {
+	        return string.replace(/،/g, ',');
+	    },
+	    postformat: function (string) {
+	        return string.replace(/,/g, '،');
+	    },
+	    week : {
+	        dow : 1, // Monday is the first day of the week.
+	        doy : 4  // The week that contains Jan 4th is the first week of the year.
+	    }
+	});
+
+	return ur;
+
+	})));
+
+
+/***/ },
+/* 750 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78689,7 +81752,7 @@
 	//! author : Sardor Muminov : https://github.com/muminoff
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78744,7 +81807,70 @@
 
 
 /***/ },
-/* 729 */
+/* 751 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//! moment.js locale configuration
+	//! locale : Uzbek Latin [uz-latn]
+	//! author : Rasulbek Mirzayev : github.com/Rasulbeeek
+
+	;(function (global, factory) {
+	    true ? factory(__webpack_require__(640)) :
+	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+	   factory(global.moment)
+	}(this, (function (moment) { 'use strict';
+
+
+	var uzLatn = moment.defineLocale('uz-latn', {
+	    months : 'Yanvar_Fevral_Mart_Aprel_May_Iyun_Iyul_Avgust_Sentabr_Oktabr_Noyabr_Dekabr'.split('_'),
+	    monthsShort : 'Yan_Fev_Mar_Apr_May_Iyun_Iyul_Avg_Sen_Okt_Noy_Dek'.split('_'),
+	    weekdays : 'Yakshanba_Dushanba_Seshanba_Chorshanba_Payshanba_Juma_Shanba'.split('_'),
+	    weekdaysShort : 'Yak_Dush_Sesh_Chor_Pay_Jum_Shan'.split('_'),
+	    weekdaysMin : 'Ya_Du_Se_Cho_Pa_Ju_Sha'.split('_'),
+	    longDateFormat : {
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
+	        L : 'DD/MM/YYYY',
+	        LL : 'D MMMM YYYY',
+	        LLL : 'D MMMM YYYY HH:mm',
+	        LLLL : 'D MMMM YYYY, dddd HH:mm'
+	    },
+	    calendar : {
+	        sameDay : '[Bugun soat] LT [da]',
+	        nextDay : '[Ertaga] LT [da]',
+	        nextWeek : 'dddd [kuni soat] LT [da]',
+	        lastDay : '[Kecha soat] LT [da]',
+	        lastWeek : '[O\'tgan] dddd [kuni soat] LT [da]',
+	        sameElse : 'L'
+	    },
+	    relativeTime : {
+	        future : 'Yaqin %s ichida',
+	        past : 'Bir necha %s oldin',
+	        s : 'soniya',
+	        m : 'bir daqiqa',
+	        mm : '%d daqiqa',
+	        h : 'bir soat',
+	        hh : '%d soat',
+	        d : 'bir kun',
+	        dd : '%d kun',
+	        M : 'bir oy',
+	        MM : '%d oy',
+	        y : 'bir yil',
+	        yy : '%d yil'
+	    },
+	    week : {
+	        dow : 1, // Monday is the first day of the week.
+	        doy : 7  // The week that contains Jan 1st is the first week of the year.
+	    }
+	});
+
+	return uzLatn;
+
+	})));
+
+
+/***/ },
+/* 752 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78752,7 +81878,7 @@
 	//! author : Bang Nguyen : https://github.com/bangnk
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78812,7 +81938,7 @@
 	        y : 'một năm',
 	        yy : '%d năm'
 	    },
-	    ordinalParse: /\d{1,2}/,
+	    dayOfMonthOrdinalParse: /\d{1,2}/,
 	    ordinal : function (number) {
 	        return number;
 	    },
@@ -78828,7 +81954,7 @@
 
 
 /***/ },
-/* 730 */
+/* 753 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78836,7 +81962,7 @@
 	//! author : Andrew Hood : https://github.com/andrewhood125
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78880,7 +82006,7 @@
 	        y : 'á ~ýéár',
 	        yy : '%d ý~éárs'
 	    },
-	    ordinalParse: /\d{1,2}(th|st|nd|rd)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(th|st|nd|rd)/,
 	    ordinal : function (number) {
 	        var b = number % 10,
 	            output = (~~(number % 100 / 10) === 1) ? 'th' :
@@ -78901,7 +82027,7 @@
 
 
 /***/ },
-/* 731 */
+/* 754 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78909,7 +82035,7 @@
 	//! author : Atolagbe Abisoye : https://github.com/andela-batolagbe
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78952,7 +82078,7 @@
 	        y : 'ọdún kan',
 	        yy : 'ọdún %d'
 	    },
-	    ordinalParse : /ọjọ́\s\d{1,2}/,
+	    dayOfMonthOrdinalParse : /ọjọ́\s\d{1,2}/,
 	    ordinal : 'ọjọ́ %d',
 	    week : {
 	        dow : 1, // Monday is the first day of the week.
@@ -78966,7 +82092,7 @@
 
 
 /***/ },
-/* 732 */
+/* 755 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -78975,7 +82101,7 @@
 	//! author : Zeno Zeng : https://github.com/zenozeng
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -78988,16 +82114,16 @@
 	    weekdaysShort : '周日_周一_周二_周三_周四_周五_周六'.split('_'),
 	    weekdaysMin : '日_一_二_三_四_五_六'.split('_'),
 	    longDateFormat : {
-	        LT : 'Ah点mm分',
-	        LTS : 'Ah点m分s秒',
-	        L : 'YYYY-MM-DD',
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
+	        L : 'YYYY年MMMD日',
 	        LL : 'YYYY年MMMD日',
 	        LLL : 'YYYY年MMMD日Ah点mm分',
 	        LLLL : 'YYYY年MMMD日ddddAh点mm分',
-	        l : 'YYYY-MM-DD',
+	        l : 'YYYY年MMMD日',
 	        ll : 'YYYY年MMMD日',
-	        lll : 'YYYY年MMMD日Ah点mm分',
-	        llll : 'YYYY年MMMD日ddddAh点mm分'
+	        lll : 'YYYY年MMMD日 HH:mm',
+	        llll : 'YYYY年MMMD日dddd HH:mm'
 	    },
 	    meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
 	    meridiemHour: function (hour, meridiem) {
@@ -79031,30 +82157,14 @@
 	        }
 	    },
 	    calendar : {
-	        sameDay : function () {
-	            return this.minutes() === 0 ? '[今天]Ah[点整]' : '[今天]LT';
-	        },
-	        nextDay : function () {
-	            return this.minutes() === 0 ? '[明天]Ah[点整]' : '[明天]LT';
-	        },
-	        lastDay : function () {
-	            return this.minutes() === 0 ? '[昨天]Ah[点整]' : '[昨天]LT';
-	        },
-	        nextWeek : function () {
-	            var startOfWeek, prefix;
-	            startOfWeek = moment().startOf('week');
-	            prefix = this.diff(startOfWeek, 'days') >= 7 ? '[下]' : '[本]';
-	            return this.minutes() === 0 ? prefix + 'dddAh点整' : prefix + 'dddAh点mm';
-	        },
-	        lastWeek : function () {
-	            var startOfWeek, prefix;
-	            startOfWeek = moment().startOf('week');
-	            prefix = this.unix() < startOfWeek.unix()  ? '[上]' : '[本]';
-	            return this.minutes() === 0 ? prefix + 'dddAh点整' : prefix + 'dddAh点mm';
-	        },
-	        sameElse : 'LL'
+	        sameDay : '[今天]LT',
+	        nextDay : '[明天]LT',
+	        nextWeek : '[下]ddddLT',
+	        lastDay : '[昨天]LT',
+	        lastWeek : '[上]ddddLT',
+	        sameElse : 'L'
 	    },
-	    ordinalParse: /\d{1,2}(日|月|周)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(日|月|周)/,
 	    ordinal : function (number, period) {
 	        switch (period) {
 	            case 'd':
@@ -79098,7 +82208,7 @@
 
 
 /***/ },
-/* 733 */
+/* 756 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -79108,7 +82218,7 @@
 	//! author : Konstantin : https://github.com/skfd
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -79121,16 +82231,16 @@
 	    weekdaysShort : '週日_週一_週二_週三_週四_週五_週六'.split('_'),
 	    weekdaysMin : '日_一_二_三_四_五_六'.split('_'),
 	    longDateFormat : {
-	        LT : 'Ah點mm分',
-	        LTS : 'Ah點m分s秒',
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
 	        L : 'YYYY年MMMD日',
 	        LL : 'YYYY年MMMD日',
-	        LLL : 'YYYY年MMMD日Ah點mm分',
-	        LLLL : 'YYYY年MMMD日ddddAh點mm分',
+	        LLL : 'YYYY年MMMD日 HH:mm',
+	        LLLL : 'YYYY年MMMD日dddd HH:mm',
 	        l : 'YYYY年MMMD日',
 	        ll : 'YYYY年MMMD日',
-	        lll : 'YYYY年MMMD日Ah點mm分',
-	        llll : 'YYYY年MMMD日ddddAh點mm分'
+	        lll : 'YYYY年MMMD日 HH:mm',
+	        llll : 'YYYY年MMMD日dddd HH:mm'
 	    },
 	    meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
 	    meridiemHour : function (hour, meridiem) {
@@ -79169,7 +82279,7 @@
 	        lastWeek : '[上]ddddLT',
 	        sameElse : 'L'
 	    },
-	    ordinalParse: /\d{1,2}(日|月|週)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(日|月|週)/,
 	    ordinal : function (number, period) {
 	        switch (period) {
 	            case 'd' :
@@ -79208,7 +82318,7 @@
 
 
 /***/ },
-/* 734 */
+/* 757 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -79217,7 +82327,7 @@
 	//! author : Chris Lam : https://github.com/hehachris
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(624)) :
+	    true ? factory(__webpack_require__(640)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -79230,16 +82340,16 @@
 	    weekdaysShort : '週日_週一_週二_週三_週四_週五_週六'.split('_'),
 	    weekdaysMin : '日_一_二_三_四_五_六'.split('_'),
 	    longDateFormat : {
-	        LT : 'Ah點mm分',
-	        LTS : 'Ah點m分s秒',
+	        LT : 'HH:mm',
+	        LTS : 'HH:mm:ss',
 	        L : 'YYYY年MMMD日',
 	        LL : 'YYYY年MMMD日',
-	        LLL : 'YYYY年MMMD日Ah點mm分',
-	        LLLL : 'YYYY年MMMD日ddddAh點mm分',
+	        LLL : 'YYYY年MMMD日 HH:mm',
+	        LLLL : 'YYYY年MMMD日dddd HH:mm',
 	        l : 'YYYY年MMMD日',
 	        ll : 'YYYY年MMMD日',
-	        lll : 'YYYY年MMMD日Ah點mm分',
-	        llll : 'YYYY年MMMD日ddddAh點mm分'
+	        lll : 'YYYY年MMMD日 HH:mm',
+	        llll : 'YYYY年MMMD日dddd HH:mm'
 	    },
 	    meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
 	    meridiemHour : function (hour, meridiem) {
@@ -79278,7 +82388,7 @@
 	        lastWeek : '[上]ddddLT',
 	        sameElse : 'L'
 	    },
-	    ordinalParse: /\d{1,2}(日|月|週)/,
+	    dayOfMonthOrdinalParse: /\d{1,2}(日|月|週)/,
 	    ordinal : function (number, period) {
 	        switch (period) {
 	            case 'd' :
@@ -79317,22 +82427,23 @@
 
 
 /***/ },
-/* 735 */
+/* 758 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var isTwelveHourTime = __webpack_require__(736);
-	var replaceCharAt = __webpack_require__(737);
-	var getGroupId = __webpack_require__(738);
-	var getGroups = __webpack_require__(739);
-	var adder = __webpack_require__(740);
-	var caret = __webpack_require__(745);
-	var validate = __webpack_require__(746);
+	var CreateReactClass = __webpack_require__(624);
+	var PropTypes = __webpack_require__(593);
+	var isTwelveHourTime = __webpack_require__(759);
+	var replaceCharAt = __webpack_require__(760);
+	var getGroupId = __webpack_require__(761);
+	var getGroups = __webpack_require__(762);
+	var adder = __webpack_require__(763);
+	var caret = __webpack_require__(768);
+	var validate = __webpack_require__(769);
 
-	var TimeInput = React.createClass({
-	  displayName: 'TimeInput',
+	var TimeInput = CreateReactClass({
 	  getInitialState: function getInitialState() {
 	    return {};
 	  },
@@ -79344,10 +82455,10 @@
 	  },
 
 	  propTypes: {
-	    className: React.PropTypes.string,
-	    value: React.PropTypes.string,
-	    onChange: React.PropTypes.func,
-	    defaultValue: React.PropTypes.string
+	    className: PropTypes.string,
+	    value: PropTypes.string,
+	    onChange: PropTypes.func,
+	    defaultValue: PropTypes.string
 	  },
 	  render: function render() {
 	    var _this = this;
@@ -79522,7 +82633,7 @@
 	module.exports = TimeInput;
 
 /***/ },
-/* 736 */
+/* 759 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79533,7 +82644,7 @@
 	};
 
 /***/ },
-/* 737 */
+/* 760 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -79545,7 +82656,7 @@
 	};
 
 /***/ },
-/* 738 */
+/* 761 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79559,7 +82670,7 @@
 	};
 
 /***/ },
-/* 739 */
+/* 762 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79569,17 +82680,17 @@
 	};
 
 /***/ },
-/* 740 */
+/* 763 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var zeroPad = __webpack_require__(741);
-	var getGroups = __webpack_require__(739);
-	var getBase = __webpack_require__(742);
-	var stringify = __webpack_require__(743);
-	var toggle24Hr = __webpack_require__(744);
-	var isTwelveHourTime = __webpack_require__(736);
+	var zeroPad = __webpack_require__(764);
+	var getGroups = __webpack_require__(762);
+	var getBase = __webpack_require__(765);
+	var stringify = __webpack_require__(766);
+	var toggle24Hr = __webpack_require__(767);
+	var isTwelveHourTime = __webpack_require__(759);
 
 	module.exports = function adder(str, groupId, amount) {
 	  var groups = getGroups(str);
@@ -79609,7 +82720,7 @@
 	}
 
 /***/ },
-/* 741 */
+/* 764 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -79621,7 +82732,7 @@
 	};
 
 /***/ },
-/* 742 */
+/* 765 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79633,19 +82744,19 @@
 	};
 
 /***/ },
-/* 743 */
+/* 766 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isTwelveHourTime = __webpack_require__(736);
+	var isTwelveHourTime = __webpack_require__(759);
 	module.exports = function stringify(groups) {
 	  if (isTwelveHourTime(groups)) return groups.slice(0, -1).join(':') + ' ' + groups[groups.length - 1];
 	  return groups.join(':');
 	};
 
 /***/ },
-/* 744 */
+/* 767 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -79657,7 +82768,7 @@
 	};
 
 /***/ },
-/* 745 */
+/* 768 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79675,7 +82786,7 @@
 	};
 
 /***/ },
-/* 746 */
+/* 769 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79687,13 +82798,13 @@
 	};
 
 /***/ },
-/* 747 */
+/* 770 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(748);
+	var content = __webpack_require__(771);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -79702,8 +82813,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -79713,7 +82824,7 @@
 	}
 
 /***/ },
-/* 748 */
+/* 771 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -79727,7 +82838,7 @@
 
 
 /***/ },
-/* 749 */
+/* 772 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79804,13 +82915,13 @@
 	exports.default = need;
 
 /***/ },
-/* 750 */
+/* 773 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(751);
+	var content = __webpack_require__(774);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -79819,8 +82930,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -79830,7 +82941,7 @@
 	}
 
 /***/ },
-/* 751 */
+/* 774 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -79844,7 +82955,7 @@
 
 
 /***/ },
-/* 752 */
+/* 775 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79865,19 +82976,19 @@
 
 	var _Layouts = __webpack_require__(591);
 
-	var _ManagePopup = __webpack_require__(753);
+	var _ManagePopup = __webpack_require__(776);
 
 	var _ManagePopup2 = _interopRequireDefault(_ManagePopup);
 
-	var _reducer = __webpack_require__(754);
+	var _reducer = __webpack_require__(777);
 
-	var _need = __webpack_require__(749);
+	var _need = __webpack_require__(772);
 
 	var _need2 = _interopRequireDefault(_need);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(757);
+	__webpack_require__(780);
 
 	var Faculties = _react2.default.createClass({
 	    displayName: 'Faculties',
@@ -79926,7 +83037,7 @@
 	}, { loadFaculties: _reducer.loadFaculties, openManagePopup: _reducer.openManagePopup })(Faculties));
 
 /***/ },
-/* 753 */
+/* 776 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79955,9 +83066,9 @@
 
 	var _Button2 = _interopRequireDefault(_Button);
 
-	var _reducer = __webpack_require__(754);
+	var _reducer = __webpack_require__(777);
 
-	__webpack_require__(755);
+	__webpack_require__(778);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -80103,7 +83214,7 @@
 	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addFaculty, edit: _reducer.editFaculty, remove: _reducer.deleteFaculty })(ManagePopup);
 
 /***/ },
-/* 754 */
+/* 777 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80203,13 +83314,13 @@
 	}
 
 /***/ },
-/* 755 */
+/* 778 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(756);
+	var content = __webpack_require__(779);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -80218,8 +83329,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -80229,7 +83340,7 @@
 	}
 
 /***/ },
-/* 756 */
+/* 779 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -80243,13 +83354,13 @@
 
 
 /***/ },
-/* 757 */
+/* 780 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(758);
+	var content = __webpack_require__(781);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -80258,8 +83369,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -80269,7 +83380,7 @@
 	}
 
 /***/ },
-/* 758 */
+/* 781 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -80283,7 +83394,7 @@
 
 
 /***/ },
-/* 759 */
+/* 782 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80304,19 +83415,19 @@
 
 	var _Layouts = __webpack_require__(591);
 
-	var _ManagePopup = __webpack_require__(760);
+	var _ManagePopup = __webpack_require__(783);
 
 	var _ManagePopup2 = _interopRequireDefault(_ManagePopup);
 
-	var _reducer = __webpack_require__(761);
+	var _reducer = __webpack_require__(784);
 
-	var _need = __webpack_require__(749);
+	var _need = __webpack_require__(772);
 
 	var _need2 = _interopRequireDefault(_need);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(764);
+	__webpack_require__(787);
 
 	var Specialities = _react2.default.createClass({
 	    displayName: 'Specialities',
@@ -80367,7 +83478,7 @@
 	}, { loadSpecialities: _reducer.loadSpecialities, openManagePopup: _reducer.openManagePopup })(Specialities));
 
 /***/ },
-/* 760 */
+/* 783 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80396,9 +83507,9 @@
 
 	var _Button2 = _interopRequireDefault(_Button);
 
-	var _reducer = __webpack_require__(761);
+	var _reducer = __webpack_require__(784);
 
-	__webpack_require__(762);
+	__webpack_require__(785);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -80544,7 +83655,7 @@
 	}, { closePopup: _reducer.closeManagePopup, add: _reducer.addSpeciality, edit: _reducer.editSpeciality, remove: _reducer.deleteSpeciality })(ManagePopup);
 
 /***/ },
-/* 761 */
+/* 784 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80644,13 +83755,13 @@
 	}
 
 /***/ },
-/* 762 */
+/* 785 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(763);
+	var content = __webpack_require__(786);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -80659,8 +83770,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -80670,7 +83781,7 @@
 	}
 
 /***/ },
-/* 763 */
+/* 786 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -80684,13 +83795,13 @@
 
 
 /***/ },
-/* 764 */
+/* 787 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(765);
+	var content = __webpack_require__(788);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -80699,8 +83810,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -80710,7 +83821,7 @@
 	}
 
 /***/ },
-/* 765 */
+/* 788 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -80724,7 +83835,7 @@
 
 
 /***/ },
-/* 766 */
+/* 789 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80745,7 +83856,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(767);
+	__webpack_require__(790);
 
 	var Courses = _react2.default.createClass({
 	    displayName: 'Courses',
@@ -80786,13 +83897,13 @@
 	exports.default = Courses;
 
 /***/ },
-/* 767 */
+/* 790 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(768);
+	var content = __webpack_require__(791);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -80801,8 +83912,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -80812,7 +83923,7 @@
 	}
 
 /***/ },
-/* 768 */
+/* 791 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -80826,7 +83937,7 @@
 
 
 /***/ },
-/* 769 */
+/* 792 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80847,7 +83958,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(770);
+	__webpack_require__(793);
 
 	var Menu = _react2.default.createClass({
 	    displayName: 'Menu',
@@ -80881,6 +83992,15 @@
 	                        { className: 'menu-item' },
 	                        '\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438'
 	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    { to: '/output' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'menu-item' },
+	                        '\u0412\u044B\u0432\u043E\u0434 \u0434\u0430\u043D\u043D\u044B\u0445'
+	                    )
 	                )
 	            )
 	        );
@@ -80894,13 +84014,13 @@
 	})(Menu);
 
 /***/ },
-/* 770 */
+/* 793 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(771);
+	var content = __webpack_require__(794);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -80909,8 +84029,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -80920,7 +84040,7 @@
 	}
 
 /***/ },
-/* 771 */
+/* 794 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -80934,7 +84054,7 @@
 
 
 /***/ },
-/* 772 */
+/* 795 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80959,19 +84079,19 @@
 
 	var _Button2 = _interopRequireDefault(_Button);
 
-	var _AddUserPopup = __webpack_require__(773);
+	var _AddUserPopup = __webpack_require__(796);
 
 	var _AddUserPopup2 = _interopRequireDefault(_AddUserPopup);
 
-	var _need = __webpack_require__(749);
+	var _need = __webpack_require__(772);
 
 	var _need2 = _interopRequireDefault(_need);
 
-	var _reducer = __webpack_require__(774);
+	var _reducer = __webpack_require__(797);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(779);
+	__webpack_require__(802);
 
 	var Menu = _react2.default.createClass({
 	    displayName: 'Menu',
@@ -81063,7 +84183,7 @@
 	}, { openPopup: _reducer.openAddUserPopup })(Menu));
 
 /***/ },
-/* 773 */
+/* 796 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81086,7 +84206,7 @@
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _reactSelect = __webpack_require__(612);
+	var _reactSelect = __webpack_require__(623);
 
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 
@@ -81098,15 +84218,15 @@
 
 	var _Button2 = _interopRequireDefault(_Button);
 
-	var _need = __webpack_require__(749);
+	var _need = __webpack_require__(772);
 
 	var _need2 = _interopRequireDefault(_need);
 
-	var _reducer = __webpack_require__(774);
+	var _reducer = __webpack_require__(797);
 
-	__webpack_require__(775);
+	__webpack_require__(798);
 
-	__webpack_require__(777);
+	__webpack_require__(800);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81240,7 +84360,7 @@
 	}, { closePopup: _reducer.closeAddUserPopup, add: _reducer.addUser, loadFaculties: _reducer.loadFaculties })(AddUserPopup);
 
 /***/ },
-/* 774 */
+/* 797 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81338,13 +84458,13 @@
 	}
 
 /***/ },
-/* 775 */
+/* 798 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(776);
+	var content = __webpack_require__(799);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -81353,8 +84473,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -81364,7 +84484,7 @@
 	}
 
 /***/ },
-/* 776 */
+/* 799 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -81378,13 +84498,13 @@
 
 
 /***/ },
-/* 777 */
+/* 800 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(778);
+	var content = __webpack_require__(801);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -81393,8 +84513,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../css-loader/index.js!./../../sass-loader/index.js!./react-select.css", function() {
-				var newContent = require("!!./../../css-loader/index.js!./../../sass-loader/index.js!./react-select.css");
+			module.hot.accept("!!../../css-loader/index.js!../../sass-loader/index.js!./react-select.css", function() {
+				var newContent = require("!!../../css-loader/index.js!../../sass-loader/index.js!./react-select.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -81404,7 +84524,7 @@
 	}
 
 /***/ },
-/* 778 */
+/* 801 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -81412,19 +84532,19 @@
 
 
 	// module
-	exports.push([module.id, "/**\n * React Select\n * ============\n * Created by Jed Watson and Joss Mackison for KeystoneJS, http://www.keystonejs.com/\n * https://twitter.com/jedwatson https://twitter.com/jossmackison https://twitter.com/keystonejs\n * MIT License: https://github.com/JedWatson/react-select\n*/\n.Select {\n  position: relative; }\n\n.Select,\n.Select div,\n.Select input,\n.Select span {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box; }\n\n.Select.is-disabled > .Select-control {\n  background-color: #f9f9f9; }\n\n.Select.is-disabled > .Select-control:hover {\n  box-shadow: none; }\n\n.Select.is-disabled .Select-arrow-zone {\n  cursor: default;\n  pointer-events: none;\n  opacity: 0.35; }\n\n.Select-control {\n  background-color: #fff;\n  border-color: #d9d9d9 #ccc #b3b3b3;\n  border-radius: 4px;\n  border: 1px solid #ccc;\n  color: #333;\n  cursor: default;\n  display: table;\n  border-spacing: 0;\n  border-collapse: separate;\n  height: 36px;\n  outline: none;\n  overflow: hidden;\n  position: relative;\n  width: 100%; }\n\n.Select-control:hover {\n  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06); }\n\n.Select-control .Select-input:focus {\n  outline: none; }\n\n.is-searchable.is-open > .Select-control {\n  cursor: text; }\n\n.is-open > .Select-control {\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n  background: #fff;\n  border-color: #b3b3b3 #ccc #d9d9d9; }\n\n.is-open > .Select-control > .Select-arrow {\n  border-color: transparent transparent #999;\n  border-width: 0 5px 5px; }\n\n.is-searchable.is-focused:not(.is-open) > .Select-control {\n  cursor: text; }\n\n.is-focused:not(.is-open) > .Select-control {\n  border-color: #007eff;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1); }\n\n.Select-placeholder,\n.Select--single > .Select-control .Select-value {\n  bottom: 0;\n  color: #aaa;\n  left: 0;\n  line-height: 34px;\n  padding-left: 10px;\n  padding-right: 10px;\n  position: absolute;\n  right: 0;\n  top: 0;\n  max-width: 100%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap; }\n\n.has-value.Select--single > .Select-control .Select-value .Select-value-label,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value .Select-value-label {\n  color: #333; }\n\n.has-value.Select--single > .Select-control .Select-value a.Select-value-label,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label {\n  cursor: pointer;\n  text-decoration: none; }\n\n.has-value.Select--single > .Select-control .Select-value a.Select-value-label:hover,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:hover,\n.has-value.Select--single > .Select-control .Select-value a.Select-value-label:focus,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:focus {\n  color: #007eff;\n  outline: none;\n  text-decoration: underline; }\n\n.Select-input {\n  height: 34px;\n  padding-left: 10px;\n  padding-right: 10px;\n  vertical-align: middle; }\n\n.Select-input > input {\n  width: 100%;\n  background: none transparent;\n  border: 0 none;\n  box-shadow: none;\n  cursor: default;\n  display: inline-block;\n  font-family: inherit;\n  font-size: inherit;\n  margin: 0;\n  outline: none;\n  line-height: 14px;\n  /* For IE 8 compatibility */\n  padding: 8px 0 12px;\n  /* For IE 8 compatibility */\n  -webkit-appearance: none; }\n\n.is-focused .Select-input > input {\n  cursor: text; }\n\n.has-value.is-pseudo-focused .Select-input {\n  opacity: 0; }\n\n.Select-control:not(.is-searchable) > .Select-input {\n  outline: none; }\n\n.Select-loading-zone {\n  cursor: pointer;\n  display: table-cell;\n  position: relative;\n  text-align: center;\n  vertical-align: middle;\n  width: 16px; }\n\n.Select-loading {\n  -webkit-animation: Select-animation-spin 400ms infinite linear;\n  -o-animation: Select-animation-spin 400ms infinite linear;\n  animation: Select-animation-spin 400ms infinite linear;\n  width: 16px;\n  height: 16px;\n  box-sizing: border-box;\n  border-radius: 50%;\n  border: 2px solid #ccc;\n  border-right-color: #333;\n  display: inline-block;\n  position: relative;\n  vertical-align: middle; }\n\n.Select-clear-zone {\n  -webkit-animation: Select-animation-fadeIn 200ms;\n  -o-animation: Select-animation-fadeIn 200ms;\n  animation: Select-animation-fadeIn 200ms;\n  color: #999;\n  cursor: pointer;\n  display: table-cell;\n  position: relative;\n  text-align: center;\n  vertical-align: middle;\n  width: 17px; }\n\n.Select-clear-zone:hover {\n  color: #D0021B; }\n\n.Select-clear {\n  display: inline-block;\n  font-size: 18px;\n  line-height: 1; }\n\n.Select--multi .Select-clear-zone {\n  width: 17px; }\n\n.Select-arrow-zone {\n  cursor: pointer;\n  display: table-cell;\n  position: relative;\n  text-align: center;\n  vertical-align: middle;\n  width: 25px;\n  padding-right: 5px; }\n\n.Select-arrow {\n  border-color: #999 transparent transparent;\n  border-style: solid;\n  border-width: 5px 5px 2.5px;\n  display: inline-block;\n  height: 0;\n  width: 0; }\n\n.is-open .Select-arrow,\n.Select-arrow-zone:hover > .Select-arrow {\n  border-top-color: #666; }\n\n.Select--multi .Select-multi-value-wrapper {\n  display: inline-block; }\n\n.Select .Select-aria-only {\n  display: inline-block;\n  height: 1px;\n  width: 1px;\n  margin: -1px;\n  clip: rect(0, 0, 0, 0);\n  overflow: hidden; }\n\n@-webkit-keyframes Select-animation-fadeIn {\n  from {\n    opacity: 0; }\n  to {\n    opacity: 1; } }\n\n@keyframes Select-animation-fadeIn {\n  from {\n    opacity: 0; }\n  to {\n    opacity: 1; } }\n\n.Select-menu-outer {\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px;\n  background-color: #fff;\n  border: 1px solid #ccc;\n  border-top-color: #e6e6e6;\n  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);\n  box-sizing: border-box;\n  margin-top: -1px;\n  max-height: 200px;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  z-index: 1;\n  -webkit-overflow-scrolling: touch; }\n\n.Select-menu {\n  max-height: 198px;\n  overflow-y: auto; }\n\n.Select-option {\n  box-sizing: border-box;\n  background-color: #fff;\n  color: #666666;\n  cursor: pointer;\n  display: block;\n  padding: 8px 10px; }\n\n.Select-option:last-child {\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px; }\n\n.Select-option.is-selected {\n  background-color: #f5faff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.04);\n  color: #333; }\n\n.Select-option.is-focused {\n  background-color: #ebf5ff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.08);\n  color: #333; }\n\n.Select-option.is-disabled {\n  color: #cccccc;\n  cursor: default; }\n\n.Select-noresults {\n  box-sizing: border-box;\n  color: #999999;\n  cursor: default;\n  display: block;\n  padding: 8px 10px; }\n\n.Select--multi .Select-input {\n  vertical-align: middle;\n  margin-left: 10px;\n  padding: 0; }\n\n.Select--multi.has-value .Select-input {\n  margin-left: 5px; }\n\n.Select--multi .Select-value {\n  background-color: #ebf5ff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.08);\n  border-radius: 2px;\n  border: 1px solid #c2e0ff;\n  /* Fallback color for IE 8 */\n  border: 1px solid rgba(0, 126, 255, 0.24);\n  color: #007eff;\n  display: inline-block;\n  font-size: 0.9em;\n  line-height: 1.4;\n  margin-left: 5px;\n  margin-top: 5px;\n  vertical-align: top; }\n\n.Select--multi .Select-value-icon,\n.Select--multi .Select-value-label {\n  display: inline-block;\n  vertical-align: middle; }\n\n.Select--multi .Select-value-label {\n  border-bottom-right-radius: 2px;\n  border-top-right-radius: 2px;\n  cursor: default;\n  padding: 2px 5px; }\n\n.Select--multi a.Select-value-label {\n  color: #007eff;\n  cursor: pointer;\n  text-decoration: none; }\n\n.Select--multi a.Select-value-label:hover {\n  text-decoration: underline; }\n\n.Select--multi .Select-value-icon {\n  cursor: pointer;\n  border-bottom-left-radius: 2px;\n  border-top-left-radius: 2px;\n  border-right: 1px solid #c2e0ff;\n  /* Fallback color for IE 8 */\n  border-right: 1px solid rgba(0, 126, 255, 0.24);\n  padding: 1px 5px 3px; }\n\n.Select--multi .Select-value-icon:hover,\n.Select--multi .Select-value-icon:focus {\n  background-color: #d8eafd;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 113, 230, 0.08);\n  color: #0071e6; }\n\n.Select--multi .Select-value-icon:active {\n  background-color: #c2e0ff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.24); }\n\n.Select--multi.is-disabled .Select-value {\n  background-color: #fcfcfc;\n  border: 1px solid #e3e3e3;\n  color: #333; }\n\n.Select--multi.is-disabled .Select-value-icon {\n  cursor: not-allowed;\n  border-right: 1px solid #e3e3e3; }\n\n.Select--multi.is-disabled .Select-value-icon:hover,\n.Select--multi.is-disabled .Select-value-icon:focus,\n.Select--multi.is-disabled .Select-value-icon:active {\n  background-color: #fcfcfc; }\n\n@keyframes Select-animation-spin {\n  to {\n    transform: rotate(1turn); } }\n\n@-webkit-keyframes Select-animation-spin {\n  to {\n    -webkit-transform: rotate(1turn); } }\n", ""]);
+	exports.push([module.id, "/**\n * React Select\n * ============\n * Created by Jed Watson and Joss Mackison for KeystoneJS, http://www.keystonejs.com/\n * https://twitter.com/jedwatson https://twitter.com/jossmackison https://twitter.com/keystonejs\n * MIT License: https://github.com/JedWatson/react-select\n*/\n.Select {\n  position: relative; }\n\n.Select,\n.Select div,\n.Select input,\n.Select span {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box; }\n\n.Select.is-disabled > .Select-control {\n  background-color: #f9f9f9; }\n\n.Select.is-disabled > .Select-control:hover {\n  box-shadow: none; }\n\n.Select.is-disabled .Select-arrow-zone {\n  cursor: default;\n  pointer-events: none;\n  opacity: 0.35; }\n\n.Select-control {\n  background-color: #fff;\n  border-color: #d9d9d9 #ccc #b3b3b3;\n  border-radius: 4px;\n  border: 1px solid #ccc;\n  color: #333;\n  cursor: default;\n  display: table;\n  border-spacing: 0;\n  border-collapse: separate;\n  height: 36px;\n  outline: none;\n  overflow: hidden;\n  position: relative;\n  width: 100%; }\n\n.Select-control:hover {\n  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06); }\n\n.Select-control .Select-input:focus {\n  outline: none; }\n\n.is-searchable.is-open > .Select-control {\n  cursor: text; }\n\n.is-open > .Select-control {\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n  background: #fff;\n  border-color: #b3b3b3 #ccc #d9d9d9; }\n\n.is-open > .Select-control .Select-arrow {\n  top: -2px;\n  border-color: transparent transparent #999;\n  border-width: 0 5px 5px; }\n\n.is-searchable.is-focused:not(.is-open) > .Select-control {\n  cursor: text; }\n\n.is-focused:not(.is-open) > .Select-control {\n  border-color: #007eff;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1); }\n\n.Select-placeholder,\n.Select--single > .Select-control .Select-value {\n  bottom: 0;\n  color: #aaa;\n  left: 0;\n  line-height: 34px;\n  padding-left: 10px;\n  padding-right: 10px;\n  position: absolute;\n  right: 0;\n  top: 0;\n  max-width: 100%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap; }\n\n.has-value.Select--single > .Select-control .Select-value .Select-value-label,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value .Select-value-label {\n  color: #333; }\n\n.has-value.Select--single > .Select-control .Select-value a.Select-value-label,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label {\n  cursor: pointer;\n  text-decoration: none; }\n\n.has-value.Select--single > .Select-control .Select-value a.Select-value-label:hover,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:hover,\n.has-value.Select--single > .Select-control .Select-value a.Select-value-label:focus,\n.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:focus {\n  color: #007eff;\n  outline: none;\n  text-decoration: underline; }\n\n.Select-input {\n  height: 34px;\n  padding-left: 10px;\n  padding-right: 10px;\n  vertical-align: middle; }\n\n.Select-input > input {\n  width: 100%;\n  background: none transparent;\n  border: 0 none;\n  box-shadow: none;\n  cursor: default;\n  display: inline-block;\n  font-family: inherit;\n  font-size: inherit;\n  margin: 0;\n  outline: none;\n  line-height: 14px;\n  /* For IE 8 compatibility */\n  padding: 8px 0 12px;\n  /* For IE 8 compatibility */\n  -webkit-appearance: none; }\n\n.is-focused .Select-input > input {\n  cursor: text; }\n\n.has-value.is-pseudo-focused .Select-input {\n  opacity: 0; }\n\n.Select-control:not(.is-searchable) > .Select-input {\n  outline: none; }\n\n.Select-loading-zone {\n  cursor: pointer;\n  display: table-cell;\n  position: relative;\n  text-align: center;\n  vertical-align: middle;\n  width: 16px; }\n\n.Select-loading {\n  -webkit-animation: Select-animation-spin 400ms infinite linear;\n  -o-animation: Select-animation-spin 400ms infinite linear;\n  animation: Select-animation-spin 400ms infinite linear;\n  width: 16px;\n  height: 16px;\n  box-sizing: border-box;\n  border-radius: 50%;\n  border: 2px solid #ccc;\n  border-right-color: #333;\n  display: inline-block;\n  position: relative;\n  vertical-align: middle; }\n\n.Select-clear-zone {\n  -webkit-animation: Select-animation-fadeIn 200ms;\n  -o-animation: Select-animation-fadeIn 200ms;\n  animation: Select-animation-fadeIn 200ms;\n  color: #999;\n  cursor: pointer;\n  display: table-cell;\n  position: relative;\n  text-align: center;\n  vertical-align: middle;\n  width: 17px; }\n\n.Select-clear-zone:hover {\n  color: #D0021B; }\n\n.Select-clear {\n  display: inline-block;\n  font-size: 18px;\n  line-height: 1; }\n\n.Select--multi .Select-clear-zone {\n  width: 17px; }\n\n.Select-arrow-zone {\n  cursor: pointer;\n  display: table-cell;\n  position: relative;\n  text-align: center;\n  vertical-align: middle;\n  width: 25px;\n  padding-right: 5px; }\n\n.Select-arrow {\n  border-color: #999 transparent transparent;\n  border-style: solid;\n  border-width: 5px 5px 2.5px;\n  display: inline-block;\n  height: 0;\n  width: 0;\n  position: relative; }\n\n.is-open .Select-arrow,\n.Select-arrow-zone:hover > .Select-arrow {\n  border-top-color: #666; }\n\n.Select--multi .Select-multi-value-wrapper {\n  display: inline-block; }\n\n.Select .Select-aria-only {\n  display: inline-block;\n  height: 1px;\n  width: 1px;\n  margin: -1px;\n  clip: rect(0, 0, 0, 0);\n  overflow: hidden;\n  float: left; }\n\n@-webkit-keyframes Select-animation-fadeIn {\n  from {\n    opacity: 0; }\n  to {\n    opacity: 1; } }\n\n@keyframes Select-animation-fadeIn {\n  from {\n    opacity: 0; }\n  to {\n    opacity: 1; } }\n\n.Select-menu-outer {\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px;\n  background-color: #fff;\n  border: 1px solid #ccc;\n  border-top-color: #e6e6e6;\n  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);\n  box-sizing: border-box;\n  margin-top: -1px;\n  max-height: 200px;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  z-index: 1;\n  -webkit-overflow-scrolling: touch; }\n\n.Select-menu {\n  max-height: 198px;\n  overflow-y: auto; }\n\n.Select-option {\n  box-sizing: border-box;\n  background-color: #fff;\n  color: #666666;\n  cursor: pointer;\n  display: block;\n  padding: 8px 10px; }\n\n.Select-option:last-child {\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px; }\n\n.Select-option.is-selected {\n  background-color: #f5faff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.04);\n  color: #333; }\n\n.Select-option.is-focused {\n  background-color: #ebf5ff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.08);\n  color: #333; }\n\n.Select-option.is-disabled {\n  color: #cccccc;\n  cursor: default; }\n\n.Select-noresults {\n  box-sizing: border-box;\n  color: #999999;\n  cursor: default;\n  display: block;\n  padding: 8px 10px; }\n\n.Select--multi .Select-input {\n  vertical-align: middle;\n  margin-left: 10px;\n  padding: 0; }\n\n.Select--multi.has-value .Select-input {\n  margin-left: 5px; }\n\n.Select--multi .Select-value {\n  background-color: #ebf5ff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.08);\n  border-radius: 2px;\n  border: 1px solid #c2e0ff;\n  /* Fallback color for IE 8 */\n  border: 1px solid rgba(0, 126, 255, 0.24);\n  color: #007eff;\n  display: inline-block;\n  font-size: 0.9em;\n  line-height: 1.4;\n  margin-left: 5px;\n  margin-top: 5px;\n  vertical-align: top; }\n\n.Select--multi .Select-value-icon,\n.Select--multi .Select-value-label {\n  display: inline-block;\n  vertical-align: middle; }\n\n.Select--multi .Select-value-label {\n  border-bottom-right-radius: 2px;\n  border-top-right-radius: 2px;\n  cursor: default;\n  padding: 2px 5px; }\n\n.Select--multi a.Select-value-label {\n  color: #007eff;\n  cursor: pointer;\n  text-decoration: none; }\n\n.Select--multi a.Select-value-label:hover {\n  text-decoration: underline; }\n\n.Select--multi .Select-value-icon {\n  cursor: pointer;\n  border-bottom-left-radius: 2px;\n  border-top-left-radius: 2px;\n  border-right: 1px solid #c2e0ff;\n  /* Fallback color for IE 8 */\n  border-right: 1px solid rgba(0, 126, 255, 0.24);\n  padding: 1px 5px 3px; }\n\n.Select--multi .Select-value-icon:hover,\n.Select--multi .Select-value-icon:focus {\n  background-color: #d8eafd;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 113, 230, 0.08);\n  color: #0071e6; }\n\n.Select--multi .Select-value-icon:active {\n  background-color: #c2e0ff;\n  /* Fallback color for IE 8 */\n  background-color: rgba(0, 126, 255, 0.24); }\n\n.Select--multi.is-disabled .Select-value {\n  background-color: #fcfcfc;\n  border: 1px solid #e3e3e3;\n  color: #333; }\n\n.Select--multi.is-disabled .Select-value-icon {\n  cursor: not-allowed;\n  border-right: 1px solid #e3e3e3; }\n\n.Select--multi.is-disabled .Select-value-icon:hover,\n.Select--multi.is-disabled .Select-value-icon:focus,\n.Select--multi.is-disabled .Select-value-icon:active {\n  background-color: #fcfcfc; }\n\n@keyframes Select-animation-spin {\n  to {\n    transform: rotate(1turn); } }\n\n@-webkit-keyframes Select-animation-spin {\n  to {\n    -webkit-transform: rotate(1turn); } }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 779 */
+/* 802 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(780);
+	var content = __webpack_require__(803);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -81433,8 +84553,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./index.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -81444,7 +84564,7 @@
 	}
 
 /***/ },
-/* 780 */
+/* 803 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -81458,7 +84578,256 @@
 
 
 /***/ },
-/* 781 */
+/* 804 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(160);
+
+	var _reactRedux = __webpack_require__(226);
+
+	var _reactBootstrap = __webpack_require__(330);
+
+	var _Layouts = __webpack_require__(591);
+
+	var _Button = __webpack_require__(570);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Input = __webpack_require__(565);
+
+	var _Input2 = _interopRequireDefault(_Input);
+
+	var _reducer = __webpack_require__(805);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(806);
+
+	var Output = _react2.default.createClass({
+	    displayName: 'Output',
+	    getInitialState: function getInitialState() {
+	        return { group: null };
+	    },
+	    addGroup: function addGroup() {
+	        if (this.state.group) {
+	            this.props.addGroup(this.state.group);
+	            this.setState({ group: null });
+	        }
+	    },
+	    render: function render() {
+	        var _this = this;
+
+	        var errorText = this.props.errorText;
+
+	        var groups = this.props.groups.map(function (item, i) {
+	            return _react2.default.createElement(
+	                'div',
+	                { key: i, className: 'group-label' },
+	                item,
+	                _react2.default.createElement('span', { className: 'fa fa-times', onClick: function onClick() {
+	                        return _this.props.removeGroup(i);
+	                    } })
+	            );
+	        });
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'output' },
+	            _react2.default.createElement(_Layouts.Title, {
+	                text: '\u0412\u044B\u0432\u043E\u0434 \u0434\u0430\u043D\u043D\u044B\u0445',
+	                linkUrl: '/'
+	            }),
+	            _react2.default.createElement(
+	                _reactBootstrap.Grid,
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Row,
+	                    null,
+	                    _react2.default.createElement(_reactBootstrap.Col, { xs: 12, md: 3 }),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { xs: 12, md: 6 },
+	                        errorText && _react2.default.createElement(
+	                            _reactBootstrap.Alert,
+	                            { bsStyle: 'danger' },
+	                            errorText
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'add' },
+	                            _react2.default.createElement(_Input2.default, {
+	                                value: this.state.group,
+	                                onChange: function onChange(e) {
+	                                    return _this.setState({ group: e.target.value });
+	                                },
+	                                placeholder: '\u041D\u043E\u043C\u0435\u0440 \u0433\u0440\u0443\u043F\u043F\u044B',
+	                                type: 'text',
+	                                className: 'name'
+	                            }),
+	                            _react2.default.createElement(
+	                                _Button2.default,
+	                                { className: 'btn-primary add-btn', onClick: this.addGroup },
+	                                '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'group-labels-container' },
+	                            groups
+	                        ),
+	                        _react2.default.createElement(
+	                            _Button2.default,
+	                            {
+	                                className: 'btn-primary pull-right',
+	                                onClick: this.props.output,
+	                                disabled: groups.length === 0
+	                            },
+	                            '\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435'
+	                        )
+	                    ),
+	                    _react2.default.createElement(_reactBootstrap.Col, { xs: 12, md: 3 })
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return _extends({}, state.output);
+	}, { addGroup: _reducer.addGroup, removeGroup: _reducer.removeGroup, output: _reducer.output })(Output);
+
+/***/ },
+/* 805 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.reducer = reducer;
+	exports.addGroup = addGroup;
+	exports.removeGroup = removeGroup;
+	exports.output = output;
+
+	var _http = __webpack_require__(261);
+
+	var _http2 = _interopRequireDefault(_http);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initState = {
+	    groups: [],
+	    errorText: null
+	};
+
+	function reducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'SET_GROUPS':
+	            {
+	                return _extends({}, state, { groups: action.payload });
+	            }
+	        case 'SET_ERROR_OUTPUT':
+	            {
+	                return _extends({}, state, { errorText: action.payload });
+	            }
+	        default:
+	            return state;
+	    }
+	}
+
+	function addGroup(value) {
+	    return function (dispatch, getState) {
+	        var groups = getState().output.groups.slice();
+	        groups.push(value);
+	        console.log(groups);
+	        dispatch({ type: 'SET_GROUPS', payload: groups });
+	    };
+	}
+
+	function removeGroup(index) {
+	    return function (dispatch, getState) {
+	        var groups = getState().output.groups.slice();
+	        groups.splice(index, 1);
+	        dispatch({ type: 'SET_GROUPS', payload: groups });
+	    };
+	}
+
+	function output(index) {
+	    return function (dispatch, getState) {
+	        var groups = getState().output.groups;
+	        return _http2.default.post('http://schedulea.h1n.ru/universities/excel/get', { groupNames: JSON.stringify(groups) }).then(function (data) {
+	            window.open(data.data, '_blank');
+	            dispatch({ type: 'SET_ERROR_OUTPUT', payload: null });
+	        }, function (error) {
+	            if (error.responseText) {
+	                dispatch({ type: 'SET_ERROR_OUTPUT', payload: JSON.parse(error.responseText).errors[0].message });
+	            } else {
+	                dispatch({ type: 'SET_ERROR_OUTPUT', payload: 'Неизвестная ошибка. Проверьте правильность введенных вами данных' });
+	            }
+	        });
+	    };
+	}
+
+/***/ },
+/* 806 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(807);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(569)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/index.js!./index.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 807 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(568)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".output .add {\n  margin-bottom: 60px; }\n  .output .add .name, .output .add .add-btn {\n    float: left; }\n  .output .add .name {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .output .add .add-btn {\n    width: 90px; }\n\n.output .group-labels-container {\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  width: 100%; }\n  .output .group-labels-container .group-label {\n    width: 140px;\n    margin: 5px;\n    padding: 5px 20px;\n    text-align: center;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    position: relative; }\n    .output .group-labels-container .group-label .fa-times {\n      color: #ccc;\n      position: absolute;\n      top: 3px;\n      right: 3px;\n      font-size: 14px;\n      cursor: pointer; }\n      .output .group-labels-container .group-label .fa-times:hover {\n        color: #f16362; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 808 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -81474,7 +84843,7 @@
 	}
 
 /***/ },
-/* 782 */
+/* 809 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -81497,7 +84866,7 @@
 	}
 
 /***/ },
-/* 783 */
+/* 810 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81508,7 +84877,7 @@
 
 	exports.default = withScroll;
 
-	var _ScrollBehavior = __webpack_require__(784);
+	var _ScrollBehavior = __webpack_require__(811);
 
 	var _ScrollBehavior2 = _interopRequireDefault(_ScrollBehavior);
 
@@ -81574,7 +84943,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 784 */
+/* 811 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81597,7 +84966,7 @@
 
 	var _scrollTop2 = _interopRequireDefault(_scrollTop);
 
-	var _requestAnimationFrame = __webpack_require__(785);
+	var _requestAnimationFrame = __webpack_require__(812);
 
 	var _requestAnimationFrame2 = _interopRequireDefault(_requestAnimationFrame);
 
@@ -81781,7 +85150,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 785 */
+/* 812 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81832,7 +85201,7 @@
 	module.exports = compatRaf;
 
 /***/ },
-/* 786 */
+/* 813 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81851,13 +85220,15 @@
 
 	var _reducer = __webpack_require__(573);
 
-	var _reducer2 = __webpack_require__(608);
+	var _reducer2 = __webpack_require__(619);
 
-	var _reducer3 = __webpack_require__(754);
+	var _reducer3 = __webpack_require__(777);
 
-	var _reducer4 = __webpack_require__(761);
+	var _reducer4 = __webpack_require__(784);
 
-	var _reducer5 = __webpack_require__(774);
+	var _reducer5 = __webpack_require__(797);
+
+	var _reducer6 = __webpack_require__(805);
 
 	exports.default = (0, _redux.combineReducers)({
 	    auth: _auth.reducer,
@@ -81866,18 +85237,19 @@
 	    faculties: _reducer3.reducer,
 	    specialities: _reducer4.reducer,
 	    users: _reducer5.reducer,
+	    output: _reducer6.reducer,
 	    router: _reduxRouter.routerStateReducer,
 	    form: _reduxForm.reducer
 	});
 
 /***/ },
-/* 787 */
+/* 814 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(788);
+	var content = __webpack_require__(815);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(569)(content, {});
@@ -81886,8 +85258,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./main.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./main.scss");
+			module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/index.js!./main.scss", function() {
+				var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/index.js!./main.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -81897,7 +85269,7 @@
 	}
 
 /***/ },
-/* 788 */
+/* 815 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(568)();
@@ -81905,13 +85277,13 @@
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(789) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n\n.fa-files-o:before {\n  content: \"\\F0C5\"; }\n\n.fa-check:before {\n  content: \"\\F00C\"; }\n\n.fa-ban:before {\n  content: \"\\F05E\"; }\n\n.fa-trash:before {\n  content: \"\\F1F8\"; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(816) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n\n.fa-files-o:before {\n  content: \"\\F0C5\"; }\n\n.fa-check:before {\n  content: \"\\F00C\"; }\n\n.fa-ban:before {\n  content: \"\\F05E\"; }\n\n.fa-trash:before {\n  content: \"\\F1F8\"; }\n\n.fa-times:before {\n  content: \"\\F00D\"; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 789 */
+/* 816 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "b06871f281fee6b241d60582ae9369b9.ttf";

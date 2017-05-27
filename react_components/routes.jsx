@@ -10,6 +10,7 @@ import Specialities from './containers/Specialities';
 import Courses from './containers/Courses';
 import Menu from './containers/Menu';
 import Users from './containers/Users';
+import Output from './containers/Output';
 
 
 function getWaite(dispatch) {
@@ -31,6 +32,7 @@ export default ({ dispatch, getState }) => {
                 <Route path='/faculties/:facultyId/specialities' component={Specialities}/>
                 <Route path='/faculties/:facultyId/specialities/:specialityId/courses' component={Courses}/>
                 <Route path='/faculties/:facultyId/specialities/:specialityId/courses/:courseNumber/schedules' component={Schedule}/>
+                <Route path='/output' component={Output}/>
             </Route>
             <Route path='login' component={Login} />
         </Route>

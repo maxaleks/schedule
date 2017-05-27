@@ -1,0 +1,49 @@
+@import '../../css/variables';
+
+.output {
+  .add {
+      margin-bottom: 60px;
+
+      .name, .add-btn {
+          float: left;
+      }
+      .name {
+          width: calc(100% - 100px);
+          margin-right: 10px;
+      }
+      .add-btn {
+          width: 90px;
+      }
+  }
+  .group-labels-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .group-label {
+      width: 140px;
+      margin: 5px;
+      padding: 5px 20px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      position: relative;
+
+      .fa-times {
+        color: #ccc;
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        font-size: 14px;
+        cursor: pointer;
+
+        &:hover {
+          color: $color-red;
+        }
+      }
+    }
+  }
+}

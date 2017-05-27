@@ -22,6 +22,9 @@ const Menu = React.createClass({
                     {admin && <Link to={`/users`}>
                         <div className='menu-item'>Пользователи</div>
                     </Link>}
+                    <Link to={`/output`}>
+                        <div className='menu-item'>Вывод данных</div>
+                    </Link>
                 </div>
             </div>
         );
