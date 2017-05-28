@@ -84630,7 +84630,10 @@
 	    render: function render() {
 	        var _this = this;
 
-	        var errorText = this.props.errorText;
+	        var _props = this.props,
+	            errorText = _props.errorText,
+	            downloadLink = _props.downloadLink,
+	            loading = _props.loading;
 
 	        var groups = this.props.groups.map(function (item, i) {
 	            return _react2.default.createElement(
@@ -84688,13 +84691,20 @@
 	                            groups
 	                        ),
 	                        _react2.default.createElement(
-	                            _Button2.default,
-	                            {
-	                                className: 'btn-primary pull-right',
-	                                onClick: this.props.output,
-	                                disabled: groups.length === 0
-	                            },
-	                            '\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435'
+	                            'div',
+	                            { className: 'spinner-and-button-container' },
+	                            loading && _react2.default.createElement('span', { className: 'fa fa-spinner fa-pulse' }),
+	                            _react2.default.createElement(
+	                                _Button2.default,
+	                                {
+	                                    className: 'btn-primary',
+	                                    onClick: function onClick() {
+	                                        return window.open(downloadLink, '_blank');
+	                                    },
+	                                    disabled: !downloadLink
+	                                },
+	                                '\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435'
+	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(_reactBootstrap.Col, { xs: 12, md: 3 })
@@ -84733,7 +84743,10 @@
 
 	var initState = {
 	    groups: [],
-	    errorText: null
+	    errorText: null,
+	    downloadLink: null,
+	    loading: false,
+	    counter: 0
 	};
 
 	function reducer() {
@@ -84749,6 +84762,22 @@
 	            {
 	                return _extends({}, state, { errorText: action.payload });
 	            }
+	        case 'SET_DOWNLOAD_LINK':
+	            {
+	                return _extends({}, state, { downloadLink: action.payload });
+	            }
+	        case 'SET_OUTPUT_LOADING':
+	            {
+	                return _extends({}, state, { loading: action.payload });
+	            }
+	        case 'INCREASE_COUNTER':
+	            {
+	                return _extends({}, state, { counter: state.counter + 1 });
+	            }
+	        case 'DECREASE_COUNTER':
+	            {
+	                return _extends({}, state, { counter: state.counter - 1 });
+	            }
 	        default:
 	            return state;
 	    }
@@ -84758,8 +84787,8 @@
 	    return function (dispatch, getState) {
 	        var groups = getState().output.groups.slice();
 	        groups.push(value);
-	        console.log(groups);
 	        dispatch({ type: 'SET_GROUPS', payload: groups });
+	        dispatch(output());
 	    };
 	}
 
@@ -84768,20 +84797,38 @@
 	        var groups = getState().output.groups.slice();
 	        groups.splice(index, 1);
 	        dispatch({ type: 'SET_GROUPS', payload: groups });
+	        dispatch(output());
 	    };
 	}
 
-	function output(index) {
+	function output() {
 	    return function (dispatch, getState) {
+	        dispatch({ type: 'SET_DOWNLOAD_LINK', payload: null });
 	        var groups = getState().output.groups;
-	        return _http2.default.post('http://schedulea.h1n.ru/universities/excel/get', { groupNames: JSON.stringify(groups) }).then(function (data) {
-	            window.open(data.data, '_blank');
+
+	        if (groups.length === 0) {
 	            dispatch({ type: 'SET_ERROR_OUTPUT', payload: null });
+	            return;
+	        }
+	        dispatch({ type: 'SET_OUTPUT_LOADING', payload: true });
+	        dispatch({ type: 'INCREASE_COUNTER' });
+	        return _http2.default.post('http://schedulea.h1n.ru/universities/excel/get', { groupNames: JSON.stringify(groups) }).then(function (data) {
+	            dispatch({ type: 'DECREASE_COUNTER' });
+	            dispatch({ type: 'SET_DOWNLOAD_LINK', payload: data.data });
+	            dispatch({ type: 'SET_ERROR_OUTPUT', payload: null });
+	            dispatch({ type: 'SET_OUTPUT_LOADING', payload: false });
 	        }, function (error) {
-	            if (error.responseText) {
-	                dispatch({ type: 'SET_ERROR_OUTPUT', payload: JSON.parse(error.responseText).errors[0].message });
-	            } else {
-	                dispatch({ type: 'SET_ERROR_OUTPUT', payload: 'Неизвестная ошибка. Проверьте правильность введенных вами данных' });
+	            dispatch({ type: 'DECREASE_COUNTER' });
+	            dispatch({ type: 'SET_DOWNLOAD_LINK', payload: null });
+	            var counter = getState().output.counter;
+
+	            if (counter === 0) {
+	                dispatch({ type: 'SET_OUTPUT_LOADING', payload: false });
+	                if (error.responseText) {
+	                    dispatch({ type: 'SET_ERROR_OUTPUT', payload: JSON.parse(error.responseText).errors[0].message });
+	                } else {
+	                    dispatch({ type: 'SET_ERROR_OUTPUT', payload: 'Неизвестная ошибка. Проверьте правильность введенных вами данных' });
+	                }
 	            }
 	        });
 	    };
@@ -84822,7 +84869,7 @@
 
 
 	// module
-	exports.push([module.id, ".output .add {\n  margin-bottom: 60px; }\n  .output .add .name, .output .add .add-btn {\n    float: left; }\n  .output .add .name {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .output .add .add-btn {\n    width: 90px; }\n\n.output .group-labels-container {\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  width: 100%; }\n  .output .group-labels-container .group-label {\n    width: 140px;\n    margin: 5px;\n    padding: 5px 20px;\n    text-align: center;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    position: relative; }\n    .output .group-labels-container .group-label .fa-times {\n      color: #ccc;\n      position: absolute;\n      top: 3px;\n      right: 3px;\n      font-size: 14px;\n      cursor: pointer; }\n      .output .group-labels-container .group-label .fa-times:hover {\n        color: #f16362; }\n", ""]);
+	exports.push([module.id, ".output .add {\n  margin-bottom: 60px; }\n  .output .add .name, .output .add .add-btn {\n    float: left; }\n  .output .add .name {\n    width: calc(100% - 100px);\n    margin-right: 10px; }\n  .output .add .add-btn {\n    width: 90px; }\n\n.output .group-labels-container {\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  width: 100%; }\n  .output .group-labels-container .group-label {\n    width: 140px;\n    margin: 5px;\n    padding: 5px 20px;\n    text-align: center;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    position: relative; }\n    .output .group-labels-container .group-label .fa-times {\n      color: #ccc;\n      position: absolute;\n      top: 3px;\n      right: 3px;\n      font-size: 14px;\n      cursor: pointer; }\n      .output .group-labels-container .group-label .fa-times:hover {\n        color: #f16362; }\n\n.output .spinner-and-button-container {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: flex-end; }\n\n.output .fa-spinner {\n  display: inline-block;\n  font-size: 20px;\n  margin-right: 10px; }\n  .output .fa-spinner:before {\n    -webkit-box-sizing: border-box;\n    -moz-box-sizing: border-box;\n    box-sizing: border-box; }\n", ""]);
 
 	// exports
 
@@ -85278,7 +85325,7 @@
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(816) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n\n.fa-files-o:before {\n  content: \"\\F0C5\"; }\n\n.fa-check:before {\n  content: \"\\F00C\"; }\n\n.fa-ban:before {\n  content: \"\\F05E\"; }\n\n.fa-trash:before {\n  content: \"\\F1F8\"; }\n\n.fa-times:before {\n  content: \"\\F00D\"; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: Font-Awesome;\n  src: url(" + __webpack_require__(816) + ") format(\"truetype\"); }\n\n.fa {\n  font-family: 'Font-Awesome';\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\"; }\n\n.fa-sign-out:before {\n  content: \"\\F08B\"; }\n\n.fa-cogs:before {\n  content: \"\\F085\"; }\n\n.fa-pencil:before {\n  content: \"\\F040\"; }\n\n.fa-files-o:before {\n  content: \"\\F0C5\"; }\n\n.fa-check:before {\n  content: \"\\F00C\"; }\n\n.fa-ban:before {\n  content: \"\\F05E\"; }\n\n.fa-trash:before {\n  content: \"\\F1F8\"; }\n\n.fa-times:before {\n  content: \"\\F00D\"; }\n\n.fa-spinner:before {\n  content: \"\\F110\"; }\n\n.fa-pulse {\n  -webkit-animation: fa-spin 1s infinite steps(8);\n  animation: fa-spin 1s infinite steps(8);\n  animation-name: fa-spin;\n  animation-duration: 1s;\n  animation-timing-function: steps(8, end);\n  animation-delay: initial;\n  animation-iteration-count: infinite;\n  animation-direction: initial;\n  animation-fill-mode: initial;\n  animation-play-state: initial; }\n\n@keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg); }\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg); } }\n", ""]);
 
 	// exports
 

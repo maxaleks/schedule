@@ -23,7 +23,7 @@ const Output = React.createClass({
         }
     },
     render() {
-      const { errorText } = this.props;
+      const { errorText, downloadLink, loading } = this.props;
         const groups = this.props.groups.map((item, i) => (
             <div key={i} className='group-label'>
               {item}
@@ -54,11 +54,14 @@ const Output = React.createClass({
                             <div className='group-labels-container'>
                               {groups}
                             </div>
-                            <Button
-                              className='btn-primary pull-right'
-                              onClick={this.props.output}
-                              disabled={groups.length === 0}
-                            >Получить расписание</Button>
+                            <div className='spinner-and-button-container'>
+                              {loading && <span className='fa fa-spinner fa-pulse' />}
+                              <Button
+                                className='btn-primary'
+                                onClick={() => window.open(downloadLink, '_blank')}
+                                disabled={!downloadLink}
+                              >Получить расписание</Button>
+                            </div>
                         </Col>
                         <Col xs={12} md={3} />
                     </Row>
