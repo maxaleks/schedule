@@ -84824,10 +84824,14 @@
 
 	            if (counter === 0) {
 	                dispatch({ type: 'SET_OUTPUT_LOADING', payload: false });
-	                if (error.responseText) {
-	                    dispatch({ type: 'SET_ERROR_OUTPUT', payload: JSON.parse(error.responseText).errors[0].message });
+	                if (error.status === 504) {
+	                    dispatch({ type: 'SET_ERROR_OUTPUT', payload: 'Сервер не отвечает' });
 	                } else {
-	                    dispatch({ type: 'SET_ERROR_OUTPUT', payload: 'Неизвестная ошибка. Проверьте правильность введенных вами данных' });
+	                    if (error.responseText) {
+	                        dispatch({ type: 'SET_ERROR_OUTPUT', payload: JSON.parse(error.responseText).errors[0].message });
+	                    } else {
+	                        dispatch({ type: 'SET_ERROR_OUTPUT', payload: 'Неизвестная ошибка' });
+	                    }
 	                }
 	            }
 	        });
